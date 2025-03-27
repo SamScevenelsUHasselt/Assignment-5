@@ -66,7 +66,6 @@ void store_byte(struct qoi_image_chunk **current, const uint8_t to_store, uint8_
 
 int main(void) {
 
-    print_chr(123);
 
     uint8_t r[C_HEIGHT][C_WIDTH];
     uint8_t g[C_HEIGHT][C_WIDTH];
@@ -230,7 +229,7 @@ int main(void) {
     current = first;
     while (current != NULL) {
         for(uint8_t i=0;i<current->size;i++) {
-            //TODO Print something
+            print_chr(current->chunk_byte[i]);
         }
         current = current->next;
     }
