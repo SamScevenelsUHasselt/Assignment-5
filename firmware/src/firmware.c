@@ -61,14 +61,6 @@ void store_byte(struct qoi_image_chunk **current, const uint8_t to_store, uint8_
     return;
 }
 
-void store_word(struct qoi_image_chunk **current, const uint32_t to_store, uint8_t* image_chunk_index) {
-    store_byte(current,(to_store&0xFF000000)<<24,image_chunk_index);
-    store_byte(current,(to_store&0x00FF0000)<<16,image_chunk_index);
-    store_byte(current,(to_store&0x0000FF00)<<8,image_chunk_index);
-    store_byte(current,(to_store&0x000000FF),image_chunk_index);
-    return;
-}
-
 
 int main(void) {
 
@@ -125,8 +117,14 @@ int main(void) {
     store_byte(&current, header.magic[1], &image_chunk_index);
     store_byte(&current, header.magic[2], &image_chunk_index);
     store_byte(&current, header.magic[3], &image_chunk_index);
-    store_word(&current, header.width, &image_chunk_index);
-    store_word(&current, header.height, &image_chunk_index);
+    store_byte(current,(header.width&0xFF000000)<<24,image_chunk_index);
+    store_byte(current,(header.width&0x00FF0000)<<16,image_chunk_index);
+    store_byte(current,(header.width&0x0000FF00)<<8,image_chunk_index);
+    store_byte(current,(header.width&0x000000FF),image_chunk_index);
+    store_byte(current,(header.height&0xFF000000)<<24,image_chunk_index);
+    store_byte(current,(header.height&0x00FF0000)<<16,image_chunk_index);
+    store_byte(current,(header.height&0x0000FF00)<<8,image_chunk_index);
+    store_byte(current,(header.height&0x000000FF),image_chunk_index);
     store_byte(&current, header.channels, &image_chunk_index);
     store_byte(&current, header.colorspace, &image_chunk_index);
 
