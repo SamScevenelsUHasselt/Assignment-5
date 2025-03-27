@@ -416,7 +416,7 @@ Disassembly of section .text:
  5a8:	27912223          	sw	s9,612(sp)
  5ac:	27a12023          	sw	s10,608(sp)
  5b0:	25b12e23          	sw	s11,604(sp)
- 5b4:	d0dff0ef          	jal	ra,2c0 <print_dec>
+ 5b4:	c7dff0ef          	jal	ra,230 <print_chr>
  5b8:	10810a13          	addi	s4,sp,264
  5bc:	0c810693          	addi	a3,sp,200
  5c0:	08810613          	addi	a2,sp,136
