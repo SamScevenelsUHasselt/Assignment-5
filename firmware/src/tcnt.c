@@ -18,7 +18,7 @@ void TCNT_stop(void) {
     TCNT_CR = TCNT_CR & ~(TCNT_CR_CS_ON);
 }
 
-void TCNT_set_mode(counter_mode){
+void TCNT_set_mode(enum counter_mode counter_mode){
     TCNT_CR = TCNT_CR & TCNT_CR_WGM_RESET;
     switch (counter_mode)
     {
