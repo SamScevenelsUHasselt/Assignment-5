@@ -1,40 +1,72 @@
-#include "tcnt.h"
+#include <stdio.h>
+#include <stdint.h>
 
-#define LED_BASEAxDDRESS 0x80000000
-
-#define LED_REG0_ADDRESS (LED_BASEAxDDRESS + 0*4)
-
-#define LED              (*(volatile unsigned int *) LED_REG0_ADDRESS)
+#define C_WIDTH 8
+#define C_HEIGHT 8
 
 
-void irq_handler(unsigned int cause) {
+void initialise(uint8_t r[C_WIDTH][C_HEIGHT], uint8_t g[C_WIDTH][C_HEIGHT], uint8_t b[C_WIDTH][C_HEIGHT], uint8_t a[C_WIDTH][C_HEIGHT]) {
+    uint8_t w, h;
 
-	static unsigned int counter;
-
-    if (counter >= 7)
-    {
-        LED = 0xFFFFFFFF;
-        counter = 0;
-    }else if (counter%2)
-    {
-        LED = 0x1;
-        counter++;
-    }else{
-        LED = 0x0;
-        counter++;
+    for(h=0;h<C_HEIGHT/2;h++) {
+        for(w=0;w<C_WIDTH/2;w++) {
+            r[h][w] = 255; g[h][w] = 0; b[h][w] = 0; a[h][w] = 255;
+        }
+        for(w=C_WIDTH/2;w<C_WIDTH;w++) {
+            r[h][w] = 0; g[h][w] = 255; b[h][w] = 0; a[h][w] = 255;
+        }
     }
-
-    TCNT_clear_ir();
-    return;
+    for(h=C_HEIGHT/2;h<C_HEIGHT;h++) {
+        for(w=0;w<C_WIDTH/2;w++) {
+            r[h][w] = 0; g[h][w] = 0; b[h][w] = 255; a[h][w] = 255;
+        }
+        for(w=C_WIDTH/2;w<C_WIDTH;w++) {
+            r[h][w] = 127; g[h][w] = 127; b[h][w] = 127; a[h][w] = 255;
+        }
+    }
 }
 
-void main(void) {
+int main(void) {
 
-    TCNT_CMP = 12500000; //500ms on a clock of 25MHz
-    TCNT_set_mode(ctc);
-    TCNT_start();
+    uint8_t r[C_HEIGHT][C_WIDTH];
+    uint8_t g[C_HEIGHT][C_WIDTH];
+    uint8_t b[C_HEIGHT][C_WIDTH];
+    uint8_t a[C_HEIGHT][C_WIDTH];
 
-    while(1) {
-        //keeps pc constant, easier for debugging
+    uint8_t r_prev = 0;
+    uint8_t g_prev = 0;
+    uint8_t b_prev = 0;
+    uint8_t a_prev = 255;
+
+    uint8_t dr, dg, db;
+
+
+    int8_t rle = -1;
+    uint32_t running_array[64];
+    uint8_t rv;
+    uint8_t index;
+    uint32_t value;
+
+    /* Sanity check */
+    if((C_WIDTH % 2) || (C_HEIGHT % 2)) {
+        printf("ERROR: W or H not even");
+        return 1;
     }
+
+    /* Initialisation */
+    initialise(r, g, b, a);
+    for(uint8_t i=0;i<64;i++) {
+        running_array[i] = 0;
+    }
+
+    /* Loop over pixels */
+    for(uint8_t h=0;h<C_HEIGHT;h++) {
+        for(uint8_t w=0;w<C_WIDTH;w++) {
+
+            /* Do something useful here */
+            
+        }
+    }
+
+    return 0;
 }
