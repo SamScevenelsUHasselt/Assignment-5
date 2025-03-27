@@ -55,7 +55,7 @@ void store_byte(struct qoi_image_chunk **current, const uint8_t to_store, uint8_
     *image_chunk_index += 1;
     if(*image_chunk_index >= CHUNK_SIZE){ //chunk is full make a new one
         struct qoi_image_chunk new; //init new chunk
-        new.next = NULL;
+        new.next = 0;
         chunk->next = &new; //point to new chunk from current chunk
         *current = chunk; //update the current pointer to point at the new chunk
         *image_chunk_index = 0;
@@ -98,7 +98,7 @@ int main(void) {
     header.colorspace = 0;
 
     struct qoi_image_chunk element;
-    element.next = NULL;
+    element.next = 0;
     struct qoi_image_chunk *first = &element;
     struct qoi_image_chunk *current = &element;
     uint8_t image_chunk_index = 0;
@@ -226,8 +226,10 @@ int main(void) {
     rv = 1;
     store_byte(&current, rv, &image_chunk_index);
 
+    print_chr(256);
+
     current = first;
-    while (current != NULL) {
+    while (current != 0) {
         for(uint8_t i=0;i<current->size;i++) {
             print_chr(current->chunk_byte[i]);
         }
