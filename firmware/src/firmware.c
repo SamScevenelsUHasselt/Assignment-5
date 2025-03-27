@@ -58,6 +58,7 @@ void store_byte(struct qoi_image_chunk **current, const uint8_t to_store, uint8_
         *current = chunk; //update the current pointer to point at the new chunk
         *image_chunk_index = 0;
     }
+    return;
 }
 
 void store_word(struct qoi_image_chunk **current, const uint32_t to_store, uint8_t* image_chunk_index) {
@@ -65,6 +66,7 @@ void store_word(struct qoi_image_chunk **current, const uint32_t to_store, uint8
     store_byte(current,(to_store&0x00FF0000)<<16,image_chunk_index);
     store_byte(current,(to_store&0x0000FF00)<<8,image_chunk_index);
     store_byte(current,(to_store&0x000000FF),image_chunk_index);
+    return;
 }
 
 
