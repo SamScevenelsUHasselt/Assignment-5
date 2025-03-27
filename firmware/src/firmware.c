@@ -49,6 +49,9 @@ void initialise(uint8_t r[C_WIDTH][C_HEIGHT], uint8_t g[C_WIDTH][C_HEIGHT], uint
 
 
 void store_byte(struct qoi_image_chunk **current, const uint8_t to_store, uint8_t* image_chunk_index) {
+
+    print_chr(to_store);
+
     struct qoi_image_chunk *chunk = *current;
     chunk->chunk_byte[*image_chunk_index] = to_store;
     chunk->size = *image_chunk_index + 1;
@@ -226,7 +229,7 @@ int main(void) {
     rv = 1;
     store_byte(&current, rv, &image_chunk_index);
 
-    print_chr(256);
+    
 
     current = first;
     while (current != 0) {
