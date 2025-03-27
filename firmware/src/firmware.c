@@ -132,14 +132,12 @@ int main(void) {
     for(uint8_t h=0;h<C_HEIGHT;h++) {
         for(uint8_t w=0;w<C_WIDTH;w++) {
 
-            //printf("Value: 0x%02X%02X%02X%02X\n", r[h][w],g[h][w],b[h][w],a[h][w]);
 
 
             //STEP 1 ------ check if equal to previous pixel ---------------------------------------------------------------------------------------------------------------------
             if (r[h][w] == r_prev && g[h][w] == g_prev && b[h][w] == b_prev && a[h][w] == a_prev) {
                 rle++;
                 if (rle>62) { //Ensure that rle does not exceed 62 as this is illegal and store the current QOI_OP_RUN chunk
-                    printf("QOI_OP_RUN_exceed: ");
                     rv = rle + 0b11000000;
                     store_byte(&current, rv, &image_chunk_index);
                     rle = -1;
@@ -147,7 +145,6 @@ int main(void) {
             }
             else{
                 if (rle != -1) { //if rle != -1 then store QOI_OP_RUN chunk
-                    printf("QOI_OP_RUN: ");
                     rv = rle + 0b11000000;
                     store_byte(&current, rv, &image_chunk_index);
                     rle = -1;
@@ -157,7 +154,6 @@ int main(void) {
                 index =  (r[h][w] * 3 + g[h][w] * 5 + b[h][w] * 7 + a[h][w] * 11) % 64; //possible bottleneck
                 value =  (r[h][w] << 24) + (g[h][w] << 16) + (b[h][w] << 8) + a[h][w];
                 if (running_array[index] == value) { //The pixel is in the running array
-                    printf("QOI_OP_INDEX: ");
                     store_byte(&current, index, &image_chunk_index);
                 }
                 else {//if not store it anyway and continue
@@ -169,7 +165,6 @@ int main(void) {
                         db = (int8_t)(b[h][w] - b_prev);
 
                         if ( (-2 <= dr && dr <= 1)&&(-2 <= dg && dg <= 1)&&(-2 <= db && db <= 1)) { //can encode in QOI_OP_DIFF chunk
-                            printf("QOI_OP_DIFF: ");
                             rv = 0b01000000 + ((uint8_t)(dr+2)<<4) + ((uint8_t)(dg+2)<<2) + (uint8_t)(db+2);
                             store_byte(&current, rv, &image_chunk_index);
                         }
@@ -177,7 +172,6 @@ int main(void) {
                             dr = dr = dg;
                             db = db = dg;
                             if ((-8 <= dr && dr <= 7)&&(-8 <= db && db <= 7)) { // can encode in QOI_OP_LUMA chunk
-                                printf("QOI_OP_LUMA: ");
                                 rv = 0b10000000 + (dg+32);
                                 store_byte(&current, rv, &image_chunk_index);
                                 rv = ((dr + 8)<<4) + (db+8);
@@ -185,7 +179,6 @@ int main(void) {
                             }
                         }
                         else { //store as RGB as alpha has not changed -----------------------------------------------------------------------------------------------------------
-                            printf("QOI_OP_RGB: ");
                             rv = 0b11111110;
                             store_byte(&current, rv, &image_chunk_index);
                             store_byte(&current, r[h][w], &image_chunk_index);
@@ -195,7 +188,6 @@ int main(void) {
                     }
                     else {
                         //STEP 5 ------ store raw RGBA -------------------------------------------------------------------------------------------------------------------------------
-                        printf("QOI_OP_RGBA: ");
                         rv = 0b11111111;
                         store_byte(&current, rv, &image_chunk_index);
                         store_byte(&current, r[h][w], &image_chunk_index);
