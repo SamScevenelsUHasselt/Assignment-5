@@ -135,6 +135,16 @@ package PKG_hwswcd is
             sys_clock : in STD_LOGIC;
             sys_reset : in STD_LOGIC;
             external_irq : in STD_LOGIC;
+            
+            --Outputs for simulation
+            we : out STD_LOGIC;
+            a : out STD_LOGIC_VECTOR(31 downto 0);
+            di : out STD_LOGIC_VECTOR(31 downto 0);
+            -- to not write 3 times
+            sclock : out STD_LOGIC;
+            ce_out : out STD_LOGIC;
+            
+    
             gpio_leds : out STD_LOGIC_VECTOR(3 downto 0)
         );
     end component riscv_microcontroller;
@@ -181,6 +191,9 @@ package PKG_hwswcd is
             ad : IN STD_LOGIC_VECTOR(G_DATA_WIDTH-1 downto 0);
             we : IN STD_LOGIC;
             do : OUT STD_LOGIC_VECTOR(G_DATA_WIDTH-1 downto 0);
+            
+            ce : IN STD_LOGIC;
+            
             writing_out_flag : OUT STD_LOGIC
         );
     end component basicIO_model;

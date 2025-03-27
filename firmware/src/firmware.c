@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdint.h>
 
+#include "print.h"
+
 #define C_WIDTH 8
 #define C_HEIGHT 8
 #define CHUNK_SIZE 64
@@ -64,6 +66,8 @@ void store_byte(struct qoi_image_chunk **current, const uint8_t to_store, uint8_
 
 int main(void) {
 
+    print_hex(34,2);
+
     uint8_t r[C_HEIGHT][C_WIDTH];
     uint8_t g[C_HEIGHT][C_WIDTH];
     uint8_t b[C_HEIGHT][C_WIDTH];
@@ -102,7 +106,7 @@ int main(void) {
 
     /* Sanity check */
     if((C_WIDTH % 2) || (C_HEIGHT % 2)) {
-        printf("ERROR: W or H not even");
+        //printf("ERROR: W or H not even");
         return 1;
     }
 
