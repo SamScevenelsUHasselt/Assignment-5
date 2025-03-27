@@ -230,5 +230,5 @@ int main(void) {
         }
         current = current->next;
     }
-    return 0;
+    while (1){}
 }
