@@ -1,6 +1,9 @@
 
 Discarded input sections
 
+ .comment       0x00000000       0x1c build/print.o
+ .riscv.attributes
+                0x00000000       0x25 build/print.o
  .comment       0x00000000       0x1c build/tcnt.o
  .riscv.attributes
                 0x00000000       0x25 build/tcnt.o
@@ -20,46 +23,59 @@ RAM              0x00002000         0x00002000         xrw
 Linker script and memory map
 
 
-.text           0x00000000      0x904
+.text           0x00000000      0xa20
                 0x00000000                        . = 0x0
  *(.init)
  .init          0x00000000      0x230 build/start.o
                 0x00000000                start
                 0x000001d8                sw_mult
  *(.text*)
- .text          0x00000230       0xcc build/tcnt.o
-                0x00000230                TCNT_start
-                0x00000244                TCNT_stop
-                0x00000258                TCNT_start_div8
-                0x00000280                TCNT_start_div16
-                0x000002a8                TCNT_set_mode
-                0x000002e8                TCNT_clear_ir
- .text          0x000002fc      0x16c build/firmware.o
-                0x000002fc                irq_handler
-                0x00000300                initialise
-                0x00000414                store_byte
- .text.startup  0x00000468      0x49c build/firmware.o
-                0x00000468                main
- .text          0x00000904        0x0 build/start.o
+ .text          0x00000230      0x110 build/print.o
+                0x00000230                print_chr
+                0x0000023c                print_str
+                0x00000258                print_hex
+                0x000002a0                getDigit
+                0x000002c0                print_dec
+ .text          0x00000340       0xcc build/tcnt.o
+                0x00000340                TCNT_start
+                0x00000354                TCNT_stop
+                0x00000368                TCNT_start_div8
+                0x00000390                TCNT_start_div16
+                0x000003b8                TCNT_set_mode
+                0x000003f8                TCNT_clear_ir
+ .text          0x0000040c      0x16c build/firmware.o
+                0x0000040c                irq_handler
+                0x00000410                initialise
+                0x00000524                store_byte
+ .text.startup  0x00000578      0x4a8 build/firmware.o
+                0x00000578                main
+ .text          0x00000a20        0x0 build/start.o
 
-.data           0x00002000        0x0
+.data           0x00002000       0x2c
                 0x00000000                        . = 0x0
  *(.data)
- .data          0x00002000        0x0 build/tcnt.o
- .data          0x00002000        0x0 build/firmware.o
- .data          0x00002000        0x0 build/start.o
+ .data          0x00002000       0x2c build/print.o
+                0x00002000                base_lookup
+ .data          0x0000202c        0x0 build/tcnt.o
+ .data          0x0000202c        0x0 build/firmware.o
+ .data          0x0000202c        0x0 build/start.o
 
-.bss            0x00002000        0x0
- .bss           0x00002000        0x0 build/tcnt.o
- .bss           0x00002000        0x0 build/firmware.o
- .bss           0x00002000        0x0 build/start.o
+.bss            0x0000202c        0x0
+ .bss           0x0000202c        0x0 build/print.o
+ .bss           0x0000202c        0x0 build/tcnt.o
+ .bss           0x0000202c        0x0 build/firmware.o
+ .bss           0x0000202c        0x0 build/start.o
 
-.rodata         0x00002000     0x1000
+.rodata         0x0000202c     0x1000
                 0x00001000                        . = 0x1000
- *fill*         0x00002000     0x1000 
+ *fill*         0x0000202c     0x1000 
  *(.rodata)
-                0x00003000                        . = ALIGN (0x4)
+                0x0000302c                        . = ALIGN (0x4)
  FILL mask 0xff
+
+.rodata.str1.4  0x0000302c       0x23
+ .rodata.str1.4
+                0x0000302c       0x23 build/print.o
 
 /DISCARD/
  *(.note*)
@@ -68,6 +84,7 @@ Linker script and memory map
  *(.rel*)
  *(.comment)
  *(.riscv.attributes)
+LOAD build/print.o
 LOAD build/tcnt.o
 LOAD build/firmware.o
 LOAD build/start.o
