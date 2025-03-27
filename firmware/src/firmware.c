@@ -4,6 +4,9 @@
 #define C_WIDTH 8
 #define C_HEIGHT 8
 
+void irq_handler(unsigned int cause) {
+
+}
 
 void initialise(uint8_t r[C_WIDTH][C_HEIGHT], uint8_t g[C_WIDTH][C_HEIGHT], uint8_t b[C_WIDTH][C_HEIGHT], uint8_t a[C_WIDTH][C_HEIGHT]) {
     uint8_t w, h;
