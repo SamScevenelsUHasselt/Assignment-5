@@ -139,7 +139,8 @@ int main(void) {
     for(uint8_t h=0;h<C_HEIGHT;h++) {
         for(uint8_t w=0;w<C_WIDTH;w++) {
 
-
+            int pixel = (r[h][w] << 24) + (g[h][w] << 16) + (b[h][w] << 8) + a[h][w];
+            print_word(pixel);
 
             //STEP 1 ------ check if equal to previous pixel ---------------------------------------------------------------------------------------------------------------------
             if (r[h][w] == r_prev && g[h][w] == g_prev && b[h][w] == b_prev && a[h][w] == a_prev) {

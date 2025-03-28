@@ -12,6 +12,10 @@ void print_chr(char ch)
 	*((volatile unsigned int*)OUTPORT) = ch;
 }
 
+void print_word(int word){
+	*((volatile unsigned int*)OUTPORT) = word;
+}
+
 void print_str(const char *p)
 {
 	while (*p != 0)
