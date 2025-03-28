@@ -26,7 +26,7 @@ entity two_k_bram_dmem is
 
         data_in : in STD_LOGIC_VECTOR(31 downto 0);
         write_enable : in STD_LOGIC;
-        address : in STD_LOGIC_VECTOR(10 downto 0);
+        address : in STD_LOGIC_VECTOR(12 downto 0);
         data_out : out STD_LOGIC_VECTOR(31 downto 0)
     );
 end entity two_k_bram_dmem;
@@ -40,7 +40,7 @@ architecture Behavioural of two_k_bram_dmem is
     signal init_address_i : STD_LOGIC_VECTOR(10 downto 0);
     signal data_in_i : STD_LOGIC_VECTOR(31 downto 0);
     signal write_enable_i : STD_LOGIC;
-    signal address_i : STD_LOGIC_VECTOR(10 downto 0);
+    signal address_i : STD_LOGIC_VECTOR(12 downto 0);
     signal data_out_o : STD_LOGIC_VECTOR(31 downto 0);
 
     constant C_NULL : STD_LOGIC_VECTOR(31 downto 0) := x"00000000";
@@ -70,7 +70,7 @@ begin
     write_enable_i <= write_enable;
     address_i <= address;
     data_out <= data_out_o;
-
+   
 
     init_address_00 <= "0" & init_address_i(9 downto 0) & "00000";
     init_address_01 <= "0" & init_address_i(9 downto 0) & "00000";
@@ -79,14 +79,25 @@ begin
     init_write_enable_00_vec <= (others => init_write_enable_00);
     init_write_enable_01_vec <= (others => init_write_enable_01);
     
-    address_00 <= "0" & address_i(9 downto 0) & "00000";
-    address_01 <= "0" & address_i(9 downto 0) & "00000";
-    write_enable_00 <= write_enable_i and not(address_i(10));
-    write_enable_01 <= write_enable_i and address_i(10);
+    address_00 <= "0" & address_i(11 downto 2) & "00000";
+    address_01 <= "0" & address_i(11 downto 2) & "00000";
+    write_enable_00 <= write_enable_i and not(address_i(12));
+    write_enable_01 <= write_enable_i and address_i(12);
     write_enable_00_vec <= (others => write_enable_00);
     write_enable_01_vec <= (others => write_enable_01);
-    data_out_o <= data_out_00 when address_i(10) = '0' else data_out_01;
-    
+    data_pre_fix <= data_out_00 when address_i(12) = '0' else data_out_01;
+
+    -- fix load byte and load half:
+    fix_loads : process(address_i)
+    begin
+        case address_i(1 downto 0) is
+            when "00" => data_out_o <= data_pre_fix; -- no shift needed
+            when "01" => data_out_o <= X"00" & data_pre_fix(31 downto 8); -- shift 1 byte
+            when "10" => data_out_o <= X"0000" & data_pre_fix(31 downto 16); -- shift 2 bytes
+            when "11" => data_out_o <= X"000000" & data_pre_fix(31 downto 24); -- shift 3 bytes
+            when others => data_out_o <= data_pre_fix;
+        end case;
+    end process;    
 
     -------------------------------------------------------------------------------
     -- BRAM PRIMITIVES
