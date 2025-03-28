@@ -23,34 +23,35 @@ RAM              0x00002000         0x00002000         xrw
 Linker script and memory map
 
 
-.text           0x00000000      0x934
+.text           0x00000000      0x55c
                 0x00000000                        . = 0x0
  *(.init)
- .init          0x00000000      0x230 build/start.o
+ .init          0x00000000      0x240 build/start.o
                 0x00000000                start
                 0x000001d8                sw_mult
+                0x00000228                load_test
  *(.text*)
- .text          0x00000230      0x11c build/print.o
-                0x00000230                print_chr
-                0x0000023c                print_word
-                0x00000248                print_str
-                0x00000264                print_hex
-                0x000002ac                getDigit
-                0x000002cc                print_dec
- .text          0x0000034c       0xcc build/tcnt.o
-                0x0000034c                TCNT_start
-                0x00000360                TCNT_stop
-                0x00000374                TCNT_start_div8
-                0x0000039c                TCNT_start_div16
-                0x000003c4                TCNT_set_mode
-                0x00000404                TCNT_clear_ir
- .text          0x00000418      0x124 build/firmware.o
-                0x00000418                irq_handler
-                0x0000041c                initialise
-                0x00000530                store_byte
- .text.startup  0x0000053c      0x3f8 build/firmware.o
-                0x0000053c                main
- .text          0x00000934        0x0 build/start.o
+ .text          0x00000240      0x11c build/print.o
+                0x00000240                print_chr
+                0x0000024c                print_word
+                0x00000258                print_str
+                0x00000274                print_hex
+                0x000002bc                getDigit
+                0x000002dc                print_dec
+ .text          0x0000035c       0xcc build/tcnt.o
+                0x0000035c                TCNT_start
+                0x00000370                TCNT_stop
+                0x00000384                TCNT_start_div8
+                0x000003ac                TCNT_start_div16
+                0x000003d4                TCNT_set_mode
+                0x00000414                TCNT_clear_ir
+ .text          0x00000428      0x124 build/firmware.o
+                0x00000428                irq_handler
+                0x0000042c                initialise
+                0x00000540                store_byte
+ .text.startup  0x0000054c       0x10 build/firmware.o
+                0x0000054c                main
+ .text          0x0000055c        0x0 build/start.o
 
 .data           0x00002000       0x2c
                 0x00000000                        . = 0x0
@@ -74,12 +75,9 @@ Linker script and memory map
                 0x0000302c                        . = ALIGN (0x4)
  FILL mask 0xff
 
-.rodata.str1.4  0x0000302c       0x2d
+.rodata.str1.4  0x0000302c       0x23
  .rodata.str1.4
-                0x0000302c       0x2d build/print.o
-                                 0x23 (size before relaxing)
- .rodata.str1.4
-                0x00003059        0x9 build/firmware.o
+                0x0000302c       0x23 build/print.o
 
 /DISCARD/
  *(.note*)
