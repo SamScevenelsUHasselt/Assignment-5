@@ -54,7 +54,7 @@ void initialise(unsigned char r[C_WIDTH][C_HEIGHT], unsigned char g[C_WIDTH][C_H
 
 void store_byte(struct qoi_image_chunk **current, const unsigned char to_store, unsigned char* image_chunk_index) {
 
-    //print_str("Storing: X");
+    print_str("Storing: X");
     print_hex(to_store,2);
     /*
     struct qoi_image_chunk *chunk = *current;
@@ -71,29 +71,8 @@ void store_byte(struct qoi_image_chunk **current, const unsigned char to_store, 
     return;
     */
 }
-#pragma GCC push_options
-#pragma GCC optimize ("O0")
-void print_test(){
-    print_str("0:");
-    print_hex(0xFF<<0,8);
-    print_str("4:");
-    print_hex(0xFF<<4,8);
-    print_str("8:");
-    print_hex(0xFF<<8,8);
-    print_str("12:");
-    print_hex(0xFF<<12,8);
-    print_str("16:");
-    print_hex(0xFF<<16,8);
-    print_str("20:");
-    print_hex(0xFF<<20,8);
-    print_str("24:");
-    print_hex(0xFF<<24,8);
-}
-#pragma GCC pop_options
+
 int main(void) {
-
-    print_test();
-
     unsigned char r[C_HEIGHT][C_WIDTH];
     unsigned char g[C_HEIGHT][C_WIDTH];
     unsigned char b[C_HEIGHT][C_WIDTH];
@@ -161,11 +140,6 @@ int main(void) {
     /* Loop over pixels */
     for(unsigned char h=0;h<C_HEIGHT;h++) {
         for(unsigned char w=0;w<C_WIDTH;w++) {
-
-            print_str("r: X"); print_hex(r[h][w] << 24,8);
-            print_str("g: X"); print_hex(g[h][w] << 16,8);
-            print_str("b: X"); print_hex(b[h][w] << 8,8);
-            print_str("a: X"); print_hex(a[h][w],8);
 
             int pixel = (r[h][w] << 24) | (g[h][w] << 16) | (b[h][w] << 8) | a[h][w];
             print_str("Pizel: X");
