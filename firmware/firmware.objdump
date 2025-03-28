@@ -475,7 +475,7 @@ Disassembly of section .text:
  684:	010c0793          	addi	a5,s8,16
  688:	00278733          	add	a4,a5,sp
  68c:	00074983          	lbu	s3,0(a4)
- 690:	00200593          	addi	a1,zero,2
+ 690:	00400593          	addi	a1,zero,4
  694:	00098513          	addi	a0,s3,0
  698:	bddff0ef          	jal	ra,274 <print_hex>
  69c:	000037b7          	lui	a5,0x3
@@ -484,7 +484,7 @@ Disassembly of section .text:
  6a8:	05010793          	addi	a5,sp,80
  6ac:	01878733          	add	a4,a5,s8
  6b0:	00074a03          	lbu	s4,0(a4)
- 6b4:	00200593          	addi	a1,zero,2
+ 6b4:	00400593          	addi	a1,zero,4
  6b8:	01899b13          	slli	s6,s3,0x18
  6bc:	000a0513          	addi	a0,s4,0
  6c0:	bb5ff0ef          	jal	ra,274 <print_hex>
@@ -494,7 +494,7 @@ Disassembly of section .text:
  6d0:	09010793          	addi	a5,sp,144
  6d4:	01878733          	add	a4,a5,s8
  6d8:	00074a83          	lbu	s5,0(a4)
- 6dc:	00200593          	addi	a1,zero,2
+ 6dc:	00400593          	addi	a1,zero,4
  6e0:	000a8513          	addi	a0,s5,0
  6e4:	b91ff0ef          	jal	ra,274 <print_hex>
  6e8:	000037b7          	lui	a5,0x3
@@ -503,7 +503,7 @@ Disassembly of section .text:
  6f4:	0d010793          	addi	a5,sp,208
  6f8:	01878733          	add	a4,a5,s8
  6fc:	00074b83          	lbu	s7,0(a4)
- 700:	00200593          	addi	a1,zero,2
+ 700:	00400593          	addi	a1,zero,4
  704:	000b8513          	addi	a0,s7,0
  708:	b6dff0ef          	jal	ra,274 <print_hex>
  70c:	010a1713          	slli	a4,s4,0x10
