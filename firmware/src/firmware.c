@@ -70,7 +70,7 @@ void store_byte(struct qoi_image_chunk **current, const uint8_t to_store, uint8_
 
 int main(void) {
 
-    print_str("Hello World");
+    print_str("Hello World\n");
 
     print_hex(56,2);
 
