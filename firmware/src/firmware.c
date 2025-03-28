@@ -13,16 +13,16 @@ extern void load_test();
 
 struct qoi_header {
     char magic[4]; // magic bytes "qoif"
-    uint32_t width; // image width in pixels (BE)
-    uint32_t height; // image height in pixels (BE)
-    uint8_t channels; // 3 = RGB, 4 = RGBA
-    uint8_t colorspace; // 0 = sRGB with linear alpha
+    unsigned int width; // image width in pixels (BE)
+    unsigned int height; // image height in pixels (BE)
+    unsigned char channels; // 3 = RGB, 4 = RGBA
+    unsigned char colorspace; // 0 = sRGB with linear alpha
                         // 1 = all channels linear
 };
 
 struct qoi_image_chunk {
-    uint8_t chunk_byte[CHUNK_SIZE];
-    uint8_t size;
+    unsigned char chunk_byte[CHUNK_SIZE];
+    unsigned char size;
     struct qoi_image_chunk *next;
 };
 
@@ -30,8 +30,8 @@ void irq_handler(unsigned int cause) {
 
 }
 
-void initialise(uint8_t r[C_WIDTH][C_HEIGHT], uint8_t g[C_WIDTH][C_HEIGHT], uint8_t b[C_WIDTH][C_HEIGHT], uint8_t a[C_WIDTH][C_HEIGHT]) {
-    uint8_t w, h;
+void initialise(unsigned char r[C_WIDTH][C_HEIGHT], unsigned char g[C_WIDTH][C_HEIGHT], unsigned char b[C_WIDTH][C_HEIGHT], unsigned char a[C_WIDTH][C_HEIGHT]) {
+    unsigned char w, h;
 
     for(h=0;h<C_HEIGHT/2;h++) {
         for(w=0;w<C_WIDTH/2;w++) {
@@ -52,7 +52,7 @@ void initialise(uint8_t r[C_WIDTH][C_HEIGHT], uint8_t g[C_WIDTH][C_HEIGHT], uint
 }
 
 
-void store_byte(struct qoi_image_chunk **current, const uint8_t to_store, uint8_t* image_chunk_index) {
+void store_byte(struct qoi_image_chunk **current, const unsigned char to_store, unsigned char* image_chunk_index) {
 
     //print_str("Storing: X");
     print_hex(to_store,2);
@@ -75,24 +75,24 @@ void store_byte(struct qoi_image_chunk **current, const uint8_t to_store, uint8_
 
 int main(void) {
     
-    uint8_t r[C_HEIGHT][C_WIDTH];
-    uint8_t g[C_HEIGHT][C_WIDTH];
-    uint8_t b[C_HEIGHT][C_WIDTH];
-    uint8_t a[C_HEIGHT][C_WIDTH];
+    unsigned char r[C_HEIGHT][C_WIDTH];
+    unsigned char g[C_HEIGHT][C_WIDTH];
+    unsigned char b[C_HEIGHT][C_WIDTH];
+    unsigned char a[C_HEIGHT][C_WIDTH];
 
-    uint8_t r_prev = 0;
-    uint8_t g_prev = 0;
-    uint8_t b_prev = 0;
-    uint8_t a_prev = 255;
+    unsigned char r_prev = 0;
+    unsigned char g_prev = 0;
+    unsigned char b_prev = 0;
+    unsigned char a_prev = 255;
 
-    int8_t dr, dg, db;
+    signed char dr, dg, db;
 
 
-    int8_t rle = -1;
-    uint32_t running_array[64];
-    uint8_t rv;
-    uint8_t index;
-    uint32_t value;
+    signed char rle = -1;
+    unsigned int running_array[64];
+    unsigned char rv;
+    unsigned char index;
+    unsigned int value;
 
     //storage objects
     struct qoi_header header;
@@ -109,7 +109,7 @@ int main(void) {
     element.next = 0;
     struct qoi_image_chunk *first = &element;
     struct qoi_image_chunk *current = &element;
-    uint8_t image_chunk_index = 0;
+    unsigned char image_chunk_index = 0;
 
     /* Sanity check */
     if((C_WIDTH % 2) || (C_HEIGHT % 2)) {
@@ -119,7 +119,7 @@ int main(void) {
 
     /* Initialisation */
     initialise(r, g, b, a);
-    for(uint8_t i=0;i<64;i++) {
+    for(unsigned char i=0;i<64;i++) {
         running_array[i] = 0;
     }
 
@@ -140,15 +140,15 @@ int main(void) {
     store_byte(&current, header.colorspace,             &image_chunk_index);
 
     /* Loop over pixels */
-    for(uint8_t h=0;h<C_HEIGHT;h++) {
-        for(uint8_t w=0;w<C_WIDTH;w++) {
+    for(unsigned char h=0;h<C_HEIGHT;h++) {
+        for(unsigned char w=0;w<C_WIDTH;w++) {
 
             print_str("r: X"); print_hex(r[h][w],2);
             print_str("g: X"); print_hex(g[h][w],2);
             print_str("b: X"); print_hex(b[h][w],2);
             print_str("a: X"); print_hex(a[h][w],2);
 
-            int pixel = (static_cast<unsigned int>r[h][w] << 24) | (static_cast<unsigned int>g[h][w] << 16) | (static_cast<unsigned int>b[h][w] << 8) | static_cast<unsigned int>a[h][w];
+            int pixel = (r[h][w] << 24) | (g[h][w] << 16) | (b[h][w] << 8) | a[h][w];
             print_str("Pizel: X");
             print_hex(pixel,8);
 
@@ -183,12 +183,12 @@ int main(void) {
                     running_array[index] = value;
                     //STEP 3 ------ check difference with previous pixels --------------------------------------------------------------------------------------------------------
                     if (a[h][w] == a_prev) {
-                        dr = (int8_t)(r[h][w] - r_prev);
-                        dg = (int8_t)(g[h][w] - g_prev);
-                        db = (int8_t)(b[h][w] - b_prev);
+                        dr = (signed char)(r[h][w] - r_prev);
+                        dg = (signed char)(g[h][w] - g_prev);
+                        db = (signed char)(b[h][w] - b_prev);
 
                         if ( (-2 <= dr && dr <= 1)&&(-2 <= dg && dg <= 1)&&(-2 <= db && db <= 1)) { //can encode in QOI_OP_DIFF chunk
-                            rv = 0b01000000 + ((uint8_t)(dr+2)<<4) + ((uint8_t)(dg+2)<<2) + (uint8_t)(db+2);
+                            rv = 0b01000000 + ((unsigned char)(dr+2)<<4) + ((unsigned char)(dg+2)<<2) + (unsigned char)(db+2);
                             store_byte(&current, rv, &image_chunk_index);
                         }
                         else if (-32 <= dg && dg <= 31) { //green dif value can be stored so we compute the dr_dg and db_dg
@@ -250,7 +250,7 @@ int main(void) {
     /*
     current = first;
     while (current != 0) {
-        for(uint8_t i=0;i<current->size;i++) {
+        for(unsigned char i=0;i<current->size;i++) {
             print_chr(current->chunk_byte[i]);
         }
         current = current->next;
