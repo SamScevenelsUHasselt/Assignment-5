@@ -143,7 +143,7 @@ begin
         init_address => C_GND(10 downto 0),
         data_in => dmem_di,
         write_enable => dmem_we_manip,
-        address => dmem_a(12 downto 2),
+        address => dmem_a(12 downto 0),
         data_out  => dmem_do_dmem
     );
 

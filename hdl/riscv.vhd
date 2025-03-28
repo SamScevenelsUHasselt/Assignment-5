@@ -48,6 +48,7 @@ architecture Behavioural of riscv is
     signal dmem_we_o : STD_LOGIC;
     signal dmem_a_o : STD_LOGIC_VECTOR(31 downto 0);
     signal dmem_do_i : STD_LOGIC_VECTOR(31 downto 0);
+    signal read_mode_o : STD_LOGIC;
     signal instruction_i : STD_LOGIC_VECTOR(C_WIDTH-1 downto 0);
     signal PC_o : STD_LOGIC_VECTOR(C_WIDTH-1 downto 0);
 
@@ -129,8 +130,8 @@ begin
     dmem_do_i <= dmem_do;
     instruction_i <= instruction;
     PC <= PC_o;
-
-
+   
+ 
     -------------------------------------------------------------------------------
     -- MAPPINGS
     -------------------------------------------------------------------------------
