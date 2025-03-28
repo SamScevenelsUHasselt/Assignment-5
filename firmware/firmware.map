@@ -1,3 +1,7 @@
+Archive member included to satisfy reference by file (symbol)
+
+/opt/riscv/lib/gcc/riscv32-unknown-elf/13.2.0/../../../../riscv32-unknown-elf/lib/libc.a(libc_a-memcpy.o)
+                              build/firmware.o (memcpy)
 
 Discarded input sections
 
@@ -12,6 +16,9 @@ Discarded input sections
                 0x00000000       0x25 build/firmware.o
  .riscv.attributes
                 0x00000000       0x27 build/start.o
+ .comment       0x00000000       0x13 /opt/riscv/lib/gcc/riscv32-unknown-elf/13.2.0/../../../../riscv32-unknown-elf/lib/libc.a(libc_a-memcpy.o)
+ .riscv.attributes
+                0x00000000       0x53 /opt/riscv/lib/gcc/riscv32-unknown-elf/13.2.0/../../../../riscv32-unknown-elf/lib/libc.a(libc_a-memcpy.o)
 
 Memory Configuration
 
@@ -23,7 +30,7 @@ RAM              0x00002000         0x00002000         xrw
 Linker script and memory map
 
 
-.text           0x00000000      0x88c
+.text           0x00000000      0x6ba
                 0x00000000                        . = 0x0
  *(.init)
  .init          0x00000000      0x230 build/start.o
@@ -48,9 +55,12 @@ Linker script and memory map
                 0x00000418                irq_handler
                 0x0000041c                initialise
                 0x00000530                store_byte
- .text.startup  0x00000538      0x354 build/firmware.o
+ .text.startup  0x00000538       0x3c build/firmware.o
                 0x00000538                main
- .text          0x0000088c        0x0 build/start.o
+ .text          0x00000574        0x0 build/start.o
+ .text          0x00000574        0x0 /opt/riscv/lib/gcc/riscv32-unknown-elf/13.2.0/../../../../riscv32-unknown-elf/lib/libc.a(libc_a-memcpy.o)
+ .text.memcpy   0x00000574      0x146 /opt/riscv/lib/gcc/riscv32-unknown-elf/13.2.0/../../../../riscv32-unknown-elf/lib/libc.a(libc_a-memcpy.o)
+                0x00000574                memcpy
 
 .data           0x00002000       0x2c
                 0x00000000                        . = 0x0
@@ -60,23 +70,26 @@ Linker script and memory map
  .data          0x0000202c        0x0 build/tcnt.o
  .data          0x0000202c        0x0 build/firmware.o
  .data          0x0000202c        0x0 build/start.o
+ .data          0x0000202c        0x0 /opt/riscv/lib/gcc/riscv32-unknown-elf/13.2.0/../../../../riscv32-unknown-elf/lib/libc.a(libc_a-memcpy.o)
 
-.bss            0x0000202c        0x0
- .bss           0x0000202c        0x0 build/print.o
- .bss           0x0000202c        0x0 build/tcnt.o
- .bss           0x0000202c        0x0 build/firmware.o
- .bss           0x0000202c        0x0 build/start.o
-
-.rodata         0x0000202c     0x1000
+.rodata         0x0000202c     0x1028
                 0x00001000                        . = 0x1000
  *fill*         0x0000202c     0x1000 
  *(.rodata)
-                0x0000302c                        . = ALIGN (0x4)
+ .rodata        0x0000302c       0x28 build/firmware.o
+                0x00003054                        . = ALIGN (0x4)
  FILL mask 0xff
 
-.rodata.str1.4  0x0000302c       0x23
+.rodata.str1.4  0x00003054       0x23
  .rodata.str1.4
-                0x0000302c       0x23 build/print.o
+                0x00003054       0x23 build/print.o
+
+.bss            0x00003077        0x0
+ .bss           0x00003077        0x0 build/print.o
+ .bss           0x00003077        0x0 build/tcnt.o
+ .bss           0x00003077        0x0 build/firmware.o
+ .bss           0x00003077        0x0 build/start.o
+ .bss           0x00003077        0x0 /opt/riscv/lib/gcc/riscv32-unknown-elf/13.2.0/../../../../riscv32-unknown-elf/lib/libc.a(libc_a-memcpy.o)
 
 /DISCARD/
  *(.note*)
