@@ -392,10 +392,13 @@ Disassembly of section .text:
  540:	05050513          	addi	a0,a0,80 # 3050 <base_lookup+0x1050>
  544:	00112623          	sw	ra,12(sp)
  548:	d01ff0ef          	jal	ra,248 <print_str>
- 54c:	00200593          	addi	a1,zero,2
- 550:	03800513          	addi	a0,zero,56
- 554:	d11ff0ef          	jal	ra,264 <print_hex>
- 558:	0000006f          	jal	zero,558 <main+0x20>
+ 54c:	00003537          	lui	a0,0x3
+ 550:	06050513          	addi	a0,a0,96 # 3060 <base_lookup+0x1060>
+ 554:	cf5ff0ef          	jal	ra,248 <print_str>
+ 558:	00200593          	addi	a1,zero,2
+ 55c:	03800513          	addi	a0,zero,56
+ 560:	d05ff0ef          	jal	ra,264 <print_hex>
+ 564:	0000006f          	jal	zero,564 <main+0x2c>
 
 Disassembly of section .data:
 
@@ -446,4 +449,8 @@ Disassembly of section .rodata.str1.4:
     3052:	6c6c                	.insn	2, 0x6c6c
     3054:	6f57206f          	jal	zero,75f48 <base_lookup+0x73f48>
     3058:	6c72                	.insn	2, 0x6c72
-    305a:	0064                	.insn	2, 0x0064
+    305a:	0a64                	.insn	2, 0x0a64
+    305c:	0000                	.insn	2, 0x
+    305e:	0000                	.insn	2, 0x
+    3060:	0a576f57          	.insn	4, 0x0a576f57
+	...
