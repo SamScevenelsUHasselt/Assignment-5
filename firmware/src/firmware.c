@@ -8,6 +8,8 @@
 #define CHUNK_SIZE 64
 
 extern unsigned int sw_mult(unsigned int x, unsigned int y);
+extern void load_test();
+
 
 struct qoi_header {
     char magic[4]; // magic bytes "qoif"
@@ -73,6 +75,13 @@ void store_byte(struct qoi_image_chunk **current, const uint8_t to_store, uint8_
 
 int main(void) {
     
+    load_test();
+    while (1)
+    {
+        /* code */
+    }
+    
+
     uint8_t r[C_HEIGHT][C_WIDTH];
     uint8_t g[C_HEIGHT][C_WIDTH];
     uint8_t b[C_HEIGHT][C_WIDTH];
