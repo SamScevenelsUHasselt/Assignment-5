@@ -50,7 +50,7 @@ void initialise(uint8_t r[C_WIDTH][C_HEIGHT], uint8_t g[C_WIDTH][C_HEIGHT], uint
 
 void store_byte(struct qoi_image_chunk **current, const uint8_t to_store, uint8_t* image_chunk_index) {
 
-    print_str("Storing: X");
+    //print_str("Storing: X");
     print_hex(to_store,2);
     /*
     struct qoi_image_chunk *chunk = *current;
