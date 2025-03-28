@@ -23,7 +23,7 @@ RAM              0x00002000         0x00002000         xrw
 Linker script and memory map
 
 
-.text           0x00000000      0x924
+.text           0x00000000      0xa38
                 0x00000000                        . = 0x0
  *(.init)
  .init          0x00000000      0x230 build/start.o
@@ -44,13 +44,13 @@ Linker script and memory map
                 0x0000039c                TCNT_start_div16
                 0x000003c4                TCNT_set_mode
                 0x00000404                TCNT_clear_ir
- .text          0x00000418      0x124 build/firmware.o
+ .text          0x00000418      0x16c build/firmware.o
                 0x00000418                irq_handler
                 0x0000041c                initialise
                 0x00000530                store_byte
- .text.startup  0x0000053c      0x3e8 build/firmware.o
-                0x0000053c                main
- .text          0x00000924        0x0 build/start.o
+ .text.startup  0x00000584      0x4b4 build/firmware.o
+                0x00000584                main
+ .text          0x00000a38        0x0 build/start.o
 
 .data           0x00002000       0x2c
                 0x00000000                        . = 0x0
