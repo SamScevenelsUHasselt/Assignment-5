@@ -50,7 +50,7 @@ void initialise(uint8_t r[C_WIDTH][C_HEIGHT], uint8_t g[C_WIDTH][C_HEIGHT], uint
 
 void store_byte(struct qoi_image_chunk **current, const uint8_t to_store, uint8_t* image_chunk_index) {
 
-    print_chr(to_store);
+    print_hex(to_store,2);
     /*
     struct qoi_image_chunk *chunk = *current;
     chunk->chunk_byte[*image_chunk_index] = to_store;
@@ -69,17 +69,7 @@ void store_byte(struct qoi_image_chunk **current, const uint8_t to_store, uint8_
 
 
 int main(void) {
-
-    print_str("Hello World\n");
-    print_str("WoW\n");
-
-    print_hex(56,2);
-
-    while (1)
-    {
-    }
     
-
     uint8_t r[C_HEIGHT][C_WIDTH];
     uint8_t g[C_HEIGHT][C_WIDTH];
     uint8_t b[C_HEIGHT][C_WIDTH];
