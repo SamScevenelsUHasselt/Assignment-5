@@ -36,5 +36,5 @@ with open(fname, "r") as fh:
         elif (line_int > 32) and (line_int < 126):
             print(chr(line_int), end='')
         else:
-            print("€", end='')
+            print("{", end='')
 print("\n## END "+ "#"*73)
