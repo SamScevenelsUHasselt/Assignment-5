@@ -70,6 +70,14 @@ void store_byte(struct qoi_image_chunk **current, const uint8_t to_store, uint8_
 
 int main(void) {
 
+    int array[] = {1,2,3,4,5,6,7,8,9,10};
+
+    for (char i = 0; i < 10; i++)
+    {
+        print_word(array[i]);
+    }
+    
+    while(1);
 
     uint8_t r[C_HEIGHT][C_WIDTH];
     uint8_t g[C_HEIGHT][C_WIDTH];
