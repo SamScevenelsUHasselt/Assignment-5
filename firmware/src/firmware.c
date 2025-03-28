@@ -72,6 +72,8 @@ int main(void) {
 
     print_str("Hello World");
 
+    print_hex(56,2);
+
     while (1)
     {
     }
