@@ -54,9 +54,9 @@ void initialise(unsigned char r[C_WIDTH][C_HEIGHT], unsigned char g[C_WIDTH][C_H
 
 void store_byte(struct qoi_image_chunk **current, const unsigned char to_store, unsigned char* image_chunk_index) {
 
-    print_str("Storing: X");
-    print_hex(to_store,2);
-    /*
+    //print_str("Storing: X");
+    //print_hex(to_store,2);
+    
     struct qoi_image_chunk *chunk = *current;
     chunk->chunk_byte[*image_chunk_index] = to_store;
     chunk->size = *image_chunk_index + 1;
@@ -69,7 +69,7 @@ void store_byte(struct qoi_image_chunk **current, const unsigned char to_store, 
         *image_chunk_index = 0;
     }
     return;
-    */
+    
 }
 
 int main(void) {
@@ -141,9 +141,9 @@ int main(void) {
     for(unsigned char h=0;h<C_HEIGHT;h++) {
         for(unsigned char w=0;w<C_WIDTH;w++) {
 
-            int pixel = (r[h][w] << 24) | (g[h][w] << 16) | (b[h][w] << 8) | a[h][w];
-            print_str("Pizel: X");
-            print_hex(pixel,8);
+            //int pixel = (r[h][w] << 24) | (g[h][w] << 16) | (b[h][w] << 8) | a[h][w];
+            //print_str("Pizel: X");
+            //print_hex(pixel,8);
 
             //STEP 1 ------ check if equal to previous pixel ---------------------------------------------------------------------------------------------------------------------
             if (r[h][w] == r_prev && g[h][w] == g_prev && b[h][w] == b_prev && a[h][w] == a_prev) {
@@ -240,14 +240,14 @@ int main(void) {
     store_byte(&current, rv, &image_chunk_index);
 
     
-    /*
+    
     current = first;
     while (current != 0) {
         for(unsigned char i=0;i<current->size;i++) {
-            print_chr(current->chunk_byte[i]);
+            print_hex(current->chunk_byte[i],2);
         }
         current = current->next;
     }
-    */
+    
     while (1){}
 }
