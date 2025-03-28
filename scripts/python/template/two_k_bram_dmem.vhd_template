@@ -42,6 +42,7 @@ architecture Behavioural of two_k_bram_dmem is
     signal write_enable_i : STD_LOGIC;
     signal address_i : STD_LOGIC_VECTOR(12 downto 0);
     signal data_out_o : STD_LOGIC_VECTOR(31 downto 0);
+    signal data_pre_fix : STD_LOGIC_VECTOR(31 downto 0);
 
     constant C_NULL : STD_LOGIC_VECTOR(31 downto 0) := x"00000000";
     constant C_ONES : STD_LOGIC_VECTOR(31 downto 0) := x"FFFFFFFF";
