@@ -109,20 +109,20 @@ Disassembly of section .text:
  184:	00000e93          	addi	t4,zero,0
  188:	00000f13          	addi	t5,zero,0
  18c:	00000f93          	addi	t6,zero,0
- 190:	00001137          	lui	sp,0x1
- 194:	fe010113          	addi	sp,sp,-32 # fe0 <main+0xa94>
- 198:	deadc1b7          	lui	gp,0xdeadc
- 19c:	eef18193          	addi	gp,gp,-273 # deadbeef <base_lookup+0xdead9eef>
- 1a0:	00018213          	addi	tp,gp,0
- 1a4:	00001137          	lui	sp,0x1
- 1a8:	00010113          	addi	sp,sp,0 # 1000 <main+0xab4>
- 1ac:	34011073          	csrrw	zero,mscratch,sp
- 1b0:	00000117          	auipc	sp,0x0
- 1b4:	e6010113          	addi	sp,sp,-416 # 10 <trap_vector>
- 1b8:	30511073          	csrrw	zero,mtvec,sp
- 1bc:	30045073          	csrrwi	zero,mstatus,8
- 1c0:	fff00113          	addi	sp,zero,-1
- 1c4:	30411073          	csrrw	zero,mie,sp
+ 190:	deadc1b7          	lui	gp,0xdeadc
+ 194:	eef18193          	addi	gp,gp,-273 # deadbeef <base_lookup+0xdead9eef>
+ 198:	00018213          	addi	tp,gp,0
+ 19c:	00001137          	lui	sp,0x1
+ 1a0:	00010113          	addi	sp,sp,0 # 1000 <main+0xab4>
+ 1a4:	34011073          	csrrw	zero,mscratch,sp
+ 1a8:	00000117          	auipc	sp,0x0
+ 1ac:	e6810113          	addi	sp,sp,-408 # 10 <trap_vector>
+ 1b0:	30511073          	csrrw	zero,mtvec,sp
+ 1b4:	30045073          	csrrwi	zero,mstatus,8
+ 1b8:	fff00113          	addi	sp,zero,-1
+ 1bc:	30411073          	csrrw	zero,mie,sp
+ 1c0:	00001137          	lui	sp,0x1
+ 1c4:	fe010113          	addi	sp,sp,-32 # fe0 <main+0xa94>
  1c8:	384000ef          	jal	ra,54c <main>
  1cc:	00100073          	ebreak
  1d0:	37c000ef          	jal	ra,54c <main>
