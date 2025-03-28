@@ -148,7 +148,7 @@ int main(void) {
             print_str("b: X"); print_hex(b[h][w],2);
             print_str("a: X"); print_hex(a[h][w],2);
 
-            int pixel = (r[h][w] << 24) | (g[h][w] << 16) | (b[h][w] << 8) | a[h][w];
+            int pixel = (static_cast<unsigned int>r[h][w] << 24) | (static_cast<unsigned int>g[h][w] << 16) | (static_cast<unsigned int>b[h][w] << 8) | static_cast<unsigned int>a[h][w];
             print_str("Pizel: X");
             print_hex(pixel,8);
 
