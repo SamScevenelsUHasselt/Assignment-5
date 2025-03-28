@@ -8,7 +8,6 @@
 #define CHUNK_SIZE 64
 
 extern unsigned int sw_mult(unsigned int x, unsigned int y);
-extern void load_test();
 
 struct qoi_header {
     char magic[4]; // magic bytes "qoif"
@@ -163,7 +162,12 @@ int main(void) {
                 }
 
                 //STEP 2 ------ check if in the running array --------------------------------------------------------------------------------------------------------------------
-                index =  (r[h][w] * 3 + g[h][w] * 5 + b[h][w] * 7 + a[h][w] * 11) % 64; //possible bottleneck
+
+
+                index =  (sw_mult(r[h][w] , 3) + sw_mult(g[h][w] , 5) + sw_mult(b[h][w] , 7) + sw_mult(a[h][w] , 11)) % 64; //possible bottleneck
+
+
+
                 value =  (r[h][w] << 24) + (g[h][w] << 16) + (b[h][w] << 8) + a[h][w];
                 if (running_array[index] == value) { //The pixel is in the running array
                     store_byte(&current, index, &image_chunk_index);
