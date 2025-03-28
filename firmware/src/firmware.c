@@ -71,10 +71,29 @@ void store_byte(struct qoi_image_chunk **current, const unsigned char to_store, 
     return;
     */
 }
-
-
+#pragma GCC push_options
+#pragma GCC optimize ("O0")
+void print_test(){
+    print_str("0:");
+    print_hex(0xFF<<0);
+    print_str("4:");
+    print_hex(0xFF<<4);
+    print_str("8:");
+    print_hex(0xFF<<8);
+    print_str("12:");
+    print_hex(0xFF<<12);
+    print_str("16:");
+    print_hex(0xFF<<16);
+    print_str("20:");
+    print_hex(0xFF<<20);
+    print_str("24:");
+    print_hex(0xFF<<24);
+}
+#pragma GCC pop_options
 int main(void) {
-    
+
+    print_test();
+
     unsigned char r[C_HEIGHT][C_WIDTH];
     unsigned char g[C_HEIGHT][C_WIDTH];
     unsigned char b[C_HEIGHT][C_WIDTH];
