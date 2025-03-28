@@ -508,11 +508,11 @@ Disassembly of section .text:
  708:	b6dff0ef          	jal	ra,274 <print_hex>
  70c:	010a1713          	slli	a4,s4,0x10
  710:	000037b7          	lui	a5,0x3
- 714:	00eb0b33          	add	s6,s6,a4
- 718:	008a9713          	slli	a4,s5,0x8
- 71c:	07078513          	addi	a0,a5,112 # 3070 <base_lookup+0x1070>
- 720:	00eb0b33          	add	s6,s6,a4
- 724:	017b0b33          	add	s6,s6,s7
+ 714:	00eb6b33          	or	s6,s6,a4
+ 718:	07078513          	addi	a0,a5,112 # 3070 <base_lookup+0x1070>
+ 71c:	008a9713          	slli	a4,s5,0x8
+ 720:	017b6b33          	or	s6,s6,s7
+ 724:	00eb6b33          	or	s6,s6,a4
  728:	b31ff0ef          	jal	ra,258 <print_str>
  72c:	00800593          	addi	a1,zero,8
  730:	000b0513          	addi	a0,s6,0
