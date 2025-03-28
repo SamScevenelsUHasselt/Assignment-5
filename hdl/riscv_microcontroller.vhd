@@ -51,6 +51,7 @@ architecture Behavioural of riscv_microcontroller is
     signal dmem_we, dmem_we_manip : STD_LOGIC;
     signal dmem_a : STD_LOGIC_VECTOR(31 downto 0);
     signal dmem_di : STD_LOGIC_VECTOR(31 downto 0);
+    signal store_control : STD_LOGIC_VECTOR(1 downto 0);
     
     --imem
     signal instruction : STD_LOGIC_VECTOR(31 downto 0);
@@ -103,6 +104,7 @@ begin
         dmem_we => dmem_we,
         dmem_a => dmem_a,
         dmem_di => dmem_di,
+        store_control => store_control,
         instruction => instruction,
         PC => PC
     );
@@ -144,7 +146,8 @@ begin
         data_in => dmem_di,
         write_enable => dmem_we_manip,
         address => dmem_a(12 downto 0),
-        data_out  => dmem_do_dmem
+        data_out  => dmem_do_dmem,
+        store_control => store_control
     );
 
     dmem_we_manip <= dmem_we when  dmem_a(C_WIDTH-1 downto C_PERIPHERAL_MASK_LOWINDEX) = C_DMEM_BASE_ADDRESS_MASK else '0';

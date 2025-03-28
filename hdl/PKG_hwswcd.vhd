@@ -125,6 +125,7 @@ package PKG_hwswcd is
             dmem_we : out STD_LOGIC;
             dmem_a : out STD_LOGIC_VECTOR(31 downto 0);
             dmem_di : out STD_LOGIC_VECTOR(31 downto 0);
+            store_control : out STD_LOGIC_VECTOR(1 downto 0);
             instruction : in STD_LOGIC_VECTOR(C_WIDTH-1 downto 0);
             PC : out STD_LOGIC_VECTOR(C_WIDTH-1 downto 0)
         );
@@ -148,7 +149,16 @@ package PKG_hwswcd is
             gpio_leds : out STD_LOGIC_VECTOR(3 downto 0)
         );
     end component riscv_microcontroller;
+    
+    component riscv_microcontroller_tb is
+    generic (
+        G_DATA_WIDTH : integer := 32;
+        G_DEPTH_LOG2 : integer := 11;
 
+        FNAME_OUT_FILE :       string := "C:/Users/School/Desktop/HWSWCD/Assignment-5/firmware/simulation_output.txt"
+    );  
+    end component riscv_microcontroller_tb;
+    
     component dmem_model is
         generic (
             G_DATA_WIDTH : integer := 32;
@@ -271,7 +281,8 @@ package PKG_hwswcd is
             data_in : in STD_LOGIC_VECTOR(31 downto 0);
             write_enable : in STD_LOGIC;
             address : in STD_LOGIC_VECTOR(12 downto 0);
-            data_out : out STD_LOGIC_VECTOR(31 downto 0)
+            data_out : out STD_LOGIC_VECTOR(31 downto 0);
+            store_control : in STD_LOGIC_VECTOR(1 downto 0)
         );
     end component two_k_bram_dmem;
 

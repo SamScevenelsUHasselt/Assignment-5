@@ -27,7 +27,9 @@ entity two_k_bram_dmem is
         data_in : in STD_LOGIC_VECTOR(31 downto 0);
         write_enable : in STD_LOGIC;
         address : in STD_LOGIC_VECTOR(12 downto 0);
-        data_out : out STD_LOGIC_VECTOR(31 downto 0)
+        data_out : out STD_LOGIC_VECTOR(31 downto 0);
+        
+        store_control : in STD_LOGIC_VECTOR(1 downto 0)
     );
 end entity two_k_bram_dmem;
 
@@ -42,7 +44,9 @@ architecture Behavioural of two_k_bram_dmem is
     signal write_enable_i : STD_LOGIC;
     signal address_i : STD_LOGIC_VECTOR(12 downto 0);
     signal data_out_o : STD_LOGIC_VECTOR(31 downto 0);
-    signal data_pre_fix : STD_LOGIC_VECTOR(31 downto 0);
+    signal data_out_pre_fix : STD_LOGIC_VECTOR(31 downto 0);
+    signal data_in_pre_fix : STD_LOGIC_VECTOR(31 downto 0);
+    signal store_control_i :STD_LOGIC_VECTOR(1 downto 0);
 
     constant C_NULL : STD_LOGIC_VECTOR(31 downto 0) := x"00000000";
     constant C_ONES : STD_LOGIC_VECTOR(31 downto 0) := x"FFFFFFFF";
@@ -67,10 +71,12 @@ begin
     init_write_enable_i <= init_write_enable;
     init_address_i <= init_address;
 
-    data_in_i <= data_in;
+    data_in_pre_fix <= data_in;
     write_enable_i <= write_enable;
     address_i <= address;
     data_out <= data_out_o;
+    
+    store_control_i <= store_control;
    
 
     init_address_00 <= "0" & init_address_i(9 downto 0) & "00000";
@@ -84,17 +90,84 @@ begin
     address_01 <= "0" & address_i(11 downto 2) & "00000";
     write_enable_00 <= write_enable_i and not(address_i(12));
     write_enable_01 <= write_enable_i and address_i(12);
-    write_enable_00_vec <= (others => write_enable_00);
-    write_enable_01_vec <= (others => write_enable_01);
-    data_pre_fix <= data_out_00 when address_i(12) = '0' else data_out_01;
-
+    data_out_pre_fix <= data_out_00 when address_i(12) = '0' else data_out_01;
+    
     -- fix load byte and load half:
     with address_i(1 downto 0) select data_out_o <=
-        data_pre_fix                            when "00", -- no shift needed
-        X"00" & data_pre_fix(31 downto 8)       when "01", -- shift 1 byte
-        X"0000" & data_pre_fix(31 downto 16)    when "10", -- shift 2 bytes
-        X"000000" & data_pre_fix(31 downto 24)  when "11", -- shift 3 bytes
-        data_pre_fix when others;
+        data_out_pre_fix                            when "00", -- no shift needed
+        X"00" & data_out_pre_fix(31 downto 8)       when "01", -- shift 1 byte
+        X"0000" & data_out_pre_fix(31 downto 16)    when "10", -- shift 2 bytes
+        X"000000" & data_out_pre_fix(31 downto 24)  when "11", -- shift 3 bytes
+        data_out_pre_fix when others;
+    
+    --fix byte store
+    store_fix: process(store_control_i,address_i,write_enable_00,write_enable_01,data_in_pre_fix)
+    begin
+    
+        case address_i(1 downto 0) is --fix data location 
+            when "00" => data_in_i <= data_in_pre_fix;
+            when "01" => data_in_i <= data_in_pre_fix(23 downto 0) & X"00";
+            when "10" => data_in_i <= data_in_pre_fix(15 downto 0) & X"0000";
+            when "11" => data_in_i <= data_in_pre_fix(7 downto 0) & X"000000";
+            when others =>  data_in_i <= data_in_pre_fix;
+        end case;
+    
+        if store_control_i = "01" then --byte store
+            if write_enable_00 = '1' then
+                case address_i(1 downto 0) is --only write the byte
+                    when "00" => write_enable_00_vec <= X"01";
+                    when "01" => write_enable_00_vec <= X"02";
+                    when "10" => write_enable_00_vec <= X"04";
+                    when "11" => write_enable_00_vec <= X"08";
+                    when others =>  write_enable_00_vec <= X"01";
+                end case;
+            else
+                write_enable_00_vec <= X"00";
+            end if;
+            
+            if write_enable_01 = '1' then
+                case address_i(1 downto 0) is --only write the byte
+                    when "00" => write_enable_01_vec <= X"01";
+                    when "01" => write_enable_01_vec <= X"02";
+                    when "10" => write_enable_01_vec <= X"04";
+                    when "11" => write_enable_01_vec <= X"08";
+                    when others =>  write_enable_01_vec <= X"01";
+                end case;
+            else
+                write_enable_01_vec <= X"00";
+            end if;
+            
+        elsif store_control_i = "10" then --half store
+            if write_enable_00 = '1' then
+                case address_i(1 downto 0) is --only write the byte
+                    when "00" => write_enable_00_vec <= X"03";
+                    when "01" => write_enable_00_vec <= X"06";
+                    when "10" => write_enable_00_vec <= X"0C";
+                    when "11" => write_enable_00_vec <= X"00"; --Should not happen!
+                    when others =>  write_enable_00_vec <= X"03";
+                end case;
+            else
+                write_enable_00_vec <= X"00";
+            end if;
+            
+            if write_enable_01 = '1' then
+                case address_i(1 downto 0) is --only write the byte
+                    when "00" => write_enable_01_vec <= X"03";
+                    when "01" => write_enable_01_vec <= X"06";
+                    when "10" => write_enable_01_vec <= X"0C";
+                    when "11" => write_enable_01_vec <= X"00"; --Should not happen!
+                    when others =>  write_enable_01_vec <= X"03";
+                end case;
+            else
+                write_enable_01_vec <= X"00";
+            end if;
+        else -- word store (no fix needed)
+            write_enable_00_vec <= (others => write_enable_00);
+            write_enable_01_vec <= (others => write_enable_01);
+        end if;
+    end process;
+    
+
 
     -------------------------------------------------------------------------------
     -- BRAM PRIMITIVES

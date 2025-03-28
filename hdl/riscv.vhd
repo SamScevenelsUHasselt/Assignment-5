@@ -30,6 +30,7 @@ entity riscv is
         dmem_we : out STD_LOGIC;
         dmem_a : out STD_LOGIC_VECTOR(31 downto 0);
         dmem_di : out STD_LOGIC_VECTOR(31 downto 0);
+        store_control : out STD_LOGIC_VECTOR(1 downto 0);
 
         -- imem
         instruction : in STD_LOGIC_VECTOR(C_WIDTH-1 downto 0);
@@ -48,7 +49,6 @@ architecture Behavioural of riscv is
     signal dmem_we_o : STD_LOGIC;
     signal dmem_a_o : STD_LOGIC_VECTOR(31 downto 0);
     signal dmem_do_i : STD_LOGIC_VECTOR(31 downto 0);
-    signal read_mode_o : STD_LOGIC;
     signal instruction_i : STD_LOGIC_VECTOR(C_WIDTH-1 downto 0);
     signal PC_o : STD_LOGIC_VECTOR(C_WIDTH-1 downto 0);
 
@@ -128,10 +128,11 @@ begin
     dmem_we <= dmem_we_o;
     dmem_a <= dmem_a_o;
     dmem_do_i <= dmem_do;
+    store_control <= ctrl_StoreSel;
     instruction_i <= instruction;
     PC <= PC_o;
-   
- 
+    
+
     -------------------------------------------------------------------------------
     -- MAPPINGS
     -------------------------------------------------------------------------------
@@ -215,14 +216,8 @@ begin
     -------------------------------------------------------------------------------
     alu_operator2 <= immediate when ctrl_ALUSrc = '0' else regfile_data2;
 
-    PMUX_DMEM_DI: process(ctrl_StoreSel, dmem_do_i, regfile_data2)
-    begin
-        case ctrl_StoreSel is
-            when "01" => dmem_di_o <= dmem_do_i(31 downto 8) & regfile_data2(7 downto 0);
-            when "10" => dmem_di_o <= dmem_do_i(31 downto 16) & regfile_data2(15 downto 0);
-            when others => dmem_di_o <= regfile_data2;
-        end case;
-    end process;
+    dmem_di_o <= regfile_data2;
+
 
     PMUX_REGFILE: process(ctrl_ToRegister, ctrl_result_filter, dmem_do_i, dmem_do_i_signpadding, program_counter, pc_inc4, immediate, alu_result, pc_inc_imm_sh12, from_CSR)
     begin
