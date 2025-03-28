@@ -67,11 +67,11 @@ void store_byte(struct qoi_image_chunk **current, const uint8_t to_store, uint8_
     */
 }
 
-char array[] = {1,2,3,4,5,6,7,8,9,10};
+int array[] = {1,2,3,4,5,6,7,8,9,10};
 
 int main(void) {
 
-    for (char i = 0; i < 10; i++)
+    for (int i = 0; i < 10; i++)
     {
         print_chr(array[i]);
     }
