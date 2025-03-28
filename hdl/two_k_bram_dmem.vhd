@@ -88,7 +88,8 @@ begin
     
     address_00 <= "0" & address_i(11 downto 2) & "00000";
     address_01 <= "0" & address_i(11 downto 2) & "00000";
-
+    write_enable_00 <= write_enable_i and not(address_i(12));
+    write_enable_01 <= write_enable_i and address_i(12);
     data_out_pre_fix <= data_out_00 when address_i(12) = '0' else data_out_01;
     
     -- fix load byte and load half:
@@ -100,11 +101,8 @@ begin
         data_out_pre_fix when others;
     
     --fix byte store
-    store_fix: process(store_control_i,address_i,write_enable_i,data_in_pre_fix)
-    begin   
-    
-        write_enable_00 <= write_enable_i and not(address_i(12));
-        write_enable_01 <= write_enable_i and address_i(12);
+    store_fix: process(store_control_i,address_i,write_enable_00,write_enable_01,data_in_pre_fix)
+    begin
     
         case address_i(1 downto 0) is --fix data location 
             when "00" => data_in_i <= data_in_pre_fix;
@@ -373,8 +371,8 @@ begin
         -- INIT_00 to INIT_7F: Initial contents of the data memory array
         INIT_00 => X"0000000000000000000000000000000000000000000000000000000000000000",
         INIT_01 => X"464544434241393837363534333231300000000a000000000000000000000000",
-        INIT_02 => X"0000000058203a670000000058203a7200003938373635343332313000000000",
-        INIT_03 => X"000000000000000058203a6c657a69500000000058203a610000000058203a62",
+        INIT_02 => X"0000000000000000000000000000000000003938373635343332313000000000",
+        INIT_03 => X"0000000000000000000000000000000000000000000000000000000000000000",
         INIT_04 => X"0000000000000000000000000000000000000000000000000000000000000000",
         INIT_05 => X"0000000000000000000000000000000000000000000000000000000000000000",
         INIT_06 => X"0000000000000000000000000000000000000000000000000000000000000000",
