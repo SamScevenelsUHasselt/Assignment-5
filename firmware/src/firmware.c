@@ -135,11 +135,16 @@ int main(void) {
     store_byte(&current,(header.height&0x0000FF00)<<8,  &image_chunk_index);
     store_byte(&current,(header.height&0x000000FF),     &image_chunk_index);
     store_byte(&current, header.channels,               &image_chunk_index);
-    store_byte(&current, header.colorspace,                 &image_chunk_index);
+    store_byte(&current, header.colorspace,             &image_chunk_index);
 
     /* Loop over pixels */
     for(uint8_t h=0;h<C_HEIGHT;h++) {
         for(uint8_t w=0;w<C_WIDTH;w++) {
+
+            print_str("r: X"); print_hex(r[h][w],2);
+            print_str("g: X"); print_hex(g[h][w],2);
+            print_str("b: X"); print_hex(b[h][w],2);
+            print_str("a: X"); print_hex(a[h][w],2);
 
             int pixel = (r[h][w] << 24) + (g[h][w] << 16) + (b[h][w] << 8) + a[h][w];
             print_str("Pizel: X");
