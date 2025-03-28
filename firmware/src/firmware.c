@@ -77,7 +77,7 @@ int main(void) {
         print_chr(array[i]);
     }
     
-    while(1);
+    while(1){};
 
     uint8_t r[C_HEIGHT][C_WIDTH];
     uint8_t g[C_HEIGHT][C_WIDTH];
