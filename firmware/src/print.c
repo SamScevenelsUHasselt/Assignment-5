@@ -38,7 +38,6 @@ void print_hex(unsigned int val, int digits) {
 		x="0123456789ABCDEF"[index];
 		*((volatile unsigned int*)OUTPORT) = x;
 	}
-	print_str("\n");
 }
 
 int getDigit(int base, int number) {
