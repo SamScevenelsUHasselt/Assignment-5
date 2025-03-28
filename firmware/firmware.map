@@ -23,7 +23,7 @@ RAM              0x00002000         0x00002000         xrw
 Linker script and memory map
 
 
-.text           0x00000000      0xab0
+.text           0x00000000      0x930
                 0x00000000                        . = 0x0
  *(.init)
  .init          0x00000000      0x240 build/start.o
@@ -45,14 +45,13 @@ Linker script and memory map
                 0x000003ac                TCNT_start_div16
                 0x000003d4                TCNT_set_mode
                 0x00000414                TCNT_clear_ir
- .text          0x00000428      0x1f8 build/firmware.o
-                0x00000428                print_test
-                0x000004fc                irq_handler
-                0x00000500                initialise
-                0x00000614                store_byte
- .text.startup  0x00000620      0x490 build/firmware.o
-                0x00000620                main
- .text          0x00000ab0        0x0 build/start.o
+ .text          0x00000428      0x180 build/firmware.o
+                0x0000045c                irq_handler
+                0x00000460                initialise
+                0x00000574                store_byte
+ .text.startup  0x000005a8      0x388 build/firmware.o
+                0x000005a8                main
+ .text          0x00000930        0x0 build/start.o
 
 .data           0x00002000       0x2c
                 0x00000000                        . = 0x0
@@ -63,24 +62,25 @@ Linker script and memory map
  .data          0x0000202c        0x0 build/firmware.o
  .data          0x0000202c        0x0 build/start.o
 
-.rodata         0x0000202c     0x1048
+.bss            0x0000202c        0x0
+ .bss           0x0000202c        0x0 build/print.o
+ .bss           0x0000202c        0x0 build/tcnt.o
+ .bss           0x0000202c        0x0 build/firmware.o
+ .bss           0x0000202c        0x0 build/start.o
+
+.rodata         0x0000202c     0x1000
                 0x00001000                        . = 0x1000
  *fill*         0x0000202c     0x1000 
  *(.rodata)
- .rodata        0x0000302c       0x45 build/firmware.o
-                0x00003074                        . = ALIGN (0x4)
- *fill*         0x00003071        0x3 
+                0x0000302c                        . = ALIGN (0x4)
  FILL mask 0xff
 
-.rodata.str1.4  0x00003074       0x23
+.rodata.str1.4  0x0000302c       0x39
  .rodata.str1.4
-                0x00003074       0x23 build/print.o
-
-.bss            0x00003097        0x0
- .bss           0x00003097        0x0 build/print.o
- .bss           0x00003097        0x0 build/tcnt.o
- .bss           0x00003097        0x0 build/firmware.o
- .bss           0x00003097        0x0 build/start.o
+                0x0000302c       0x39 build/print.o
+                                 0x23 (size before relaxing)
+ .rodata.str1.4
+                0x00003065       0x15 build/firmware.o
 
 /DISCARD/
  *(.note*)
