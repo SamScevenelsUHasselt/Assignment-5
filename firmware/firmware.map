@@ -23,7 +23,7 @@ RAM              0x00002000         0x00002000         xrw
 Linker script and memory map
 
 
-.text           0x00000000      0x574
+.text           0x00000000      0x568
                 0x00000000                        . = 0x0
  *(.init)
  .init          0x00000000      0x230 build/start.o
@@ -48,37 +48,36 @@ Linker script and memory map
                 0x00000418                irq_handler
                 0x0000041c                initialise
                 0x00000530                store_byte
- .text.startup  0x00000538       0x3c build/firmware.o
+ .text.startup  0x00000538       0x30 build/firmware.o
                 0x00000538                main
- .text          0x00000574        0x0 build/start.o
+ .text          0x00000568        0x0 build/start.o
 
-.data           0x00002000       0x36
+.data           0x00002000       0x54
                 0x00000000                        . = 0x0
  *(.data)
  .data          0x00002000       0x2c build/print.o
                 0x00002000                base_lookup
  .data          0x0000202c        0x0 build/tcnt.o
- .data          0x0000202c        0xa build/firmware.o
+ .data          0x0000202c       0x28 build/firmware.o
                 0x0000202c                array
- .data          0x00002036        0x0 build/start.o
+ .data          0x00002054        0x0 build/start.o
 
-.bss            0x00002036        0x0
- .bss           0x00002036        0x0 build/print.o
- .bss           0x00002036        0x0 build/tcnt.o
- .bss           0x00002036        0x0 build/firmware.o
- .bss           0x00002036        0x0 build/start.o
+.bss            0x00002054        0x0
+ .bss           0x00002054        0x0 build/print.o
+ .bss           0x00002054        0x0 build/tcnt.o
+ .bss           0x00002054        0x0 build/firmware.o
+ .bss           0x00002054        0x0 build/start.o
 
-.rodata         0x00002036     0x1002
+.rodata         0x00002054     0x1000
                 0x00001000                        . = 0x1000
- *fill*         0x00002036     0x1000 
+ *fill*         0x00002054     0x1000 
  *(.rodata)
-                0x00003038                        . = ALIGN (0x4)
- *fill*         0x00003036        0x2 
+                0x00003054                        . = ALIGN (0x4)
  FILL mask 0xff
 
-.rodata.str1.4  0x00003038       0x23
+.rodata.str1.4  0x00003054       0x23
  .rodata.str1.4
-                0x00003038       0x23 build/print.o
+                0x00003054       0x23 build/print.o
 
 /DISCARD/
  *(.note*)
