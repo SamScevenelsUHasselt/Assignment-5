@@ -50,7 +50,8 @@ void initialise(uint8_t r[C_WIDTH][C_HEIGHT], uint8_t g[C_WIDTH][C_HEIGHT], uint
 
 void store_byte(struct qoi_image_chunk **current, const uint8_t to_store, uint8_t* image_chunk_index) {
 
-    print_chr(to_store);
+    print_str("Storing: X");
+    print_hex(to_store,2);
     /*
     struct qoi_image_chunk *chunk = *current;
     chunk->chunk_byte[*image_chunk_index] = to_store;
@@ -139,7 +140,8 @@ int main(void) {
         for(uint8_t w=0;w<C_WIDTH;w++) {
 
             int pixel = (r[h][w] << 24) + (g[h][w] << 16) + (b[h][w] << 8) + a[h][w];
-            print_word(pixel);
+            print_str("Pizel: X");
+            print_hex(pixel,8);
 
             //STEP 1 ------ check if equal to previous pixel ---------------------------------------------------------------------------------------------------------------------
             if (r[h][w] == r_prev && g[h][w] == g_prev && b[h][w] == b_prev && a[h][w] == a_prev) {
