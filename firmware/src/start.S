@@ -1,6 +1,8 @@
 .global start
 .global sw_mult
 
+.global load_test
+
 .section .init, "ax"
 
 start:
@@ -181,6 +183,12 @@ sw_mult_exit:
     lw t1, 8(sp)
     addi sp, sp, (3*4)
     jalr zero, 0(ra)
+
+load_test:
+    addi t0, zero, 123; # t0 = t1 + imm
+    addi t1, zero, 129
+    sb t0, 0(t1) # 
+    lb t2, 0(t1) # 
 
 done:
     j done
