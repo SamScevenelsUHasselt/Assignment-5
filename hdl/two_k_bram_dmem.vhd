@@ -89,14 +89,16 @@ begin
     data_pre_fix <= data_out_00 when address_i(12) = '0' else data_out_01;
 
     -- fix load byte and load half:
-    
-    with address_i(1 downto 0) select data_out_o <=
-        data_pre_fix                            when "00", -- no shift needed
-        X"00" & data_pre_fix(31 downto 8)       when "01", -- shift 1 byte
-        X"0000" & data_pre_fix(31 downto 16)    when "10", -- shift 2 bytes
-        X"000000" & data_pre_fix(31 downto 24)  when "11", -- shift 3 bytes
-        data_pre_fix when others;
-
+    fix_loads : process(address_i)
+    begin
+        case address_i(1 downto 0) is
+            when "00" => data_out_o <= data_pre_fix; -- no shift needed
+            when "01" => data_out_o <= X"00" & data_pre_fix(31 downto 8); -- shift 1 byte
+            when "10" => data_out_o <= X"0000" & data_pre_fix(31 downto 16); -- shift 2 bytes
+            when "11" => data_out_o <= X"000000" & data_pre_fix(31 downto 24); -- shift 3 bytes
+            when others => data_out_o <= data_pre_fix;
+        end case;
+    end process;    
 
     -------------------------------------------------------------------------------
     -- BRAM PRIMITIVES
@@ -111,8 +113,8 @@ begin
         EN_ECC_WRITE => FALSE,
         -- INIT_00 to INIT_7F: Initial contents of the data memory array
         INIT_00 => X"000f4240000186a000002710000003e8000000640000000a0000000100000000",
-        INIT_01 => X"00000005000000040000000300000002000000013b9aca0005f5e10000989680",
-        INIT_02 => X"0000000000000000000000000000000a00000009000000080000000700000006",
+        INIT_01 => X"00000000000000000000000000000000000000003b9aca0005f5e10000989680",
+        INIT_02 => X"0000000000000000000000000000000000000000000000000000000000000000",
         INIT_03 => X"0000000000000000000000000000000000000000000000000000000000000000",
         INIT_04 => X"0000000000000000000000000000000000000000000000000000000000000000",
         INIT_05 => X"0000000000000000000000000000000000000000000000000000000000000000",
@@ -301,9 +303,9 @@ begin
         EN_ECC_WRITE => FALSE,
         -- INIT_00 to INIT_7F: Initial contents of the data memory array
         INIT_00 => X"0000000000000000000000000000000000000000000000000000000000000000",
-        INIT_01 => X"0000000000000000000000000000000000000000000000000000000000000000",
-        INIT_02 => X"37363534333231300000000a0000000000000000000000000000000000000000",
-        INIT_03 => X"0000000000000000000039383736353433323130000000004645444342413938",
+        INIT_01 => X"464544434241393837363534333231300000000a000000000000000000000000",
+        INIT_02 => X"0000000000646c726f57206f6c6c654800003938373635343332313000000000",
+        INIT_03 => X"0000000000000000000000000000000000000000000000000000000000000000",
         INIT_04 => X"0000000000000000000000000000000000000000000000000000000000000000",
         INIT_05 => X"0000000000000000000000000000000000000000000000000000000000000000",
         INIT_06 => X"0000000000000000000000000000000000000000000000000000000000000000",
