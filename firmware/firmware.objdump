@@ -392,7 +392,10 @@ Disassembly of section .text:
  540:	05050513          	addi	a0,a0,80 # 3050 <base_lookup+0x1050>
  544:	00112623          	sw	ra,12(sp)
  548:	d01ff0ef          	jal	ra,248 <print_str>
- 54c:	0000006f          	jal	zero,54c <main+0x14>
+ 54c:	00200593          	addi	a1,zero,2
+ 550:	03800513          	addi	a0,zero,56
+ 554:	d11ff0ef          	jal	ra,264 <print_hex>
+ 558:	0000006f          	jal	zero,558 <main+0x20>
 
 Disassembly of section .data:
 
