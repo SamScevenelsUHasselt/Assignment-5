@@ -89,16 +89,14 @@ begin
     data_pre_fix <= data_out_00 when address_i(12) = '0' else data_out_01;
 
     -- fix load byte and load half:
-    fix_loads : process(address_i)
-    begin
-        case address_i(1 downto 0) is
-            when "00" => data_out_o <= data_pre_fix; -- no shift needed
-            when "01" => data_out_o <= X"00" & data_pre_fix(31 downto 8); -- shift 1 byte
-            when "10" => data_out_o <= X"0000" & data_pre_fix(31 downto 16); -- shift 2 bytes
-            when "11" => data_out_o <= X"000000" & data_pre_fix(31 downto 24); -- shift 3 bytes
-            when others => data_out_o <= data_pre_fix;
-        end case;
-    end process;    
+    
+    with address_i(1 downto 0) select data_out_o <=
+        data_pre_fix                            when "00", -- no shift needed
+        X"00" & data_pre_fix(31 downto 8)       when "01", -- shift 1 byte
+        X"0000" & data_pre_fix(31 downto 16)    when "10", -- shift 2 bytes
+        X"000000" & data_pre_fix(31 downto 24)  when "11", -- shift 3 bytes
+        data_pre_fix when others;
+
 
     -------------------------------------------------------------------------------
     -- BRAM PRIMITIVES
