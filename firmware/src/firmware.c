@@ -143,12 +143,12 @@ int main(void) {
     for(unsigned char h=0;h<C_HEIGHT;h++) {
         for(unsigned char w=0;w<C_WIDTH;w++) {
 
-            print_str("r: X"); print_hex(r[h][w],8);
-            print_str("g: X"); print_hex(g[h][w],8);
-            print_str("b: X"); print_hex(b[h][w],8);
+            print_str("r: X"); print_hex(r[h][w] << 24,8);
+            print_str("g: X"); print_hex(g[h][w] << 16,8);
+            print_str("b: X"); print_hex(b[h][w] << 8,8);
             print_str("a: X"); print_hex(a[h][w],8);
 
-            int pixel = ((unsigned int)r[h][w] << 24) | ((unsigned int)g[h][w] << 16) | ((unsigned int)b[h][w] << 8) | (unsigned int)a[h][w];
+            int pixel = (r[h][w] << 24) | (g[h][w] << 16) | (b[h][w] << 8) | a[h][w];
             print_str("Pizel: X");
             print_hex(pixel,8);
 
@@ -175,7 +175,7 @@ int main(void) {
 
 
 
-                value =  ((unsigned int)r[h][w] << 24) | ((unsigned int)g[h][w] << 16) | ((unsigned int)b[h][w] << 8) | (unsigned int)a[h][w];
+                value =  (r[h][w] << 24) | (g[h][w] << 16) | (b[h][w] << 8) | a[h][w];
                 if (running_array[index] == value) { //The pixel is in the running array
                     store_byte(&current, index, &image_chunk_index);
                 }
