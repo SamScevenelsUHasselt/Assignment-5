@@ -30,25 +30,26 @@ Linker script and memory map
                 0x00000000                start
                 0x000001d8                sw_mult
  *(.text*)
- .text          0x00000230      0x110 build/print.o
+ .text          0x00000230      0x11c build/print.o
                 0x00000230                print_chr
-                0x0000023c                print_str
-                0x00000258                print_hex
-                0x000002a0                getDigit
-                0x000002c0                print_dec
- .text          0x00000340       0xcc build/tcnt.o
-                0x00000340                TCNT_start
-                0x00000354                TCNT_stop
-                0x00000368                TCNT_start_div8
-                0x00000390                TCNT_start_div16
-                0x000003b8                TCNT_set_mode
-                0x000003f8                TCNT_clear_ir
- .text          0x0000040c      0x120 build/firmware.o
-                0x0000040c                irq_handler
-                0x00000410                initialise
-                0x00000524                store_byte
- .text.startup  0x0000052c      0x360 build/firmware.o
-                0x0000052c                main
+                0x0000023c                print_word
+                0x00000248                print_str
+                0x00000264                print_hex
+                0x000002ac                getDigit
+                0x000002cc                print_dec
+ .text          0x0000034c       0xcc build/tcnt.o
+                0x0000034c                TCNT_start
+                0x00000360                TCNT_stop
+                0x00000374                TCNT_start_div8
+                0x0000039c                TCNT_start_div16
+                0x000003c4                TCNT_set_mode
+                0x00000404                TCNT_clear_ir
+ .text          0x00000418      0x120 build/firmware.o
+                0x00000418                irq_handler
+                0x0000041c                initialise
+                0x00000530                store_byte
+ .text.startup  0x00000538      0x354 build/firmware.o
+                0x00000538                main
  .text          0x0000088c        0x0 build/start.o
 
 .data           0x00002000       0x2c
