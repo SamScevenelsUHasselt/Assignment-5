@@ -143,10 +143,10 @@ int main(void) {
     for(unsigned char h=0;h<C_HEIGHT;h++) {
         for(unsigned char w=0;w<C_WIDTH;w++) {
 
-            print_str("r: X"); print_hex(r[h][w],2);
-            print_str("g: X"); print_hex(g[h][w],2);
-            print_str("b: X"); print_hex(b[h][w],2);
-            print_str("a: X"); print_hex(a[h][w],2);
+            print_str("r: X"); print_hex(r[h][w],4);
+            print_str("g: X"); print_hex(g[h][w],4);
+            print_str("b: X"); print_hex(b[h][w],4);
+            print_str("a: X"); print_hex(a[h][w],4);
 
             int pixel = (r[h][w] << 24) | (g[h][w] << 16) | (b[h][w] << 8) | a[h][w];
             print_str("Pizel: X");
