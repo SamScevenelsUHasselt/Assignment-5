@@ -422,41 +422,47 @@ Disassembly of section .text:
 
 000005b0 <main>:
  5b0:	00003537          	lui	a0,0x3
- 5b4:	ff010113          	addi	sp,sp,-16
+ 5b4:	fe010113          	addi	sp,sp,-32
  5b8:	05050513          	addi	a0,a0,80 # 3050 <base_lookup+0x1050>
- 5bc:	00112623          	sw	ra,12(sp)
- 5c0:	00812423          	sw	s0,8(sp)
- 5c4:	c95ff0ef          	jal	ra,258 <print_str>
+ 5bc:	00112e23          	sw	ra,28(sp)
+ 5c0:	00812c23          	sw	s0,24(sp)
+ 5c4:	00912a23          	sw	s1,20(sp)
  5c8:	82000437          	lui	s0,0x82000
- 5cc:	00842503          	lw	a0,8(s0) # 82000008 <base_lookup+0x81ffe008>
- 5d0:	00855513          	srli	a0,a0,0x8
- 5d4:	0ff57513          	andi	a0,a0,255
- 5d8:	cf9ff0ef          	jal	ra,2d0 <print_dec>
- 5dc:	00003537          	lui	a0,0x3
- 5e0:	06050513          	addi	a0,a0,96 # 3060 <base_lookup+0x1060>
- 5e4:	c75ff0ef          	jal	ra,258 <print_str>
- 5e8:	00842503          	lw	a0,8(s0)
- 5ec:	00003437          	lui	s0,0x3
- 5f0:	00855513          	srli	a0,a0,0x8
- 5f4:	0ff57513          	andi	a0,a0,255
- 5f8:	cd9ff0ef          	jal	ra,2d0 <print_dec>
- 5fc:	00003537          	lui	a0,0x3
- 600:	07050513          	addi	a0,a0,112 # 3070 <base_lookup+0x1070>
- 604:	c55ff0ef          	jal	ra,258 <print_str>
- 608:	d49ff0ef          	jal	ra,350 <SENSOR_fetch>
- 60c:	00800593          	addi	a1,zero,8
- 610:	c65ff0ef          	jal	ra,274 <print_hex>
- 614:	04040513          	addi	a0,s0,64 # 3040 <base_lookup+0x1040>
- 618:	c41ff0ef          	jal	ra,258 <print_str>
- 61c:	00003537          	lui	a0,0x3
- 620:	08050513          	addi	a0,a0,128 # 3080 <base_lookup+0x1080>
- 624:	c35ff0ef          	jal	ra,258 <print_str>
- 628:	d29ff0ef          	jal	ra,350 <SENSOR_fetch>
- 62c:	00800593          	addi	a1,zero,8
+ 5cc:	01212823          	sw	s2,16(sp)
+ 5d0:	01312623          	sw	s3,12(sp)
+ 5d4:	01412423          	sw	s4,8(sp)
+ 5d8:	c81ff0ef          	jal	ra,258 <print_str>
+ 5dc:	00842503          	lw	a0,8(s0) # 82000008 <base_lookup+0x81ffe008>
+ 5e0:	00003a37          	lui	s4,0x3
+ 5e4:	000039b7          	lui	s3,0x3
+ 5e8:	00855513          	srli	a0,a0,0x8
+ 5ec:	0ff57513          	andi	a0,a0,255
+ 5f0:	ce1ff0ef          	jal	ra,2d0 <print_dec>
+ 5f4:	00003537          	lui	a0,0x3
+ 5f8:	06050513          	addi	a0,a0,96 # 3060 <base_lookup+0x1060>
+ 5fc:	c5dff0ef          	jal	ra,258 <print_str>
+ 600:	00842503          	lw	a0,8(s0)
+ 604:	00003937          	lui	s2,0x3
+ 608:	00000413          	addi	s0,zero,0
+ 60c:	00855513          	srli	a0,a0,0x8
+ 610:	0ff57513          	andi	a0,a0,255
+ 614:	cbdff0ef          	jal	ra,2d0 <print_dec>
+ 618:	04000493          	addi	s1,zero,64
+ 61c:	070a0513          	addi	a0,s4,112 # 3070 <base_lookup+0x1070>
+ 620:	c39ff0ef          	jal	ra,258 <print_str>
+ 624:	00140413          	addi	s0,s0,1
+ 628:	00100593          	addi	a1,zero,1
+ 62c:	00040513          	addi	a0,s0,0
  630:	c45ff0ef          	jal	ra,274 <print_hex>
- 634:	04040513          	addi	a0,s0,64
+ 634:	06c98513          	addi	a0,s3,108 # 306c <base_lookup+0x106c>
  638:	c21ff0ef          	jal	ra,258 <print_str>
- 63c:	0000006f          	jal	zero,63c <main+0x8c>
+ 63c:	d15ff0ef          	jal	ra,350 <SENSOR_fetch>
+ 640:	00800593          	addi	a1,zero,8
+ 644:	c31ff0ef          	jal	ra,274 <print_hex>
+ 648:	04090513          	addi	a0,s2,64 # 3040 <base_lookup+0x1040>
+ 64c:	c0dff0ef          	jal	ra,258 <print_str>
+ 650:	fc9416e3          	bne	s0,s1,61c <main+0x6c>
+ 654:	0000006f          	jal	zero,654 <main+0xa4>
 
 Disassembly of section .data:
 
@@ -518,11 +524,4 @@ Disassembly of section .rodata.str1.4:
     3074:	7020726f          	jal	tp,a776 <base_lookup+0x8776>
     3078:	7869                	.insn	2, 0x7869
     307a:	6c65                	.insn	2, 0x6c65
-    307c:	3a31                	.insn	2, 0x3a31
-    307e:	0020                	.insn	2, 0x0020
-    3080:	736e6553          	.insn	4, 0x736e6553
-    3084:	7020726f          	jal	tp,a786 <base_lookup+0x8786>
-    3088:	7869                	.insn	2, 0x7869
-    308a:	6c65                	.insn	2, 0x6c65
-    308c:	3a32                	.insn	2, 0x3a32
-    308e:	0020                	.insn	2, 0x0020
+    307c:	0020                	.insn	2, 0x0020
