@@ -37,6 +37,7 @@ package PKG_hwswcd is
     constant C_DMEM_BASE_ADDRESS_MASK : STD_LOGIC_VECTOR(C_WIDTH-1 downto C_PERIPHERAL_MASK_LOWINDEX) := x"0000";
     constant C_LED_BASE_ADDRESS_MASK : STD_LOGIC_VECTOR(C_WIDTH-1 downto C_PERIPHERAL_MASK_LOWINDEX) := x"8000";
     constant C_TIMER_BASE_ADDRESS_MASK : STD_LOGIC_VECTOR(C_WIDTH-1 downto C_PERIPHERAL_MASK_LOWINDEX) := x"8100";
+    constant C_SENSOR_BASE_ADDRESS_MASK : STD_LOGIC_VECTOR(C_WIDTH-1 downto C_PERIPHERAL_MASK_LOWINDEX) := x"8200";
 
     constant C_MRO_xF11_MVENDORID : STD_LOGIC_VECTOR(C_WIDTH-1 downto 0) := x"01234568";
     constant C_MRO_xF14_MHARTID : STD_LOGIC_VECTOR(C_WIDTH-1 downto 0) := x"CAFEBABE";
@@ -298,7 +299,57 @@ package PKG_hwswcd is
             data_out : out STD_LOGIC_VECTOR(31 downto 0)
         );
     end component two_k_bram_imem;
+    
+    --Sensor-----------------------------------------------------------------------------------------------
+    component wrapped_sensor is
+    generic(
+        G_PIXELS : natural := 3750
+    );
+    port(
+        clock : in STD_LOGIC;
+        reset : in STD_LOGIC;
+        iface_di : in STD_LOGIC_VECTOR(C_WIDTH-1 downto 0);
+        iface_a : in STD_LOGIC_VECTOR(C_WIDTH-1 downto 0);
+        iface_we : in STD_LOGIC;
+        iface_do : out STD_LOGIC_VECTOR(C_WIDTH-1 downto 0)
+    );
+    end component wrapped_sensor;
 
+    component sensor is
+    generic (G_PIXELS : natural := 3750);
+    port(
+        clock : in STD_LOGIC;
+        reset : in STD_LOGIC;
+        pixel_data_out_re : in STD_LOGIC;
+        pixel_data_out : out STD_LOGIC_VECTOR(31 downto 0);
+        first : out std_logic
+    );
+    end component sensor;
+    
+    component sensor_r is
+    port(
+        clock : in STD_LOGIC;
+        address : in STD_LOGIC_VECTOR(11 downto 0);
+        data_out : out STD_LOGIC_VECTOR(7 downto 0)
+    );
+    end component sensor_r;
+    
+    component sensor_g is
+    port(
+        clock : in STD_LOGIC;
+        address : in STD_LOGIC_VECTOR(11 downto 0);
+        data_out : out STD_LOGIC_VECTOR(7 downto 0)
+    );
+    end component sensor_g;
+    
+    component sensor_b is
+    port(
+        clock : in STD_LOGIC;
+        address : in STD_LOGIC_VECTOR(11 downto 0);
+        data_out : out STD_LOGIC_VECTOR(7 downto 0)
+    );
+    end component sensor_b;
+    
 end package;
 
 package body PKG_hwswcd is

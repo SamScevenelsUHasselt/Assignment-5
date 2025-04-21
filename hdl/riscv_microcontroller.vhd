@@ -47,8 +47,8 @@ architecture Behavioural of riscv_microcontroller is
 
     -- dmem
     signal dmem_do : STD_LOGIC_VECTOR(31 downto 0);
-    signal dmem_do_dmem : STD_LOGIC_VECTOR(31 downto 0);
-    signal dmem_we, dmem_we_manip : STD_LOGIC;
+    signal dmem_do_dmem, dmem_do_sensor : STD_LOGIC_VECTOR(31 downto 0);
+    signal dmem_we, dmem_we_manip, sensor_we : STD_LOGIC;
     signal dmem_a : STD_LOGIC_VECTOR(31 downto 0);
     signal dmem_di : STD_LOGIC_VECTOR(31 downto 0);
     signal store_control : STD_LOGIC_VECTOR(1 downto 0);
@@ -149,6 +149,7 @@ begin
         data_out  => dmem_do_dmem,
         store_control => store_control
     );
+    
 
     dmem_we_manip <= dmem_we when  dmem_a(C_WIDTH-1 downto C_PERIPHERAL_MASK_LOWINDEX) = C_DMEM_BASE_ADDRESS_MASK else '0';
 
@@ -174,12 +175,24 @@ begin
         iface_we => dmem_we,
         iface_do => dmem_do_tcnt
     );
+    
+    wrapped_sensor_inst00: component wrapped_sensor port map(
+        clock => clock,
+        reset => reset,
+        iface_di => dmem_di,
+        iface_a => dmem_a,
+        iface_we => sensor_we,
+        iface_do => dmem_do_sensor
+    );
+    
+    sensor_we <= dmem_we when  dmem_a(C_WIDTH-1 downto C_PERIPHERAL_MASK_LOWINDEX) = C_SENSOR_BASE_ADDRESS_MASK else '0';
 
     PMUX_bus: process(dmem_a, dmem_do_tcnt, dmem_do_dmem, leds)
     begin
         case dmem_a(dmem_a'high downto C_PERIPHERAL_MASK_LOWINDEX) is
             when C_LED_BASE_ADDRESS_MASK => dmem_do <= leds;
             when C_TIMER_BASE_ADDRESS_MASK => dmem_do <= dmem_do_tcnt;
+            when C_SENSOR_BASE_ADDRESS_MASK => dmem_do <= dmem_do_sensor;
             when others => dmem_do <= dmem_do_dmem;
         end case;
     end process;

@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdint.h>
 
+#include "sensor.h"
 #include "print.h"
 
 #define C_WIDTH 8
@@ -73,6 +74,18 @@ void store_byte(struct qoi_image_chunk **current, const unsigned char to_store, 
 }
 
 int main(void) {
+
+    print_str("Sensor Height: ");
+    print_dec(SENSOR_get_height);
+    print_str("Sensor Width: ");
+    print_dec(SENSOR_get_height);
+    print_str("Sensor pixel1: ");
+    print_hex(SENSOR_fetch(),8); print_str("\n");
+    print_str("Sensor pixel2: ");
+    print_hex(SENSOR_fetch(),8); print_str("\n");
+
+    while(1);
+
     unsigned char r[C_HEIGHT][C_WIDTH];
     unsigned char g[C_HEIGHT][C_WIDTH];
     unsigned char b[C_HEIGHT][C_WIDTH];
