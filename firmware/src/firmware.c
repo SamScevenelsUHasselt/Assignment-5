@@ -148,12 +148,8 @@ int main(void) {
 
                 //STEP 2 ------ check if in the running array --------------------------------------------------------------------------------------------------------------------
 
-
                 index =  (sw_mult(r , 3) + sw_mult(g , 5) + sw_mult(b , 7) + sw_mult(a , 11)) % 64; //possible bottleneck
 
-
-
-                value =  (r << 24) | (g << 16) | (b << 8) | a;
                 if (running_array[index] == value) { //The pixel is in the running array
                     store_byte(&current, index, &image_chunk_index);
                 }
