@@ -125,16 +125,6 @@ int main(void) {
             g = (unsigned char)(value >> 16);
             b = (unsigned char)(value >> 8);
             a = (unsigned char)(value);
-            print_str("Sensor pixel: ");
-            print_hex(value,8);print_str("\n");
-            print_str("r: ");
-            print_hex(r,2);print_str("\n");
-            print_str("g: ");
-            print_hex(g,2);print_str("\n");
-            print_str("b: ");
-            print_hex(b,2);print_str("\n");
-            print_str("a: ");
-            print_hex(a,2);print_str("\n");
 
             //int pixel = (r << 24) | (g << 16) | (b << 8) | a;
             //print_str("Pizel: X");
