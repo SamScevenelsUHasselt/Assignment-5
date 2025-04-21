@@ -79,11 +79,14 @@ int main(void) {
     print_dec(SENSOR_get_height());
     print_str("Sensor Width: ");
     print_dec(SENSOR_get_height());
-    print_str("Sensor pixel1: ");
-    print_hex(SENSOR_fetch(),8); print_str("\n");
-    print_str("Sensor pixel2: ");
-    print_hex(SENSOR_fetch(),8); print_str("\n");
 
+    for (int i = 0; i < 64; i++)
+    {
+        print_str("Sensor pixel ");
+        print_hex(i+1,1);
+        print_str(": ");
+        print_hex(SENSOR_fetch(),8); print_str("\n");
+    }
     while(1);
 
     unsigned char r[C_HEIGHT][C_WIDTH];
