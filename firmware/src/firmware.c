@@ -95,12 +95,6 @@ int main(void) {
     struct qoi_image_chunk *current = &element;
     unsigned char image_chunk_index = 0;
 
-    /* Sanity check */
-    if((width % 2) || (height % 2)) {
-        printf("ERROR: W or H not even");
-        return 1;
-    }
-
     /* Initialisation */
     for(unsigned char i=0;i<64;i++) {
         running_array[i] = 0;
