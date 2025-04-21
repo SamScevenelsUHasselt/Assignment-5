@@ -4,8 +4,8 @@
 #include "sensor.h"
 #include "print.h"
 
-#define C_WIDTH 8
-#define C_HEIGHT 8
+#define width 8
+#define height 8
 #define CHUNK_SIZE 64
 
 extern unsigned int sw_mult(unsigned int x, unsigned int y);
@@ -72,14 +72,17 @@ int main(void) {
     unsigned char index;
     unsigned int value;
 
+    unsigned int width = SENSOR_get_width();
+    unsigned int height = SENSOR_get_height();
+
     //storage objects
     struct qoi_header header;
     header.magic[0] = 'q';
     header.magic[1] = 'o';
     header.magic[2] = 'i';
     header.magic[3] = 'f';
-    header.width = C_WIDTH;
-    header.height = C_HEIGHT;
+    header.width = width;
+    header.height = height;
     header.channels = 3; //RGBA
     header.colorspace = 0;
 
@@ -90,8 +93,8 @@ int main(void) {
     unsigned char image_chunk_index = 0;
 
     /* Sanity check */
-    if((C_WIDTH % 2) || (C_HEIGHT % 2)) {
-        //printf("ERROR: W or H not even");
+    if((width % 2) || (height % 2)) {
+        printf("ERROR: W or H not even");
         return 1;
     }
 
@@ -117,8 +120,8 @@ int main(void) {
     store_byte(&current, header.colorspace,             &image_chunk_index);
 
     /* Loop over pixels */
-    for(unsigned char h=0;h<C_HEIGHT;h++) {
-        for(unsigned char w=0;w<C_WIDTH;w++) {
+    for(unsigned char h=0;h<height;h++) {
+        for(unsigned char w=0;w<width;w++) {
             
             value = SENSOR_fetch();
             r = (unsigned char)(value >> 24);
