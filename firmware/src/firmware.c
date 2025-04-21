@@ -68,7 +68,6 @@ int main(void) {
 
     signed char dr, dg, db;
 
-
     signed char rle = -1;
     unsigned int running_array[64];
     unsigned char rv;
@@ -126,9 +125,9 @@ int main(void) {
             b = (unsigned char)(value >> 8);
             a = (unsigned char)(value);
 
-            //int pixel = (r << 24) | (g << 16) | (b << 8) | a;
-            //print_str("Pizel: X");
-            //print_hex(pixel,8);
+            int pixel = (r << 24) | (g << 16) | (b << 8) | a;
+            print_str("Pizel: X");
+            print_hex(pixel,8);
 
             //STEP 1 ------ check if equal to previous pixel ---------------------------------------------------------------------------------------------------------------------
             if (r == r_prev && g == g_prev && b == b_prev && a == a_prev) {
