@@ -120,8 +120,8 @@ int main(void) {
     store_byte(&current, header.colorspace,             &image_chunk_index);
 
     /* Loop over pixels */
-    for(unsigned char h=0;h<C_HEIGHT;h++) {
-        for(unsigned char w=0;w<C_WIDTH;w++) {
+    for(unsigned char h=0;h<height;h++) {
+        for(unsigned char w=0;w<width;w++) {
             
             value = SENSOR_fetch();
             r = (unsigned char)(value >> 24);
