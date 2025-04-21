@@ -4,6 +4,8 @@
 #include "sensor.h"
 #include "print.h"
 
+#define C_WIDTH 8
+#define C_HEIGHT 8
 #define CHUNK_SIZE 64
 
 extern unsigned int sw_mult(unsigned int x, unsigned int y);
@@ -79,8 +81,8 @@ int main(void) {
     header.magic[1] = 'o';
     header.magic[2] = 'i';
     header.magic[3] = 'f';
-    header.width = width;
-    header.height = height;
+    header.width = C_WIDTH;
+    header.height = C_HEIGHT;
     header.channels = 3; //RGBA
     header.colorspace = 0;
 
@@ -91,8 +93,8 @@ int main(void) {
     unsigned char image_chunk_index = 0;
 
     /* Sanity check */
-    if((width % 2) || (height % 2)) {
-        printf("ERROR: W or H not even");
+    if((C_WIDTH % 2) || (C_HEIGHT % 2)) {
+        //printf("ERROR: W or H not even");
         return 1;
     }
 
@@ -118,8 +120,8 @@ int main(void) {
     store_byte(&current, header.colorspace,             &image_chunk_index);
 
     /* Loop over pixels */
-    for(unsigned char h=0;h<height;h++) {
-        for(unsigned char w=0;w<width;w++) {
+    for(unsigned char h=0;h<C_HEIGHT;h++) {
+        for(unsigned char w=0;w<C_WIDTH;w++) {
             
             value = SENSOR_fetch();
             r = (unsigned char)(value >> 24);
