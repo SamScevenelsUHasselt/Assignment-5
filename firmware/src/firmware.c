@@ -97,7 +97,7 @@ int main(void) {
 
     /* Sanity check */
     if((width % 2) || (height % 2)) {
-        //printf("ERROR: W or H not even");
+        printf("ERROR: W or H not even");
         return 1;
     }
 
