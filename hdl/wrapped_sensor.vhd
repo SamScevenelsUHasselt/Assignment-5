@@ -73,8 +73,8 @@ begin
     sensor_re <= reg0(0);
     reg1 <= sensor_pixeldata;
     -- reg2 <= (0 => sensor_first, others => '0');
-    reg2 <= x"00" & x"08" & x"08" & "0000000" & sensor_first; --for sensor data v1
-    --reg2 <= x"00" & x"4B" & x"32" & "0000000" & sensor_first; --for sensor data v2
+    -- reg2 <= x"00" & x"08" & x"08" & "0000000" & sensor_first; --for sensor data v1
+    reg2 <= x"00" & x"4B" & x"32" & "0000000" & sensor_first; --for sensor data v2
 
 
     -------------------------------------------------------------------------------
