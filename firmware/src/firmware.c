@@ -81,8 +81,8 @@ int main(void) {
     header.magic[1] = 'o';
     header.magic[2] = 'i';
     header.magic[3] = 'f';
-    header.width = C_WIDTH;
-    header.height = C_HEIGHT;
+    header.width = width;
+    header.height = height;
     header.channels = 3; //RGBA
     header.colorspace = 0;
 
