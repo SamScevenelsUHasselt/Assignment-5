@@ -5,6 +5,7 @@
 #include "print.h"
 
 #define CHUNK_SIZE 64
+#define STORE_IN_MEM 0
 
 extern unsigned int sw_mult(unsigned int x, unsigned int y);
 extern void load_test();
@@ -33,19 +34,23 @@ void store_byte(struct qoi_image_chunk **current, const unsigned char to_store, 
 
     //print_str("Storing: X");
     //print_hex(to_store,2);
-    
-    struct qoi_image_chunk *chunk = *current;
-    chunk->chunk_byte[*image_chunk_index] = to_store;
-    chunk->size = *image_chunk_index + 1;
-    *image_chunk_index += 1;
-    if(*image_chunk_index >= CHUNK_SIZE){ //chunk is full make a new one
-        struct qoi_image_chunk new; //init new chunk
-        new.next = 0;
-        chunk->next = &new; //point to new chunk from current chunk
-        *current = chunk; //update the current pointer to point at the new chunk
-        *image_chunk_index = 0;
+    if (STORE_IN_MEM == 1){
+        struct qoi_image_chunk *chunk = *current;
+        chunk->chunk_byte[*image_chunk_index] = to_store;
+        chunk->size = *image_chunk_index + 1;
+        *image_chunk_index += 1;
+        if(*image_chunk_index >= CHUNK_SIZE){ //chunk is full make a new one
+            struct qoi_image_chunk new; //init new chunk
+            new.next = 0;
+            chunk->next = &new; //point to new chunk from current chunk
+            *current = chunk; //update the current pointer to point at the new chunk
+            *image_chunk_index = 0;
+        }
+        return;
+    }else{
+        print_hex(to_store,2);
     }
-    return;
+    
     
 }
 
@@ -222,13 +227,14 @@ int main(void) {
     store_byte(&current, rv, &image_chunk_index);
 
     
-    
-    current = first;
-    while (current != 0) {
-        for(unsigned char i=0;i<current->size;i++) {
-            print_hex(current->chunk_byte[i],2);
+    if (STORE_IN_MEM == 1){
+        current = first;
+        while (current != 0) {
+            for(unsigned char i=0;i<current->size;i++) {
+                print_hex(current->chunk_byte[i],2);
+            }
+            current = current->next;
         }
-        current = current->next;
     }
     
     while (1){}
