@@ -76,9 +76,9 @@ void store_byte(struct qoi_image_chunk **current, const unsigned char to_store, 
 int main(void) {
 
     print_str("Sensor Height: ");
-    print_dec(SENSOR_get_height);
+    print_dec(SENSOR_get_height());
     print_str("Sensor Width: ");
-    print_dec(SENSOR_get_height);
+    print_dec(SENSOR_get_height());
     print_str("Sensor pixel1: ");
     print_hex(SENSOR_fetch(),8); print_str("\n");
     print_str("Sensor pixel2: ");
