@@ -93,7 +93,7 @@ int main(void) {
     unsigned char image_chunk_index = 0;
 
     /* Sanity check */
-    if((C_WIDTH % 2) || (C_HEIGHT % 2)) {
+    if((width % 2) || (height % 2)) {
         //printf("ERROR: W or H not even");
         return 1;
     }
