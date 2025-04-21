@@ -4,8 +4,6 @@
 #include "sensor.h"
 #include "print.h"
 
-#define width 8
-#define height 8
 #define CHUNK_SIZE 64
 
 extern unsigned int sw_mult(unsigned int x, unsigned int y);
