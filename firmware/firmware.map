@@ -4,6 +4,9 @@ Discarded input sections
  .comment       0x00000000       0x1c build/print.o
  .riscv.attributes
                 0x00000000       0x25 build/print.o
+ .comment       0x00000000       0x1c build/sensor.o
+ .riscv.attributes
+                0x00000000       0x25 build/sensor.o
  .comment       0x00000000       0x1c build/tcnt.o
  .riscv.attributes
                 0x00000000       0x25 build/tcnt.o
@@ -23,7 +26,7 @@ RAM              0x00002000         0x00002000         xrw
 Linker script and memory map
 
 
-.text           0x00000000      0xa6c
+.text           0x00000000      0x640
                 0x00000000                        . = 0x0
  *(.init)
  .init          0x00000000      0x240 build/start.o
@@ -38,32 +41,36 @@ Linker script and memory map
                 0x00000274                print_hex
                 0x000002b0                getDigit
                 0x000002d0                print_dec
- .text          0x00000350       0xcc build/tcnt.o
-                0x00000350                TCNT_start
-                0x00000364                TCNT_stop
-                0x00000378                TCNT_start_div8
-                0x000003a0                TCNT_start_div16
-                0x000003c8                TCNT_set_mode
-                0x00000408                TCNT_clear_ir
- .text          0x0000041c      0x16c build/firmware.o
-                0x0000041c                irq_handler
-                0x00000420                initialise
-                0x00000534                store_byte
- .text.startup  0x00000588      0x4e4 build/firmware.o
-                0x00000588                main
- .text          0x00000a6c        0x0 build/start.o
+ .text          0x00000350       0x28 build/sensor.o
+                0x00000350                SENSOR_fetch
+ .text          0x00000378       0xcc build/tcnt.o
+                0x00000378                TCNT_start
+                0x0000038c                TCNT_stop
+                0x000003a0                TCNT_start_div8
+                0x000003c8                TCNT_start_div16
+                0x000003f0                TCNT_set_mode
+                0x00000430                TCNT_clear_ir
+ .text          0x00000444      0x16c build/firmware.o
+                0x00000444                irq_handler
+                0x00000448                initialise
+                0x0000055c                store_byte
+ .text.startup  0x000005b0       0x90 build/firmware.o
+                0x000005b0                main
+ .text          0x00000640        0x0 build/start.o
 
 .data           0x00002000       0x2c
                 0x00000000                        . = 0x0
  *(.data)
  .data          0x00002000       0x2c build/print.o
                 0x00002000                base_lookup
+ .data          0x0000202c        0x0 build/sensor.o
  .data          0x0000202c        0x0 build/tcnt.o
  .data          0x0000202c        0x0 build/firmware.o
  .data          0x0000202c        0x0 build/start.o
 
 .bss            0x0000202c        0x0
  .bss           0x0000202c        0x0 build/print.o
+ .bss           0x0000202c        0x0 build/sensor.o
  .bss           0x0000202c        0x0 build/tcnt.o
  .bss           0x0000202c        0x0 build/firmware.o
  .bss           0x0000202c        0x0 build/start.o
@@ -75,9 +82,12 @@ Linker script and memory map
                 0x0000302c                        . = ALIGN (0x4)
  FILL mask 0xff
 
-.rodata.str1.4  0x0000302c       0x23
+.rodata.str1.4  0x0000302c       0x64
  .rodata.str1.4
-                0x0000302c       0x23 build/print.o
+                0x0000302c       0x64 build/print.o
+                                 0x23 (size before relaxing)
+ .rodata.str1.4
+                0x00003090       0x44 build/firmware.o
 
 /DISCARD/
  *(.note*)
@@ -87,6 +97,7 @@ Linker script and memory map
  *(.comment)
  *(.riscv.attributes)
 LOAD build/print.o
+LOAD build/sensor.o
 LOAD build/tcnt.o
 LOAD build/firmware.o
 LOAD build/start.o
