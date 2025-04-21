@@ -31,28 +31,6 @@ void irq_handler(unsigned int cause) {
 
 }
 
-void initialise(unsigned char r[C_WIDTH][C_HEIGHT], unsigned char g[C_WIDTH][C_HEIGHT], unsigned char b[C_WIDTH][C_HEIGHT], unsigned char a[C_WIDTH][C_HEIGHT]) {
-    unsigned char w, h;
-
-    for(h=0;h<C_HEIGHT/2;h++) {
-        for(w=0;w<C_WIDTH/2;w++) {
-            r[h][w] = 255; g[h][w] = 0; b[h][w] = 0; a[h][w] = 255;
-        }
-        for(w=C_WIDTH/2;w<C_WIDTH;w++) {
-            r[h][w] = 0; g[h][w] = 255; b[h][w] = 0; a[h][w] = 255;
-        }
-    }
-    for(h=C_HEIGHT/2;h<C_HEIGHT;h++) {
-        for(w=0;w<C_WIDTH/2;w++) {
-            r[h][w] = 0; g[h][w] = 0; b[h][w] = 255; a[h][w] = 255;
-        }
-        for(w=C_WIDTH/2;w<C_WIDTH;w++) {
-            r[h][w] = 127; g[h][w] = 127; b[h][w] = 127; a[h][w] = 255;
-        }
-    }
-}
-
-
 void store_byte(struct qoi_image_chunk **current, const unsigned char to_store, unsigned char* image_chunk_index) {
 
     //print_str("Storing: X");
@@ -78,26 +56,12 @@ int main(void) {
     print_str("Sensor Height: ");
     print_dec(SENSOR_get_height());
     print_str("Sensor Width: ");
-    print_dec(SENSOR_get_height());
+    print_dec(SENSOR_get_width());
 
-    for (int i = 0; i < 64; i++)
-    {
-        print_str("Sensor pixel ");
-        print_hex(i+1,1);
-        print_str(": ");
-        print_hex(SENSOR_fetch(),8); print_str("\n");
-    }
-    while(1);
-
-    unsigned char r[C_HEIGHT][C_WIDTH];
-    unsigned char g[C_HEIGHT][C_WIDTH];
-    unsigned char b[C_HEIGHT][C_WIDTH];
-    unsigned char a[C_HEIGHT][C_WIDTH];
-
-    unsigned char r_prev = 0;
-    unsigned char g_prev = 0;
-    unsigned char b_prev = 0;
-    unsigned char a_prev = 255;
+    unsigned char r, r_prev = 0;
+    unsigned char g, g_prev = 0;
+    unsigned char b, b_prev = 0;
+    unsigned char a, a_prev = 255;
 
     signed char dr, dg, db;
 
@@ -132,7 +96,6 @@ int main(void) {
     }
 
     /* Initialisation */
-    initialise(r, g, b, a);
     for(unsigned char i=0;i<64;i++) {
         running_array[i] = 0;
     }
@@ -156,13 +119,29 @@ int main(void) {
     /* Loop over pixels */
     for(unsigned char h=0;h<C_HEIGHT;h++) {
         for(unsigned char w=0;w<C_WIDTH;w++) {
+            
+            value = SENSOR_fetch();
+            r = (unsigned char)(value >> 24);
+            g = (unsigned char)(value >> 16);
+            b = (unsigned char)(value >> 8);
+            a = (unsigned char)(value);
+            print_str("Sensor pixel: ");
+            print_hex(value,8);print_str("\n");
+            print_str("r: ");
+            print_hex(r,2);print_str("\n");
+            print_str("g: ");
+            print_hex(g,2);print_str("\n");
+            print_str("b: ");
+            print_hex(b,2);print_str("\n");
+            print_str("a: ");
+            print_hex(a,2);print_str("\n");
 
-            //int pixel = (r[h][w] << 24) | (g[h][w] << 16) | (b[h][w] << 8) | a[h][w];
+            //int pixel = (r << 24) | (g << 16) | (b << 8) | a;
             //print_str("Pizel: X");
             //print_hex(pixel,8);
 
             //STEP 1 ------ check if equal to previous pixel ---------------------------------------------------------------------------------------------------------------------
-            if (r[h][w] == r_prev && g[h][w] == g_prev && b[h][w] == b_prev && a[h][w] == a_prev) {
+            if (r == r_prev && g == g_prev && b == b_prev && a == a_prev) {
                 rle++;
                 if (rle>62) { //Ensure that rle does not exceed 62 as this is illegal and store the current QOI_OP_RUN chunk
                     rv = rle + 0b11000000;
@@ -180,21 +159,21 @@ int main(void) {
                 //STEP 2 ------ check if in the running array --------------------------------------------------------------------------------------------------------------------
 
 
-                index =  (sw_mult(r[h][w] , 3) + sw_mult(g[h][w] , 5) + sw_mult(b[h][w] , 7) + sw_mult(a[h][w] , 11)) % 64; //possible bottleneck
+                index =  (sw_mult(r , 3) + sw_mult(g , 5) + sw_mult(b , 7) + sw_mult(a , 11)) % 64; //possible bottleneck
 
 
 
-                value =  (r[h][w] << 24) | (g[h][w] << 16) | (b[h][w] << 8) | a[h][w];
+                value =  (r << 24) | (g << 16) | (b << 8) | a;
                 if (running_array[index] == value) { //The pixel is in the running array
                     store_byte(&current, index, &image_chunk_index);
                 }
                 else {//if not store it anyway and continue
                     running_array[index] = value;
                     //STEP 3 ------ check difference with previous pixels --------------------------------------------------------------------------------------------------------
-                    if (a[h][w] == a_prev) {
-                        dr = (signed char)(r[h][w] - r_prev);
-                        dg = (signed char)(g[h][w] - g_prev);
-                        db = (signed char)(b[h][w] - b_prev);
+                    if (a == a_prev) {
+                        dr = (signed char)(r - r_prev);
+                        dg = (signed char)(g - g_prev);
+                        db = (signed char)(b - b_prev);
 
                         if ( (-2 <= dr && dr <= 1)&&(-2 <= dg && dg <= 1)&&(-2 <= db && db <= 1)) { //can encode in QOI_OP_DIFF chunk
                             rv = 0b01000000 + ((unsigned char)(dr+2)<<4) + ((unsigned char)(dg+2)<<2) + (unsigned char)(db+2);
@@ -213,25 +192,25 @@ int main(void) {
                         else { //store as RGB as alpha has not changed -----------------------------------------------------------------------------------------------------------
                             rv = 0b11111110;
                             store_byte(&current, rv, &image_chunk_index);
-                            store_byte(&current, r[h][w], &image_chunk_index);
-                            store_byte(&current, g[h][w], &image_chunk_index);
-                            store_byte(&current, b[h][w], &image_chunk_index);
+                            store_byte(&current, r, &image_chunk_index);
+                            store_byte(&current, g, &image_chunk_index);
+                            store_byte(&current, b, &image_chunk_index);
                         }
                     }
                     else {
                         //STEP 5 ------ store raw RGBA -------------------------------------------------------------------------------------------------------------------------------
                         rv = 0b11111111;
                         store_byte(&current, rv, &image_chunk_index);
-                        store_byte(&current, r[h][w], &image_chunk_index);
-                        store_byte(&current, g[h][w], &image_chunk_index);
-                        store_byte(&current, b[h][w], &image_chunk_index);
-                        store_byte(&current, a[h][w], &image_chunk_index);
+                        store_byte(&current, r, &image_chunk_index);
+                        store_byte(&current, g, &image_chunk_index);
+                        store_byte(&current, b, &image_chunk_index);
+                        store_byte(&current, a, &image_chunk_index);
                     }
                 }
-                r_prev = r[h][w];
-                g_prev = g[h][w];
-                b_prev = b[h][w];
-                a_prev = a[h][w];
+                r_prev = r;
+                g_prev = g;
+                b_prev = b;
+                a_prev = a;
             }
         }
     }
