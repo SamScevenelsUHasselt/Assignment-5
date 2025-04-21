@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
-ifname = "../../firmware/sim_output.dat"
-ofname = "../../firmware/sim_output.qoi"
+ifname = "sim_output.dat"
+ofname = "sim_output.qoi"
 
 ifh = open(ifname, "r")
 ofh = open (ofname, "wb")
