@@ -129,10 +129,10 @@ int main(void) {
             b = (unsigned char)(value >> 8);
             a = (unsigned char)(value);
 
-            //int pixel = (r << 24) | (g << 16) | (b << 8) | a;
-            //print_str("Pixel: X");
-            //print_hex(pixel,8);
-            //print_str("\n");
+            int pixel = (r << 24) | (g << 16) | (b << 8) | a;
+            print_str("Pixel: X");
+            print_hex(pixel,8);
+            print_str("\n");
 
             //STEP 1 ------ check if equal to previous pixel ---------------------------------------------------------------------------------------------------------------------
             if (r == r_prev && g == g_prev && b == b_prev && a == a_prev) {
