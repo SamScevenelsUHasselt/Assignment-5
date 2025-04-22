@@ -26,7 +26,7 @@ RAM              0x00002000         0x00002000         xrw
 Linker script and memory map
 
 
-.text           0x00000000      0x838
+.text           0x00000000      0x7c0
                 0x00000000                        . = 0x0
  *(.init)
  .init          0x00000000      0x240 build/start.o
@@ -50,12 +50,12 @@ Linker script and memory map
                 0x000003c8                TCNT_start_div16
                 0x000003f0                TCNT_set_mode
                 0x00000430                TCNT_clear_ir
- .text          0x00000444       0x84 build/firmware.o
-                0x00000484                irq_handler
-                0x00000488                store_byte
- .text.startup  0x000004c8      0x370 build/firmware.o
-                0x000004c8                main
- .text          0x00000838        0x0 build/start.o
+ .text          0x00000444        0xc build/firmware.o
+                0x00000444                irq_handler
+                0x00000448                store_byte
+ .text.startup  0x00000450      0x370 build/firmware.o
+                0x00000450                main
+ .text          0x000007c0        0x0 build/start.o
 
 .data           0x00002000       0x2c
                 0x00000000                        . = 0x0
@@ -81,12 +81,9 @@ Linker script and memory map
                 0x0000302c                        . = ALIGN (0x4)
  FILL mask 0xff
 
-.rodata.str1.4  0x0000302c       0x2f
+.rodata.str1.4  0x0000302c       0x23
  .rodata.str1.4
-                0x0000302c       0x2f build/print.o
-                                 0x23 (size before relaxing)
- .rodata.str1.4
-                0x0000305b        0xb build/firmware.o
+                0x0000302c       0x23 build/print.o
 
 /DISCARD/
  *(.note*)
