@@ -174,8 +174,8 @@ int main(void) {
                             store_byte(&current, rv, &image_chunk_index);
                         }
                         else if (-32 <= dg && dg <= 31) { //green dif value can be stored so we compute the dr_dg and db_dg
-                            dr = dr = dg;
-                            db = db = dg;
+                            dr = dr - dg;
+                            db = db - dg;
                             if ((-8 <= dr && dr <= 7)&&(-8 <= db && db <= 7)) { // can encode in QOI_OP_LUMA chunk
                                 rv = 0b10000000 + (dg+32);
                                 store_byte(&current, rv, &image_chunk_index);
