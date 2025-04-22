@@ -52,7 +52,7 @@ void store_byte(struct qoi_image_chunk **current, const unsigned char to_store, 
         }
         return;
     }else{
-        //print_chr(to_store);
+        print_chr(to_store);
     }
     
     
@@ -168,12 +168,8 @@ int main(void) {
                         dr = (signed char)(r - r_prev);
                         dg = (signed char)(g - g_prev);
                         db = (signed char)(b - b_prev);
-                        print_str("dr: "); print_dec(dr); print_str(" dg: "); print_dec(dg); print_str(" db: "); print_dec(db); print_str("\n");
                         if ( (-2 <= dr && dr <= 1)&&(-2 <= dg && dg <= 1)&&(-2 <= db && db <= 1)) { //can encode in QOI_OP_DIFF chunk
                             rv = 0b01000000 + ((dr+2)<<4) + ((dg+2)<<2) + (db+2);
-                            print_str("OP_DIFF: ");
-                            print_hex(rv,2);
-                            print_str("\n");
                             store_byte(&current, rv, &image_chunk_index);
                         }
                         else if (-32 <= dg && dg <= 31) { //green dif value can be stored so we compute the dr_dg and db_dg
@@ -181,13 +177,15 @@ int main(void) {
                             db = db - dg;
                             if ((-8 <= dr && dr <= 7)&&(-8 <= db && db <= 7)) { // can encode in QOI_OP_LUMA chunk
                                 rv = 0b10000000 + (dg+32);
-                                print_str("OP_LUMA: ");
-                                print_hex(rv,2);
                                 store_byte(&current, rv, &image_chunk_index);
                                 rv = ((dr + 8)<<4) + (db+8);
-                                print_hex(rv,2);
-                                print_str("\n");
                                 store_byte(&current, rv, &image_chunk_index);
+                            }else { //store as RGB as alpha has not changed -----------------------------------------------------------------------------------------------------------
+                                rv = 0b11111110;
+                                store_byte(&current, rv, &image_chunk_index);
+                                store_byte(&current, r, &image_chunk_index);
+                                store_byte(&current, g, &image_chunk_index);
+                                store_byte(&current, b, &image_chunk_index);
                             }
                         }
                         else { //store as RGB as alpha has not changed -----------------------------------------------------------------------------------------------------------
