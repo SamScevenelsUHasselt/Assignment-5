@@ -441,7 +441,7 @@ Disassembly of section .text:
  5fc:	00150793          	addi	a5,a0,1
  600:	01879793          	slli	a5,a5,0x18
  604:	4187d793          	srai	a5,a5,0x18
- 608:	03e00713          	addi	a4,zero,62
+ 608:	03d00713          	addi	a4,zero,61
  60c:	00f75a63          	bge	a4,a5,620 <main+0x1d0>
  610:	fc150513          	addi	a0,a0,-63
  614:	0ff57513          	andi	a0,a0,255
