@@ -171,7 +171,7 @@ int main(void) {
                         print_str("dr: "); print_dec(dr); print_str(" dg: "); print_dec(dg); print_str(" db: "); print_dec(db); print_str("\n");
                         if ( (-2 <= dr && dr <= 1)&&(-2 <= dg && dg <= 1)&&(-2 <= db && db <= 1)) { //can encode in QOI_OP_DIFF chunk
                             rv = 0b01000000 + ((dr+2)<<4) + ((dg+2)<<2) + (db+2);
-                            print_str("OP_DIFF: ")
+                            print_str("OP_DIFF: ");
                             print_hex(rv,2);
                             print_str("\n");
                             store_byte(&current, rv, &image_chunk_index);
@@ -181,7 +181,7 @@ int main(void) {
                             db = db - dg;
                             if ((-8 <= dr && dr <= 7)&&(-8 <= db && db <= 7)) { // can encode in QOI_OP_LUMA chunk
                                 rv = 0b10000000 + (dg+32);
-                                print_str("OP_LUMA: ")
+                                print_str("OP_LUMA: ");
                                 print_hex(rv,2);
                                 store_byte(&current, rv, &image_chunk_index);
                                 rv = ((dr + 8)<<4) + (db+8);
