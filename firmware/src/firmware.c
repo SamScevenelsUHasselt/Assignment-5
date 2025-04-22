@@ -137,7 +137,7 @@ int main(void) {
             //STEP 1 ------ check if equal to previous pixel ---------------------------------------------------------------------------------------------------------------------
             if (r == r_prev && g == g_prev && b == b_prev && a == a_prev) {
                 rle++;
-                if (rle>62) { //Ensure that rle does not exceed 62 as this is illegal and store the current QOI_OP_RUN chunk
+                if (rle>61) { //Ensure that rle does not exceed 62 as this is illegal and store the current QOI_OP_RUN chunk
                     rv = rle + 0b11000000;
                     store_byte(&current, rv, &image_chunk_index);
                     rle = -1;
@@ -177,9 +177,9 @@ int main(void) {
                             dr = dr - dg;
                             db = db - dg;
                             if ((-8 <= dr && dr <= 7)&&(-8 <= db && db <= 7)) { // can encode in QOI_OP_LUMA chunk
-                                rv = 0b10000000 + (dg+32);
+                                rv = 0b10000000 + (unsigned char)(dg+32);
                                 store_byte(&current, rv, &image_chunk_index);
-                                rv = ((dr + 8)<<4) + (db+8);
+                                rv = ((unsigned char)(dr + 8)<<4) + (unsigned char)(db+8);
                                 store_byte(&current, rv, &image_chunk_index);
                             }
                         }
