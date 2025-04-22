@@ -30,6 +30,10 @@ void irq_handler(unsigned int cause) {
 
 }
 
+inline unsigned int easy_mul(unsigned char x, unsigned char shift){
+    return (x << shift);
+}
+
 void store_byte(struct qoi_image_chunk **current, const unsigned char to_store, unsigned char* image_chunk_index) {
 
     //print_str("Storing: X");
@@ -149,7 +153,9 @@ int main(void) {
                 //STEP 2 ------ check if in the running array --------------------------------------------------------------------------------------------------------------------
 
                 //index =  (sw_mult(r , 3) + sw_mult(g , 5) + sw_mult(b , 7) + sw_mult(a , 11)) % 64; //possible bottleneck
-                index = (unsigned int)((unsigned int)r<<1 + (unsigned int)r) + (unsigned int)((unsigned int)g<<2 + (unsigned int)g) + (unsigned int)((unsigned int)b<<2 + (unsigned int)b + (unsigned int)b + (unsigned int)b) + (unsigned int)((unsigned int)a<<3 + (unsigned int)a + (unsigned int)a + (unsigned int)a);
+                
+                
+                index = (easy_mul(r,1) + r) + (easy_mul(g,2) + g) + (easy_mul(b,3) - b) + (easy_mul(a,3) + a + a + a);
                 index = index & 0x3f;
 
                 if (running_array[index] == value) { //The pixel is in the running array
