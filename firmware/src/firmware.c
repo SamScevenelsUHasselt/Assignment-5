@@ -36,8 +36,8 @@ inline unsigned int easy_mul(unsigned char x, unsigned char shift){
 
 void store_byte(struct qoi_image_chunk **current, const unsigned char to_store, unsigned char* image_chunk_index) {
 
-    print_str("Storing: X");
-    print_hex(to_store,2);
+    //print_str("Storing: X");
+    //print_hex(to_store,2);
     if (STORE_IN_MEM == 1){
         struct qoi_image_chunk *chunk = *current;
         chunk->chunk_byte[*image_chunk_index] = to_store;
@@ -52,7 +52,7 @@ void store_byte(struct qoi_image_chunk **current, const unsigned char to_store, 
         }
         return;
     }else{
-        print_hex(to_store,2);
+        print_chr(to_store);
     }
     
     
