@@ -52,7 +52,7 @@ void store_byte(struct qoi_image_chunk **current, const unsigned char to_store, 
         }
         return;
     }else{
-        print_chr(to_store);
+        //print_chr(to_store);
     }
     
     
@@ -155,7 +155,7 @@ int main(void) {
                 //index =  (sw_mult(r , 3) + sw_mult(g , 5) + sw_mult(b , 7) + sw_mult(a , 11)) % 64; //possible bottleneck
                 
                 
-                index = (easy_mul(r,1) + r) + (easy_mul(g,2) + g) + (easy_mul(b,3) - b) + (easy_mul(a,3) + a + a + a);
+                index = (easy_mul(r,1) + r) + (easy_mul(g,2) + g) + (easy_mul(b,2) + b + b + b) + (easy_mul(a,3) + a + a + a);
                 index = index & 0x3f;
 
                 if (running_array[index] == value) { //The pixel is in the running array
@@ -168,18 +168,25 @@ int main(void) {
                         dr = (signed char)(r - r_prev);
                         dg = (signed char)(g - g_prev);
                         db = (signed char)(b - b_prev);
-
+                        print_str("dr: "); print_dec(dr); print_str(" dg: "); print_dec(dg); print_str(" db: "); print_dec(db); print_str("\n");
                         if ( (-2 <= dr && dr <= 1)&&(-2 <= dg && dg <= 1)&&(-2 <= db && db <= 1)) { //can encode in QOI_OP_DIFF chunk
-                            rv = 0b01000000 + ((unsigned char)(dr+2)<<4) + ((unsigned char)(dg+2)<<2) + (unsigned char)(db+2);
+                            rv = 0b01000000 + ((dr+2)<<4) + ((dg+2)<<2) + (db+2);
+                            print_str("OP_DIFF: ")
+                            print_hex(rv,2);
+                            print_str("\n");
                             store_byte(&current, rv, &image_chunk_index);
                         }
                         else if (-32 <= dg && dg <= 31) { //green dif value can be stored so we compute the dr_dg and db_dg
                             dr = dr - dg;
                             db = db - dg;
                             if ((-8 <= dr && dr <= 7)&&(-8 <= db && db <= 7)) { // can encode in QOI_OP_LUMA chunk
-                                rv = 0b10000000 + (unsigned char)(dg+32);
+                                rv = 0b10000000 + (dg+32);
+                                print_str("OP_LUMA: ")
+                                print_hex(rv,2);
                                 store_byte(&current, rv, &image_chunk_index);
-                                rv = ((unsigned char)(dr + 8)<<4) + (unsigned char)(db+8);
+                                rv = ((dr + 8)<<4) + (db+8);
+                                print_hex(rv,2);
+                                print_str("\n");
                                 store_byte(&current, rv, &image_chunk_index);
                             }
                         }
