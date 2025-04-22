@@ -149,7 +149,7 @@ int main(void) {
                 //STEP 2 ------ check if in the running array --------------------------------------------------------------------------------------------------------------------
 
                 //index =  (sw_mult(r , 3) + sw_mult(g , 5) + sw_mult(b , 7) + sw_mult(a , 11)) % 64; //possible bottleneck
-                index = (unsigned int)((unsigned int)r<<1 + (unsigned int)r) + (unsigned int)((unsigned int)g<<2 + (unsigned int)g) + (unsigned int)((unsigned int)b<<3 - (unsigned int)b) + (unsigned int)((unsigned int)a<<3 + (unsigned int)a + (unsigned int)a + (unsigned int)a);
+                index = (unsigned int)((unsigned int)r<<1 + (unsigned int)r) + (unsigned int)((unsigned int)g<<2 + (unsigned int)g) + (unsigned int)((unsigned int)b<<2 + (unsigned int)b + (unsigned int)b + (unsigned int)b) + (unsigned int)((unsigned int)a<<3 + (unsigned int)a + (unsigned int)a + (unsigned int)a);
                 index = index & 0x3f;
 
                 if (running_array[index] == value) { //The pixel is in the running array
