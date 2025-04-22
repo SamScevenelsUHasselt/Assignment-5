@@ -30,6 +30,10 @@ void irq_handler(unsigned int cause) {
 
 }
 
+inline unsigned int easy_mul(unsigned char x, unsigned char shift){
+    return (x << shift);
+}
+
 void store_byte(struct qoi_image_chunk **current, const unsigned char to_store, unsigned char* image_chunk_index) {
 
     //print_str("Storing: X");
@@ -48,7 +52,7 @@ void store_byte(struct qoi_image_chunk **current, const unsigned char to_store, 
         }
         return;
     }else{
-        print_hex(to_store,2);
+        print_chr(to_store);
     }
     
     
@@ -56,10 +60,10 @@ void store_byte(struct qoi_image_chunk **current, const unsigned char to_store, 
 
 int main(void) {
 
-    print_str("Sensor Height: ");
-    print_dec(SENSOR_get_height());
-    print_str("Sensor Width: ");
-    print_dec(SENSOR_get_width());
+    //print_str("Sensor Height: ");
+    //print_dec(SENSOR_get_height());
+    //print_str("Sensor Width: ");
+    //print_dec(SENSOR_get_width());
 
     unsigned char r, r_prev = 0;
     unsigned char g, g_prev = 0;
@@ -133,7 +137,7 @@ int main(void) {
             //STEP 1 ------ check if equal to previous pixel ---------------------------------------------------------------------------------------------------------------------
             if (r == r_prev && g == g_prev && b == b_prev && a == a_prev) {
                 rle++;
-                if (rle>62) { //Ensure that rle does not exceed 62 as this is illegal and store the current QOI_OP_RUN chunk
+                if (rle>61) { //Ensure that rle does not exceed 62 as this is illegal and store the current QOI_OP_RUN chunk
                     rv = rle + 0b11000000;
                     store_byte(&current, rv, &image_chunk_index);
                     rle = -1;
@@ -148,7 +152,11 @@ int main(void) {
 
                 //STEP 2 ------ check if in the running array --------------------------------------------------------------------------------------------------------------------
 
-                index =  (sw_mult(r , 3) + sw_mult(g , 5) + sw_mult(b , 7) + sw_mult(a , 11)) % 64; //possible bottleneck
+                //index =  (sw_mult(r , 3) + sw_mult(g , 5) + sw_mult(b , 7) + sw_mult(a , 11)) % 64; //possible bottleneck
+                
+                
+                index = (easy_mul(r,1) + r) + (easy_mul(g,2) + g) + (easy_mul(b,3) - b) + (easy_mul(a,3) + a + a + a);
+                index = index & 0x3f;
 
                 if (running_array[index] == value) { //The pixel is in the running array
                     store_byte(&current, index, &image_chunk_index);
@@ -166,12 +174,12 @@ int main(void) {
                             store_byte(&current, rv, &image_chunk_index);
                         }
                         else if (-32 <= dg && dg <= 31) { //green dif value can be stored so we compute the dr_dg and db_dg
-                            dr = dr = dg;
-                            db = db = dg;
+                            dr = dr - dg;
+                            db = db - dg;
                             if ((-8 <= dr && dr <= 7)&&(-8 <= db && db <= 7)) { // can encode in QOI_OP_LUMA chunk
-                                rv = 0b10000000 + (dg+32);
+                                rv = 0b10000000 + (unsigned char)(dg+32);
                                 store_byte(&current, rv, &image_chunk_index);
-                                rv = ((dr + 8)<<4) + (db+8);
+                                rv = ((unsigned char)(dr + 8)<<4) + (unsigned char)(db+8);
                                 store_byte(&current, rv, &image_chunk_index);
                             }
                         }

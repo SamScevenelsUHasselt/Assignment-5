@@ -8,9 +8,10 @@ ofh = open (ofname, "wb")
 
 
 for line in ifh:
-    line = line.rstrip()
-    line_int = int(line, 2)
     
+    line = line.rstrip()
+    last_8 = line[-8:]
+    line_int = int(line, 2)
     ofh.write(line_int.to_bytes(1,byteorder='big'))
 
 ifh.close()

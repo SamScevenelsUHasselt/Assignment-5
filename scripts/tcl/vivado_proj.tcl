@@ -10,8 +10,8 @@
 ################################################################################
 
 set pname "Assignment-5"
-set path "C:/Users/School/Desktop/HWSWCD/VivadoProj"
-set srcpath "C:/Users/School/Desktop/HWSWCD/Assignment-5"
+set path "C:/Users/SamSc/OneDrive/Desktop/HWSWCD/VivadoProj"
+set srcpath "C:/Users/SamSc/OneDrive/Desktop/HWSWCD/Assignment-5"
 
 set part "xc7z020clg400-1"
 set board "tul.com.tw:pynq-z2:part0:1.0"
@@ -53,9 +53,14 @@ add_files -norecurse $srcpath/hdl/clock_and_reset_pynq.vhd
 
 add_files -norecurse $srcpath/hdl/riscv_microcontroller.vhd
 
+add_files -norecurse $srcpath/hdl/sensor.vhd
+add_files -norecurse $srcpath/hdl/wrapped_sensor.vhd
+
+
 # TESTBENCHES
 ################################################################################
 add_files -fileset sim_1 -norecurse $srcpath/hdl/tb/riscv_microcontroller_tb.vhd
+add_files -fileset sim_1 -norecurse $srcpath/hdl/tb/basicIO_model.vhd
 
 
 # CONSTRAINT FILES

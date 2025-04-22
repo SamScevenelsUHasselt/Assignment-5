@@ -20,7 +20,7 @@ entity riscv_microcontroller_tb is
         G_DATA_WIDTH : integer := 32;
         G_DEPTH_LOG2 : integer := 11;
 
-        FNAME_OUT_FILE :       string := "C:/Users/School/Desktop/HWSWCD/Assignment-5/firmware/simulation_output.txt"
+        FNAME_OUT_FILE :       string := "C:/Users/SamSc/OneDrive/Desktop/HWSWCD/Assignment-5/firmware/simulation_output.txt"
     );  
 end entity riscv_microcontroller_tb;
 
