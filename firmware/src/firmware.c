@@ -108,14 +108,14 @@ int main(void) {
     store_byte(&current, header.magic[1],               &image_chunk_index);
     store_byte(&current, header.magic[2],               &image_chunk_index);
     store_byte(&current, header.magic[3],               &image_chunk_index);
-    store_byte(&current,(header.width&0xFF000000)<<24,  &image_chunk_index);
-    store_byte(&current,(header.width&0x00FF0000)<<16,  &image_chunk_index);
-    store_byte(&current,(header.width&0x0000FF00)<<8,   &image_chunk_index);
-    store_byte(&current,(header.width&0x000000FF),      &image_chunk_index);
-    store_byte(&current,(header.height&0xFF000000)<<24, &image_chunk_index);
-    store_byte(&current,(header.height&0x00FF0000)<<16, &image_chunk_index);
-    store_byte(&current,(header.height&0x0000FF00)<<8,  &image_chunk_index);
-    store_byte(&current,(header.height&0x000000FF),     &image_chunk_index);
+    store_byte(&current, (header.width >> 24) & 0xFF, &image_chunk_index);
+    store_byte(&current, (header.width >> 16) & 0xFF, &image_chunk_index);
+    store_byte(&current, (header.width >> 8)  & 0xFF, &image_chunk_index);
+    store_byte(&current, (header.width >> 0)  & 0xFF, &image_chunk_index);
+    store_byte(&current, (header.height >> 24) & 0xFF, &image_chunk_index);
+    store_byte(&current, (header.height >> 16) & 0xFF, &image_chunk_index);
+    store_byte(&current, (header.height >> 8)  & 0xFF, &image_chunk_index);
+    store_byte(&current, (header.height >> 0)  & 0xFF, &image_chunk_index);
     store_byte(&current, header.channels,               &image_chunk_index);
     store_byte(&current, header.colorspace,             &image_chunk_index);
 
