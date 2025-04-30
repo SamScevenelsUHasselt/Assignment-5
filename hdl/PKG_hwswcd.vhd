@@ -138,13 +138,13 @@ package PKG_hwswcd is
             sys_reset : in STD_LOGIC;
             external_irq : in STD_LOGIC;
             
---            --Outputs for simulation
---            we : out STD_LOGIC;
---            a : out STD_LOGIC_VECTOR(31 downto 0);
---            di : out STD_LOGIC_VECTOR(31 downto 0);
---            -- to not write 3 times
---            sclock : out STD_LOGIC;
---            ce_out : out STD_LOGIC;
+            --Outputs for simulation
+            we : out STD_LOGIC;
+            a : out STD_LOGIC_VECTOR(31 downto 0);
+            di : out STD_LOGIC_VECTOR(31 downto 0);
+            -- to not write 3 times
+            sclock : out STD_LOGIC;
+            ce_out : out STD_LOGIC;
             
     
             gpio_leds : out STD_LOGIC_VECTOR(3 downto 0)
