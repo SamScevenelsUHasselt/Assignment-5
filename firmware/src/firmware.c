@@ -155,7 +155,8 @@ int main(void) {
                 //index =  (sw_mult(r , 3) + sw_mult(g , 5) + sw_mult(b , 7) + sw_mult(a , 11)) % 64; //possible bottleneck
                 
                 
-                index = (easy_mul(r,1) + r) + (easy_mul(g,2) + g) + (easy_mul(b,2) + b + b + b) + (easy_mul(a,3) + a + a + a);
+                //index = (easy_mul(r,1) + r) + (easy_mul(g,2) + g) + (easy_mul(b,2) + b + b + b) + (easy_mul(a,3) + a + a + a);
+                index = r;
                 index = index & 0x3f;
 
                 if (running_array[index] == value) { //The pixel is in the running array
