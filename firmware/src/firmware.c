@@ -129,6 +129,7 @@ int main(void) {
             b = (unsigned char)(value >> 8);
             a = (unsigned char)(value);
 
+            goto pixel_end;
             //int pixel = (r << 24) | (g << 16) | (b << 8) | a;
             //print_str("Pixel: X");
             //print_hex(pixel,8);
@@ -163,7 +164,6 @@ int main(void) {
                     store_byte(&current, index, &image_chunk_index);
                 }
                 else {//if not store it anyway and continue
-                    goto pixel_end;
                     running_array[index] = value;
                     //STEP 3 ------ check difference with previous pixels --------------------------------------------------------------------------------------------------------
                     if (a == a_prev) {
