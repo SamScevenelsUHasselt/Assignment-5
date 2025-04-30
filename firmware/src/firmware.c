@@ -108,14 +108,14 @@ int main(void) {
     store_byte(&current, header.magic[1],               &image_chunk_index);
     store_byte(&current, header.magic[2],               &image_chunk_index);
     store_byte(&current, header.magic[3],               &image_chunk_index);
-    store_byte(&current,(header.width&0xFF000000)<<24,  &image_chunk_index);
-    store_byte(&current,(header.width&0x00FF0000)<<16,  &image_chunk_index);
-    store_byte(&current,(header.width&0x0000FF00)<<8,   &image_chunk_index);
-    store_byte(&current,(header.width&0x000000FF),      &image_chunk_index);
-    store_byte(&current,(header.height&0xFF000000)<<24, &image_chunk_index);
-    store_byte(&current,(header.height&0x00FF0000)<<16, &image_chunk_index);
-    store_byte(&current,(header.height&0x0000FF00)<<8,  &image_chunk_index);
-    store_byte(&current,(header.height&0x000000FF),     &image_chunk_index);
+    store_byte(&current, (header.width >> 24) & 0xFF, &image_chunk_index);
+    store_byte(&current, (header.width >> 16) & 0xFF, &image_chunk_index);
+    store_byte(&current, (header.width >> 8)  & 0xFF, &image_chunk_index);
+    store_byte(&current, (header.width >> 0)  & 0xFF, &image_chunk_index);
+    store_byte(&current, (header.height >> 24) & 0xFF, &image_chunk_index);
+    store_byte(&current, (header.height >> 16) & 0xFF, &image_chunk_index);
+    store_byte(&current, (header.height >> 8)  & 0xFF, &image_chunk_index);
+    store_byte(&current, (header.height >> 0)  & 0xFF, &image_chunk_index);
     store_byte(&current, header.channels,               &image_chunk_index);
     store_byte(&current, header.colorspace,             &image_chunk_index);
 
@@ -155,7 +155,7 @@ int main(void) {
                 //index =  (sw_mult(r , 3) + sw_mult(g , 5) + sw_mult(b , 7) + sw_mult(a , 11)) % 64; //possible bottleneck
                 
                 
-                index = (easy_mul(r,1) + r) + (easy_mul(g,2) + g) + (easy_mul(b,3) - b) + (easy_mul(a,3) + a + a + a);
+                index = (easy_mul(r,1) + r) + (easy_mul(g,2) + g) + (easy_mul(b,2) + b + b + b) + (easy_mul(a,3) + a + a + a);
                 index = index & 0x3f;
 
                 if (running_array[index] == value) { //The pixel is in the running array
@@ -168,19 +168,24 @@ int main(void) {
                         dr = (signed char)(r - r_prev);
                         dg = (signed char)(g - g_prev);
                         db = (signed char)(b - b_prev);
-
                         if ( (-2 <= dr && dr <= 1)&&(-2 <= dg && dg <= 1)&&(-2 <= db && db <= 1)) { //can encode in QOI_OP_DIFF chunk
-                            rv = 0b01000000 + ((unsigned char)(dr+2)<<4) + ((unsigned char)(dg+2)<<2) + (unsigned char)(db+2);
+                            rv = 0b01000000 + ((dr+2)<<4) + ((dg+2)<<2) + (db+2);
                             store_byte(&current, rv, &image_chunk_index);
                         }
                         else if (-32 <= dg && dg <= 31) { //green dif value can be stored so we compute the dr_dg and db_dg
                             dr = dr - dg;
                             db = db - dg;
                             if ((-8 <= dr && dr <= 7)&&(-8 <= db && db <= 7)) { // can encode in QOI_OP_LUMA chunk
-                                rv = 0b10000000 + (unsigned char)(dg+32);
+                                rv = 0b10000000 + (dg+32);
                                 store_byte(&current, rv, &image_chunk_index);
-                                rv = ((unsigned char)(dr + 8)<<4) + (unsigned char)(db+8);
+                                rv = ((dr + 8)<<4) + (db+8);
                                 store_byte(&current, rv, &image_chunk_index);
+                            }else { //store as RGB as alpha has not changed -----------------------------------------------------------------------------------------------------------
+                                rv = 0b11111110;
+                                store_byte(&current, rv, &image_chunk_index);
+                                store_byte(&current, r, &image_chunk_index);
+                                store_byte(&current, g, &image_chunk_index);
+                                store_byte(&current, b, &image_chunk_index);
                             }
                         }
                         else { //store as RGB as alpha has not changed -----------------------------------------------------------------------------------------------------------

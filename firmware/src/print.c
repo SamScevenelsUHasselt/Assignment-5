@@ -75,6 +75,5 @@ void print_dec(unsigned int val) {
 		    val -= base_lookup[i];
 		}
 	}
-	print_str("\n");
 	return;
 }
