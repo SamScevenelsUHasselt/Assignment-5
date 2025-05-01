@@ -72,7 +72,7 @@ int main(void) {
             if ((result_info && QOI_RLE_MASK) == QOI_RLE_MASK){ //RLE has ended, store the chunk
                 print_chr(result_info && QOI_RLE_DATA_MASK);
             }
-            chunk_len = result_info && QOI_LEN_MASK
+            chunk_len = result_info && QOI_LEN_MASK;
             switch (chunk_len)
             {
             case 0x100: //1 Byte chunk
