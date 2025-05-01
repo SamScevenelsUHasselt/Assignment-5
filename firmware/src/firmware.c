@@ -42,17 +42,6 @@ int main(void) {
     header.channels = 3; //RGBA
     header.colorspace = 0;
 
-    struct qoi_image_chunk element;
-    element.next = 0;
-    struct qoi_image_chunk *first = &element;
-    struct qoi_image_chunk *current = &element;
-    unsigned char image_chunk_index = 0;
-
-    /* Initialisation */
-    for(unsigned char i=0;i<64;i++) {
-        running_array[i] = 0;
-    }
-
     //Store header
     print_chr(header.magic[0]);
     print_chr(header.magic[1]);
@@ -75,7 +64,7 @@ int main(void) {
             value = SENSOR_fetch();
             
             unsigned int result_info = QOI_put_pixel(value);
-            if ((result_info && QOI_RLE_MASK) = QOI_RLE_MASK){ //RLE has ended, store the chunk
+            if ((result_info && QOI_RLE_MASK) == QOI_RLE_MASK){ //RLE has ended, store the chunk
                 print_chr(result_info && QOI_RLE_DATA_MASK);
             }
             switch (result_info && QOI_LEN_MASK)
