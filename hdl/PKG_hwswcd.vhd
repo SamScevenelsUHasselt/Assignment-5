@@ -38,7 +38,8 @@ package PKG_hwswcd is
     constant C_LED_BASE_ADDRESS_MASK : STD_LOGIC_VECTOR(C_WIDTH-1 downto C_PERIPHERAL_MASK_LOWINDEX) := x"8000";
     constant C_TIMER_BASE_ADDRESS_MASK : STD_LOGIC_VECTOR(C_WIDTH-1 downto C_PERIPHERAL_MASK_LOWINDEX) := x"8100";
     constant C_SENSOR_BASE_ADDRESS_MASK : STD_LOGIC_VECTOR(C_WIDTH-1 downto C_PERIPHERAL_MASK_LOWINDEX) := x"8200";
-
+    constant C_QOI_BASE_ADDRESS_MASK : STD_LOGIC_VECTOR(C_WIDTH-1 downto C_PERIPHERAL_MASK_LOWINDEX) := x"8500";
+    
     constant C_MRO_xF11_MVENDORID : STD_LOGIC_VECTOR(C_WIDTH-1 downto 0) := x"01234568";
     constant C_MRO_xF14_MHARTID : STD_LOGIC_VECTOR(C_WIDTH-1 downto 0) := x"CAFEBABE";
 
@@ -138,13 +139,13 @@ package PKG_hwswcd is
             sys_reset : in STD_LOGIC;
             external_irq : in STD_LOGIC;
             
-            --Outputs for simulation
-            we : out STD_LOGIC;
-            a : out STD_LOGIC_VECTOR(31 downto 0);
-            di : out STD_LOGIC_VECTOR(31 downto 0);
-            -- to not write 3 times
-            sclock : out STD_LOGIC;
-            ce_out : out STD_LOGIC;
+--            --Outputs for simulation
+--            we : out STD_LOGIC;
+--            a : out STD_LOGIC_VECTOR(31 downto 0);
+--            di : out STD_LOGIC_VECTOR(31 downto 0);
+--            -- to not write 3 times
+--            sclock : out STD_LOGIC;
+--            ce_out : out STD_LOGIC;
             
     
             gpio_leds : out STD_LOGIC_VECTOR(3 downto 0)
@@ -349,6 +350,29 @@ package PKG_hwswcd is
         data_out : out STD_LOGIC_VECTOR(7 downto 0)
     );
     end component sensor_b;
+    
+    component QOI is
+    Port (
+        clock : in STD_LOGIC;
+        reset : in STD_LOGIC;
+        pixel : in STD_LOGIC_VECTOR(C_WIDTH-1 downto 0);
+        new_pixel : in STD_LOGIC;
+        flush_rle : in STD_LOGIC;
+        result : out STD_LOGIC_VECTOR(C_WIDTH-1 downto 0);
+        result_info: out STD_LOGIC_VECTOR(10 downto 0)
+    );
+    end component QOI;
+    
+    component QOI_Wrapper is
+    Port (
+        clock : in STD_LOGIC;
+        reset : in STD_LOGIC;
+        iface_di : in STD_LOGIC_VECTOR(C_WIDTH-1 downto 0);
+        iface_a : in STD_LOGIC_VECTOR(C_WIDTH-1 downto 0);
+        iface_we : in STD_LOGIC;
+        iface_do : out STD_LOGIC_VECTOR(C_WIDTH-1 downto 0)
+    );
+    end component QOI_Wrapper;
     
 end package;
 

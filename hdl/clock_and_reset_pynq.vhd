@@ -33,8 +33,8 @@ architecture Behavioural of clock_and_reset_pynq is
     constant C_D_MASTER : integer := 1;
     constant C_M_MASTER : real := 8.0;
     
---    constant C_D_CLK0 : real := 20.0; -- this sets CLKOUT0 to 1000MHz / 20 = 50 MHz
-    constant C_D_CLK0 : real := 25.0; -- this sets CLKOUT0 to 1000MHz / 25 = 40 MHz
+--    constant C_D_CLK0 : real := 25.0; -- this sets CLKOUT0 to 1000MHz / 25 = 40 MHz
+    constant C_D_CLK0 : real := 20.5; -- this sets CLKOUT0 to 1000MHz / 20 = 50 MHz
 
     -- (DE-)LOCALISING IN/OUTPUTS
     signal sysclock_i : STD_LOGIC;
@@ -55,6 +55,9 @@ architecture Behavioural of clock_and_reset_pynq is
     
     constant C_GND32 : STD_LOGIC_VECTOR(31 downto 0) := x"00000000";
     constant C_VCC32 : STD_LOGIC_VECTOR(31 downto 0) := x"FFFFFFFF";
+    
+    signal sysclock_buffed : STD_LOGIC;
+    
 begin
 
     -------------------------------------------------------------------------------
@@ -64,6 +67,13 @@ begin
     sysreset_i <= sysreset;
     sreset <= sreset_o;
     clock <= clock_o;
+
+
+    IBUF_inst : IBUF generic map (IOSTANDARD => "DEFAULT") port map (
+      O => sysclock_buffed,
+      I => sysclock_i
+    );
+  
 
     -------------------------------------------------------------------------------
     -- HEARTBEAT
@@ -195,7 +205,7 @@ begin
         CLKINSTOPPED => open, -- 1-bit output: Input clock stopped
         LOCKED => locked,             -- 1-bit output: LOCK
         -- Clock Inputs: 1-bit (each) input: Clock inputs
-        CLKIN1 => sysclock,             -- 1-bit input: Primary clock
+        CLKIN1 => sysclock_buffed,             -- 1-bit input: Primary clock
         CLKIN2 => C_GND32(0),             -- 1-bit input: Secondary clock
         -- Control Ports: 1-bit (each) input: MMCM control ports
         CLKINSEL => C_VCC32(0),         -- 1-bit input: Clock select, High=CLKIN1 Low=CLKIN2

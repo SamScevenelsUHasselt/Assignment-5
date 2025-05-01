@@ -22,13 +22,13 @@ entity riscv_microcontroller is
         sys_reset : in STD_LOGIC;
         external_irq : in STD_LOGIC;
         
-        --Outputs for simulation
-        we : out STD_LOGIC;
-        a : out STD_LOGIC_VECTOR(31 downto 0);
-        di : out STD_LOGIC_VECTOR(31 downto 0);
-        -- to not write 3 times
-        sclock : out STD_LOGIC;
-        ce_out : out STD_LOGIC;
+--        --Outputs for simulation
+--        we : out STD_LOGIC;
+--        a : out STD_LOGIC_VECTOR(31 downto 0);
+--        di : out STD_LOGIC_VECTOR(31 downto 0);
+--        -- to not write 3 times
+--        sclock : out STD_LOGIC;
+--        ce_out : out STD_LOGIC;
         
 
         gpio_leds : out STD_LOGIC_VECTOR(3 downto 0)
@@ -86,11 +86,11 @@ begin
 
     gpio_leds_o <= leds(3 downto 0);
 
-    we <= dmem_we;
-    a <= dmem_a;
-    di <= dmem_di;
-    sclock <= clock;
-    ce_out <= ce(0);
+--    we <= dmem_we;
+--    a <= dmem_a;
+--    di <= dmem_di;
+--    sclock <= clock;
+--    ce_out <= ce(0);
 
     -------------------------------------------------------------------------------
     -- MICROPROCESSOR

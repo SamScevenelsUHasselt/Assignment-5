@@ -3,6 +3,7 @@
 
 #include "sensor.h"
 #include "print.h"
+#include "qoi.h"
 
 #define CHUNK_SIZE 64
 #define STORE_IN_MEM 0
@@ -20,63 +21,12 @@ struct qoi_header {
                         // 1 = all channels linear
 };
 
-struct qoi_image_chunk {
-    unsigned char chunk_byte[CHUNK_SIZE];
-    unsigned char size;
-    struct qoi_image_chunk *next;
-};
-
 void irq_handler(unsigned int cause) {
 
 }
 
-inline unsigned int easy_mul(unsigned char x, unsigned char shift){
-    return (x << shift);
-}
-
-void store_byte(struct qoi_image_chunk **current, const unsigned char to_store, unsigned char* image_chunk_index) {
-
-    //print_str("Storing: X");
-    //print_hex(to_store,2);
-    if (STORE_IN_MEM == 1){
-        struct qoi_image_chunk *chunk = *current;
-        chunk->chunk_byte[*image_chunk_index] = to_store;
-        chunk->size = *image_chunk_index + 1;
-        *image_chunk_index += 1;
-        if(*image_chunk_index >= CHUNK_SIZE){ //chunk is full make a new one
-            struct qoi_image_chunk new; //init new chunk
-            new.next = 0;
-            chunk->next = &new; //point to new chunk from current chunk
-            *current = chunk; //update the current pointer to point at the new chunk
-            *image_chunk_index = 0;
-        }
-        return;
-    }else{
-        print_chr(to_store);
-    }
-    
-    
-}
 
 int main(void) {
-
-    //print_str("Sensor Height: ");
-    //print_dec(SENSOR_get_height());
-    //print_str("Sensor Width: ");
-    //print_dec(SENSOR_get_width());
-
-    unsigned char r, r_prev = 0;
-    unsigned char g, g_prev = 0;
-    unsigned char b, b_prev = 0;
-    unsigned char a, a_prev = 255;
-
-    signed char dr, dg, db;
-
-    signed char rle = -1;
-    unsigned int running_array[64];
-    unsigned char rv;
-    unsigned char index;
-    unsigned int value;
 
     unsigned int width = SENSOR_get_width();
     unsigned int height = SENSOR_get_height();
@@ -104,148 +54,69 @@ int main(void) {
     }
 
     //Store header
-    store_byte(&current, header.magic[0],               &image_chunk_index);
-    store_byte(&current, header.magic[1],               &image_chunk_index);
-    store_byte(&current, header.magic[2],               &image_chunk_index);
-    store_byte(&current, header.magic[3],               &image_chunk_index);
-    store_byte(&current, (header.width >> 24) & 0xFF, &image_chunk_index);
-    store_byte(&current, (header.width >> 16) & 0xFF, &image_chunk_index);
-    store_byte(&current, (header.width >> 8)  & 0xFF, &image_chunk_index);
-    store_byte(&current, (header.width >> 0)  & 0xFF, &image_chunk_index);
-    store_byte(&current, (header.height >> 24) & 0xFF, &image_chunk_index);
-    store_byte(&current, (header.height >> 16) & 0xFF, &image_chunk_index);
-    store_byte(&current, (header.height >> 8)  & 0xFF, &image_chunk_index);
-    store_byte(&current, (header.height >> 0)  & 0xFF, &image_chunk_index);
-    store_byte(&current, header.channels,               &image_chunk_index);
-    store_byte(&current, header.colorspace,             &image_chunk_index);
+    print_chr(header.magic[0]);
+    print_chr(header.magic[1]);
+    print_chr(header.magic[2]);
+    print_chr(header.magic[3]);
+    print_chr((header.width >> 24) & 0xFF);
+    print_chr((header.width >> 16) & 0xFF);
+    print_chr((header.width >> 8)  & 0xFF);
+    print_chr((header.width >> 0)  & 0xFF);
+    print_chr((header.height >> 24) & 0xFF);
+    print_chr((header.height >> 16) & 0xFF);
+    print_chr((header.height >> 8)  & 0xFF);
+    print_chr((header.height >> 0)  & 0xFF);
+    print_chr(header.channels);
+    print_chr(header.colorspace);
 
     /* Loop over pixels */
     for(unsigned char h=0;h<height;h++) {
         for(unsigned char w=0;w<width;w++) {
-            
             value = SENSOR_fetch();
-            r = (unsigned char)(value >> 24);
-            g = (unsigned char)(value >> 16);
-            b = (unsigned char)(value >> 8);
-            a = (unsigned char)(value);
-
-            goto pixel_end;
-            //int pixel = (r << 24) | (g << 16) | (b << 8) | a;
-            //print_str("Pixel: X");
-            //print_hex(pixel,8);
-            //print_str("\n");
-
-            //STEP 1 ------ check if equal to previous pixel ---------------------------------------------------------------------------------------------------------------------
-            if (r == r_prev && g == g_prev && b == b_prev && a == a_prev) {
-                rle++;
-                if (rle>61) { //Ensure that rle does not exceed 62 as this is illegal and store the current QOI_OP_RUN chunk
-                    rv = rle + 0b11000000;
-                    store_byte(&current, rv, &image_chunk_index);
-                    rle = -1;
-                }
+            
+            unsigned int result_info = QOI_put_pixel(value);
+            if ((result_info && QOI_RLE_MASK) = QOI_RLE_MASK){ //RLE has ended, store the chunk
+                print_chr(result_info && QOI_RLE_DATA_MASK);
             }
-            else{
-                if (rle != -1) { //if rle != -1 then store QOI_OP_RUN chunk
-                    rv = rle + 0b11000000;
-                    store_byte(&current, rv, &image_chunk_index);
-                    rle = -1;
-                }
-
-                //STEP 2 ------ check if in the running array --------------------------------------------------------------------------------------------------------------------
-
-                //index =  (sw_mult(r , 3) + sw_mult(g , 5) + sw_mult(b , 7) + sw_mult(a , 11)) % 64; //possible bottleneck
-                
-                
-                index = (easy_mul(r,1) + r) + (easy_mul(g,2) + g) + (easy_mul(b,2) + b + b + b) + (easy_mul(a,3) + a + a + a);
-                //index = r;
-                index = index & 0x3f;
-
-                if (running_array[index] == value) { //The pixel is in the running array
-                    store_byte(&current, index, &image_chunk_index);
-                }
-                else {//if not store it anyway and continue
-                    running_array[index] = value;
-                    //STEP 3 ------ check difference with previous pixels --------------------------------------------------------------------------------------------------------
-                    if (a == a_prev) {
-                        dr = (signed char)(r - r_prev);
-                        dg = (signed char)(g - g_prev);
-                        db = (signed char)(b - b_prev);
-                        if ( (-2 <= dr && dr <= 1)&&(-2 <= dg && dg <= 1)&&(-2 <= db && db <= 1)) { //can encode in QOI_OP_DIFF chunk
-                            rv = 0b01000000 + ((dr+2)<<4) + ((dg+2)<<2) + (db+2);
-                            store_byte(&current, rv, &image_chunk_index);
-                        }
-                        else if (-32 <= dg && dg <= 31) { //green dif value can be stored so we compute the dr_dg and db_dg
-                            dr = dr - dg;
-                            db = db - dg;
-                            if ((-8 <= dr && dr <= 7)&&(-8 <= db && db <= 7)) { // can encode in QOI_OP_LUMA chunk
-                                rv = 0b10000000 + (dg+32);
-                                store_byte(&current, rv, &image_chunk_index);
-                                rv = ((dr + 8)<<4) + (db+8);
-                                store_byte(&current, rv, &image_chunk_index);
-                            }else { //store as RGB as alpha has not changed -----------------------------------------------------------------------------------------------------------
-                                rv = 0b11111110;
-                                store_byte(&current, rv, &image_chunk_index);
-                                store_byte(&current, r, &image_chunk_index);
-                                store_byte(&current, g, &image_chunk_index);
-                                store_byte(&current, b, &image_chunk_index);
-                            }
-                        }
-                        else { //store as RGB as alpha has not changed -----------------------------------------------------------------------------------------------------------
-                            rv = 0b11111110;
-                            store_byte(&current, rv, &image_chunk_index);
-                            store_byte(&current, r, &image_chunk_index);
-                            store_byte(&current, g, &image_chunk_index);
-                            store_byte(&current, b, &image_chunk_index);
-                        }
-                    }
-                    else {
-                        //STEP 5 ------ store raw RGBA -------------------------------------------------------------------------------------------------------------------------------
-                        rv = 0b11111111;
-                        store_byte(&current, rv, &image_chunk_index);
-                        store_byte(&current, r, &image_chunk_index);
-                        store_byte(&current, g, &image_chunk_index);
-                        store_byte(&current, b, &image_chunk_index);
-                        store_byte(&current, a, &image_chunk_index);
-                    }
-                }
-                pixel_end:
-                r_prev = r;
-                g_prev = g;
-                b_prev = b;
-                a_prev = a;
+            switch (result_info && QOI_LEN_MASK)
+            {
+            case 0x100: //1 Byte chunk
+                unsigned int result = QOI_fetch_result();
+                print_chr(result);
+                break;
+            case 0x200: //2 Byte chunk
+                unsigned int result = QOI_fetch_result();
+                print_chr(result);
+                print_chr(result>>8);
+                break;
+            case 0x300: //4 Byte chunk
+                unsigned int result = QOI_fetch_result();
+                print_chr(result);
+                print_chr(result>>8);
+                print_chr(result>>16);
+                print_chr(result>>24);
+                break;
+            default: //no chunk
+                break;
             }
         }
     }
 
     //check rle
-    if (rle != -1) { //check if rle still has something
-        rv = rle + 0b11000000;
-        store_byte(&current, rv, &image_chunk_index);
-        rle = -1;
+    unsigned int result_info = QOI_flush();
+    if ((result_info && QOI_RLE_MASK) = QOI_RLE_MASK){ //RLE still had something, store it
+        print_chr(result_info && QOI_RLE_DATA_MASK);
     }
 
     //end marker
-    rv = 0;
-    store_byte(&current, rv, &image_chunk_index);
-    store_byte(&current, rv, &image_chunk_index);
-    store_byte(&current, rv, &image_chunk_index);
-    store_byte(&current, rv, &image_chunk_index);
-    store_byte(&current, rv, &image_chunk_index);
-    store_byte(&current, rv, &image_chunk_index);
-    store_byte(&current, rv, &image_chunk_index);
-    rv = 1;
-    store_byte(&current, rv, &image_chunk_index);
-
-    
-    if (STORE_IN_MEM == 1){
-        current = first;
-        while (current != 0) {
-            for(unsigned char i=0;i<current->size;i++) {
-                print_hex(current->chunk_byte[i],2);
-            }
-            current = current->next;
-        }
-    }
+    print_chr(0);
+    print_chr(0);
+    print_chr(0);
+    print_chr(0);
+    print_chr(0);
+    print_chr(0);
+    print_chr(0);
+    print_chr(1);
     
     while (1){}
 }
