@@ -73,10 +73,10 @@ int main(void) {
                 print_chr(result_info && QOI_RLE_DATA_MASK);
             }
             chunk_len = result_info && QOI_LEN_MASK;
+            print_str("\n");print_str("1 byte: "); print_hex(chunk_len,8); print_str("\n");
             switch (chunk_len)
             {
             case 0x100: //1 Byte chunk
-                print_str("\n");print_str("1 byte: "); print_hex(chunk_len,8); print_str("\n");
                 result = QOI_fetch_result();
                 print_chr(result);
                 break;
