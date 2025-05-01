@@ -62,13 +62,14 @@ int main(void) {
     unsigned int result_info;
     unsigned int result;
     unsigned int chunk_len;
-
+    
     /* Loop over pixels */
     for(unsigned char h=0;h<height;h++) {
         for(unsigned char w=0;w<width;w++) {
             value = SENSOR_fetch();
             
             result_info = QOI_put_pixel(value);
+            print_str("\n");print_str("result: "); print_hex(result_info,8); print_str("\n");
             if ((result_info && QOI_RLE_MASK) == QOI_RLE_MASK){ //RLE has ended, store the chunk
                 print_chr(result_info && QOI_RLE_DATA_MASK);
             }

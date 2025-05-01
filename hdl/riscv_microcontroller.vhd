@@ -22,13 +22,13 @@ entity riscv_microcontroller is
         sys_reset : in STD_LOGIC;
         external_irq : in STD_LOGIC;
         
---        --Outputs for simulation
---        we : out STD_LOGIC;
---        a : out STD_LOGIC_VECTOR(31 downto 0);
---        di : out STD_LOGIC_VECTOR(31 downto 0);
---        -- to not write 3 times
---        sclock : out STD_LOGIC;
---        ce_out : out STD_LOGIC;
+        --Outputs for simulation
+        we : out STD_LOGIC;
+        a : out STD_LOGIC_VECTOR(31 downto 0);
+        di : out STD_LOGIC_VECTOR(31 downto 0);
+        -- to not write 3 times
+        sclock : out STD_LOGIC;
+        ce_out : out STD_LOGIC;
         
 
         gpio_leds : out STD_LOGIC_VECTOR(3 downto 0)
@@ -47,8 +47,8 @@ architecture Behavioural of riscv_microcontroller is
 
     -- dmem
     signal dmem_do : STD_LOGIC_VECTOR(31 downto 0);
-    signal dmem_do_dmem, dmem_do_sensor : STD_LOGIC_VECTOR(31 downto 0);
-    signal dmem_we, dmem_we_manip, sensor_we : STD_LOGIC;
+    signal dmem_do_dmem, dmem_do_sensor, dmem_do_qoi : STD_LOGIC_VECTOR(31 downto 0);
+    signal dmem_we, dmem_we_manip, sensor_we, qoi_we : STD_LOGIC;
     signal dmem_a : STD_LOGIC_VECTOR(31 downto 0);
     signal dmem_di : STD_LOGIC_VECTOR(31 downto 0);
     signal store_control : STD_LOGIC_VECTOR(1 downto 0);
@@ -86,11 +86,11 @@ begin
 
     gpio_leds_o <= leds(3 downto 0);
 
---    we <= dmem_we;
---    a <= dmem_a;
---    di <= dmem_di;
---    sclock <= clock;
---    ce_out <= ce(0);
+    we <= dmem_we;
+    a <= dmem_a;
+    di <= dmem_di;
+    sclock <= clock;
+    ce_out <= ce(0);
 
     -------------------------------------------------------------------------------
     -- MICROPROCESSOR
@@ -186,6 +186,17 @@ begin
     );
     
     sensor_we <= dmem_we when  dmem_a(C_WIDTH-1 downto C_PERIPHERAL_MASK_LOWINDEX) = C_SENSOR_BASE_ADDRESS_MASK else '0';
+    
+    wrapped_qoi_inst00: component QOI_Wrapper port map(
+        clock => clock,
+        reset => reset,
+        iface_di => dmem_di,
+        iface_a => dmem_a,
+        iface_we => qoi_we,
+        iface_do => dmem_do_qoi
+    );
+    
+    qoi_we <= dmem_we when  dmem_a(C_WIDTH-1 downto C_PERIPHERAL_MASK_LOWINDEX) = C_QOI_BASE_ADDRESS_MASK else '0';
 
     PMUX_bus: process(dmem_a, dmem_do_tcnt, dmem_do_dmem, leds)
     begin
@@ -193,6 +204,7 @@ begin
             when C_LED_BASE_ADDRESS_MASK => dmem_do <= leds;
             when C_TIMER_BASE_ADDRESS_MASK => dmem_do <= dmem_do_tcnt;
             when C_SENSOR_BASE_ADDRESS_MASK => dmem_do <= dmem_do_sensor;
+            when C_QOI_BASE_ADDRESS_MASK => dmem_do <= dmem_do_qoi;
             when others => dmem_do <= dmem_do_dmem;
         end case;
     end process;
