@@ -4,12 +4,15 @@ Discarded input sections
  .comment       0x00000000       0x1c build/print.o
  .riscv.attributes
                 0x00000000       0x25 build/print.o
- .comment       0x00000000       0x1c build/sensor.o
- .riscv.attributes
-                0x00000000       0x25 build/sensor.o
  .comment       0x00000000       0x1c build/tcnt.o
  .riscv.attributes
                 0x00000000       0x25 build/tcnt.o
+ .comment       0x00000000       0x1c build/sensor.o
+ .riscv.attributes
+                0x00000000       0x25 build/sensor.o
+ .comment       0x00000000       0x1c build/qoi.o
+ .riscv.attributes
+                0x00000000       0x25 build/qoi.o
  .comment       0x00000000       0x1c build/firmware.o
  .riscv.attributes
                 0x00000000       0x25 build/firmware.o
@@ -26,7 +29,7 @@ RAM              0x00002000         0x00002000         xrw
 Linker script and memory map
 
 
-.text           0x00000000      0x55c
+.text           0x00000000      0x590
                 0x00000000                        . = 0x0
  *(.init)
  .init          0x00000000      0x240 build/start.o
@@ -41,36 +44,41 @@ Linker script and memory map
                 0x00000274                print_hex
                 0x000002b0                getDigit
                 0x000002d0                print_dec
- .text          0x00000348       0x28 build/sensor.o
-                0x00000348                SENSOR_fetch
- .text          0x00000370       0xcc build/tcnt.o
-                0x00000370                TCNT_start
-                0x00000384                TCNT_stop
-                0x00000398                TCNT_start_div8
-                0x000003c0                TCNT_start_div16
-                0x000003e8                TCNT_set_mode
-                0x00000428                TCNT_clear_ir
- .text          0x0000043c        0xc build/firmware.o
-                0x0000043c                irq_handler
-                0x00000440                store_byte
- .text.startup  0x00000448      0x114 build/firmware.o
-                0x00000448                main
- .text          0x0000055c        0x0 build/start.o
+ .text          0x00000348       0xcc build/tcnt.o
+                0x00000348                TCNT_start
+                0x0000035c                TCNT_stop
+                0x00000370                TCNT_start_div8
+                0x00000398                TCNT_start_div16
+                0x000003c0                TCNT_set_mode
+                0x00000400                TCNT_clear_ir
+ .text          0x00000414       0x28 build/sensor.o
+                0x00000414                SENSOR_fetch
+ .text          0x0000043c       0x34 build/qoi.o
+                0x0000043c                QOI_put_pixel
+                0x0000044c                QOI_fetch_result
+                0x00000458                QOI_flush
+ .text          0x00000470        0x4 build/firmware.o
+                0x00000470                irq_handler
+ .text.startup  0x00000474      0x11c build/firmware.o
+                0x00000474                main
+ .text          0x00000590        0x0 build/start.o
 
 .data           0x00002000       0x2c
                 0x00000000                        . = 0x0
  *(.data)
  .data          0x00002000       0x2c build/print.o
                 0x00002000                base_lookup
- .data          0x0000202c        0x0 build/sensor.o
  .data          0x0000202c        0x0 build/tcnt.o
+ .data          0x0000202c        0x0 build/sensor.o
+ .data          0x0000202c        0x0 build/qoi.o
  .data          0x0000202c        0x0 build/firmware.o
  .data          0x0000202c        0x0 build/start.o
 
 .bss            0x0000202c        0x0
  .bss           0x0000202c        0x0 build/print.o
- .bss           0x0000202c        0x0 build/sensor.o
  .bss           0x0000202c        0x0 build/tcnt.o
+ .bss           0x0000202c        0x0 build/sensor.o
+ .bss           0x0000202c        0x0 build/qoi.o
  .bss           0x0000202c        0x0 build/firmware.o
  .bss           0x0000202c        0x0 build/start.o
 
@@ -93,8 +101,9 @@ Linker script and memory map
  *(.comment)
  *(.riscv.attributes)
 LOAD build/print.o
-LOAD build/sensor.o
 LOAD build/tcnt.o
+LOAD build/sensor.o
+LOAD build/qoi.o
 LOAD build/firmware.o
 LOAD build/start.o
 LOAD /opt/riscv/lib/gcc/riscv32-unknown-elf/13.2.0/libgcc.a
