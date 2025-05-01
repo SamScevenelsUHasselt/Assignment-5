@@ -69,7 +69,6 @@ int main(void) {
             value = SENSOR_fetch();
             
             result_info = QOI_put_pixel(value);
-            print_str("\n");print_str("result: "); print_hex(result_info,8); print_str("\n");
             if ((result_info && QOI_RLE_MASK) == QOI_RLE_MASK){ //RLE has ended, store the chunk
                 print_chr(result_info && QOI_RLE_DATA_MASK);
             }
@@ -77,6 +76,7 @@ int main(void) {
             switch (chunk_len)
             {
             case 0x100: //1 Byte chunk
+                print_str("\n");print_str("1 byte: "); print_hex(chunk_len,8); print_str("\n");
                 result = QOI_fetch_result();
                 print_chr(result);
                 break;
