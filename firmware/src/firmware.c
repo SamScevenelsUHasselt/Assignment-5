@@ -61,6 +61,7 @@ int main(void) {
     unsigned int value;
     unsigned int result_info;
     unsigned int result;
+    unsigned int chunk_len;
 
     /* Loop over pixels */
     for(unsigned char h=0;h<height;h++) {
@@ -71,7 +72,8 @@ int main(void) {
             if ((result_info && QOI_RLE_MASK) == QOI_RLE_MASK){ //RLE has ended, store the chunk
                 print_chr(result_info && QOI_RLE_DATA_MASK);
             }
-            switch (result_info && QOI_LEN_MASK)
+            chunk_len = result_info && QOI_LEN_MASK
+            switch (chunk_len)
             {
             case 0x100: //1 Byte chunk
                 result = QOI_fetch_result();
@@ -97,7 +99,7 @@ int main(void) {
 
     //check rle
     result_info = QOI_flush();
-    if ((result_info && QOI_RLE_MASK) = QOI_RLE_MASK){ //RLE still had something, store it
+    if ((result_info && QOI_RLE_MASK) == QOI_RLE_MASK){ //RLE still had something, store it
         print_chr(result_info && QOI_RLE_DATA_MASK);
     }
 
