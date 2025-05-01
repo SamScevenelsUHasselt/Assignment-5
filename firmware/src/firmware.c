@@ -58,28 +58,32 @@ int main(void) {
     print_chr(header.channels);
     print_chr(header.colorspace);
 
+    unsigned int value;
+    unsigned int result_info;
+    unsigned int result;
+
     /* Loop over pixels */
     for(unsigned char h=0;h<height;h++) {
         for(unsigned char w=0;w<width;w++) {
             value = SENSOR_fetch();
             
-            unsigned int result_info = QOI_put_pixel(value);
+            result_info = QOI_put_pixel(value);
             if ((result_info && QOI_RLE_MASK) == QOI_RLE_MASK){ //RLE has ended, store the chunk
                 print_chr(result_info && QOI_RLE_DATA_MASK);
             }
             switch (result_info && QOI_LEN_MASK)
             {
             case 0x100: //1 Byte chunk
-                unsigned int result = QOI_fetch_result();
+                result = QOI_fetch_result();
                 print_chr(result);
                 break;
             case 0x200: //2 Byte chunk
-                unsigned int result = QOI_fetch_result();
+                result = QOI_fetch_result();
                 print_chr(result);
                 print_chr(result>>8);
                 break;
             case 0x300: //4 Byte chunk
-                unsigned int result = QOI_fetch_result();
+                result = QOI_fetch_result();
                 print_chr(result);
                 print_chr(result>>8);
                 print_chr(result>>16);
@@ -92,7 +96,7 @@ int main(void) {
     }
 
     //check rle
-    unsigned int result_info = QOI_flush();
+    result_info = QOI_flush();
     if ((result_info && QOI_RLE_MASK) = QOI_RLE_MASK){ //RLE still had something, store it
         print_chr(result_info && QOI_RLE_DATA_MASK);
     }
