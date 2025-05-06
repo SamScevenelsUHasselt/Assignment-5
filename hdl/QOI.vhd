@@ -130,6 +130,7 @@ begin
             
             index <= 0;
             ra_value <= (others => '0');
+            result_o <= (others => '0');
             result_info_o <= (others => '0');
         else
             base_sum := to_integer(unsigned(r)) * 3 +

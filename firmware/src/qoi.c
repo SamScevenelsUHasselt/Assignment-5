@@ -13,3 +13,11 @@ unsigned int QOI_flush(void){
     QOI_CR = 0x01;
     return QOI_RES_INFO;
 }
+
+void QOI_start(void){
+    QOI_CR = 0x00;
+}
+
+unsigned int QOI_fetch_info(void){
+    return QOI_RES_INFO;
+}

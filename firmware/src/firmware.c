@@ -66,9 +66,10 @@ int main(void) {
     /* Loop over pixels */
     for(unsigned char h=0;h<height;h++) {
         for(unsigned char w=0;w<width;w++) {
-
+            
+            QOI_start();
             SENSOR_advance();
-
+            
             /*
             value = SENSOR_fetch();
             
