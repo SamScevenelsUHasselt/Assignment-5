@@ -20,9 +20,7 @@
 #define QOI_RLE_DATA_MASK            0x0FF
 
 unsigned int QOI_put_pixel(unsigned int pixel);
-unsigned int QOI_fetch_result(void);
 unsigned int QOI_flush(void);
 void QOI_start(void);
-unsigned int QOI_fetch_info(void);
 
 #endif

@@ -16,6 +16,14 @@ inline void print_chr(char ch)
 	*((volatile unsigned int*)OUTPORT) = ch;
 }
 
+inline unsigned int QOI_fetch_result(void){
+    return QOI_RES;
+}
+
+inline unsigned int QOI_fetch_info(void){
+    return QOI_RES_INFO;
+}
+
 struct qoi_header {
     char magic[4]; // magic bytes "qoif"
     unsigned int width; // image width in pixels (BE)
