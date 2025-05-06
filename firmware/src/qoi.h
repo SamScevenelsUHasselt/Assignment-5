@@ -18,6 +18,7 @@
 #define QOI_RLE_MASK                 0x400
 #define QOI_LEN_MASK                 0x300
 #define QOI_RLE_DATA_MASK            0x0FF
+#define QOI_RUNNING_ARRAY_INDEX_MASK 0x1F800
 
 unsigned int QOI_put_pixel(unsigned int pixel);
 unsigned int QOI_flush(void);
