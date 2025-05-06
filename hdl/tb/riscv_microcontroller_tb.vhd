@@ -42,7 +42,7 @@ architecture Behavioural of riscv_microcontroller_tb is
     
     -- constants
     constant C_ZEROES: STD_LOGIC_VECTOR(G_DATA_WIDTH-1 downto 0) := (others => '0');
-    constant clock_period : time := 10 ns;
+    constant clock_period : time := 8 ns;
 
 begin
 
