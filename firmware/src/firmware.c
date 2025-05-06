@@ -11,6 +11,10 @@
 extern unsigned int sw_mult(unsigned int x, unsigned int y);
 extern void load_test();
 
+inline void print_chr(char ch)
+{
+	*((volatile unsigned int*)OUTPORT) = ch;
+}
 
 struct qoi_header {
     char magic[4]; // magic bytes "qoif"
