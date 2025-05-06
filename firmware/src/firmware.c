@@ -81,6 +81,7 @@ int main(void) {
     unsigned int result;
     unsigned int chunk_len;
     unsigned int ra_index;
+    unsigned int rle_chunk;
 
     QOI_start();
 
@@ -90,7 +91,8 @@ int main(void) {
             
             result_info = QOI_fetch_info();
             if ((result_info & QOI_RLE_MASK) == QOI_RLE_MASK){ //RLE has ended, store the chunk
-                print_chr(QOI_RLE_DATA_MASK);
+                
+                print_chr(result_info);
             }
 
             //print_str("RA index: "); print_dec(ra_index); print_str(" | Value: "); print_hex(value,8);

@@ -100,7 +100,7 @@ begin
     -------------------------------------------------------------------------------
     -- QOI
     -------------------------------------------------------------------------------
-    PREG: process(pixel_i,new_pixel_i,flush_rle_i)
+    PREG: process(new_pixel_i,flush_rle_i)
         variable base_sum : natural range 0 to 3825; -- max r*3 + g*5 + b*7
         variable result : natural range 0 to 63;
     
@@ -138,20 +138,23 @@ begin
             result_o <= (others => '0');
             result_info_o <= (others => '0');
         else
-            base_sum := to_integer(unsigned(r)) * 3 +
+            if new_pixel_i = '1' then
+                
+                base_sum := to_integer(unsigned(r)) * 3 +
                         to_integer(unsigned(g)) * 5 +
                         to_integer(unsigned(b)) * 7;
     
-            result := (base_sum + 53) mod 64;
-            
-            index <= result;
-            result_info_o(17 downto 12) <= STD_LOGIC_VECTOR(TO_UNSIGNED(index,6));
---            ra_value <= ra(index);
-            if new_pixel_i = '1' then
-                result_info_o(10 downto 0) <= "00000000000";
+                result := (base_sum + 53) mod 64;
+                
+                index <= result;
+                result_info_o(17 downto 12) <= STD_LOGIC_VECTOR(TO_UNSIGNED(index,6));
+                
+                
+                
+                result_info_o(11 downto 0) <= "000000000000";
                 if flush_rle_i = '1' then
                     if rle = -1 then
-                        result_info_o(10 downto 0) <= "00000000000";
+                        result_info_o(11 downto 0) <= "000000000000";
                     else
                         rle_v := std_logic_vector(TO_UNSIGNED(rle,6));
                         result_info_o(7 downto 0) <= "11" & rle_v;
@@ -168,9 +171,6 @@ begin
                             result_o <= X"000000" & "11" & rle_v;
                             result_info_o(9 downto 8) <= "01";
                             rle <= -1;
-                        else
-                            result_info_o(17 downto 12) <= "000000";
-                            result_info_o(10 downto 0) <= (others => '0');
                         end if;
                     else
                         if rle > -1 then --if rle != -1 then store QOI_OP_RUN chunk
