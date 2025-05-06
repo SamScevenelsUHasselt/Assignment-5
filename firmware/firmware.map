@@ -1,3 +1,7 @@
+Archive member included to satisfy reference by file (symbol)
+
+/opt/riscv/lib/gcc/riscv32-unknown-elf/13.2.0/../../../../riscv32-unknown-elf/lib/libc.a(libc_a-memset.o)
+                              build/firmware.o (memset)
 
 Discarded input sections
 
@@ -18,6 +22,8 @@ Discarded input sections
                 0x00000000       0x25 build/firmware.o
  .riscv.attributes
                 0x00000000       0x27 build/start.o
+ .riscv.attributes
+                0x00000000       0x51 /opt/riscv/lib/gcc/riscv32-unknown-elf/13.2.0/../../../../riscv32-unknown-elf/lib/libc.a(libc_a-memset.o)
 
 Memory Configuration
 
@@ -29,7 +35,7 @@ RAM              0x00002000         0x00002000         xrw
 Linker script and memory map
 
 
-.text           0x00000000      0x60c
+.text           0x00000000      0x6fc
                 0x00000000                        . = 0x0
  *(.init)
  .init          0x00000000      0x240 build/start.o
@@ -59,9 +65,11 @@ Linker script and memory map
                 0x00000468                QOI_start
  .text          0x00000474        0x4 build/firmware.o
                 0x00000474                irq_handler
- .text.startup  0x00000478      0x194 build/firmware.o
+ .text.startup  0x00000478      0x1dc build/firmware.o
                 0x00000478                main
- .text          0x0000060c        0x0 build/start.o
+ .text          0x00000654        0x0 build/start.o
+ .text          0x00000654       0xa8 /opt/riscv/lib/gcc/riscv32-unknown-elf/13.2.0/../../../../riscv32-unknown-elf/lib/libc.a(libc_a-memset.o)
+                0x00000654                memset
 
 .data           0x00002000       0x2c
                 0x00000000                        . = 0x0
@@ -73,6 +81,7 @@ Linker script and memory map
  .data          0x0000202c        0x0 build/qoi.o
  .data          0x0000202c        0x0 build/firmware.o
  .data          0x0000202c        0x0 build/start.o
+ .data          0x0000202c        0x0 /opt/riscv/lib/gcc/riscv32-unknown-elf/13.2.0/../../../../riscv32-unknown-elf/lib/libc.a(libc_a-memset.o)
 
 .bss            0x0000202c        0x0
  .bss           0x0000202c        0x0 build/print.o
@@ -81,6 +90,7 @@ Linker script and memory map
  .bss           0x0000202c        0x0 build/qoi.o
  .bss           0x0000202c        0x0 build/firmware.o
  .bss           0x0000202c        0x0 build/start.o
+ .bss           0x0000202c        0x0 /opt/riscv/lib/gcc/riscv32-unknown-elf/13.2.0/../../../../riscv32-unknown-elf/lib/libc.a(libc_a-memset.o)
 
 .rodata         0x0000202c     0x1000
                 0x00001000                        . = 0x1000
