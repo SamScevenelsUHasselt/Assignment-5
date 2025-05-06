@@ -22,5 +22,6 @@
 unsigned int QOI_put_pixel(unsigned int pixel);
 unsigned int QOI_fetch_result(void);
 unsigned int QOI_flush(void);
+unsigned int QOI_fetch_info(void);
 
 #endif
