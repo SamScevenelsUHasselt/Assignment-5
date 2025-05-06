@@ -393,7 +393,7 @@ Disassembly of section .text:
  52c:	20000a93          	addi	s5,zero,512
  530:	30000b13          	addi	s6,zero,768
  534:	10000b93          	addi	s7,zero,256
- 538:	0f34ea63          	bltu	s1,s3,62c <main+0x1b8>
+ 538:	0f34e463          	bltu	s1,s3,620 <main+0x1ac>
  53c:	f1dff0ef          	jal	ra,458 <QOI_flush>
  540:	40057513          	andi	a0,a0,1024
  544:	00050663          	beq	a0,zero,550 <main+0xdc>
@@ -425,7 +425,7 @@ Disassembly of section .text:
  5ac:	c95ff0ef          	jal	ra,240 <print_chr>
  5b0:	30047413          	andi	s0,s0,768
  5b4:	03540863          	beq	s0,s5,5e4 <main+0x170>
- 5b8:	05640263          	beq	s0,s6,5fc <main+0x188>
+ 5b8:	05640463          	beq	s0,s6,600 <main+0x18c>
  5bc:	01741863          	bne	s0,s7,5cc <main+0x158>
  5c0:	e8dff0ef          	jal	ra,44c <QOI_fetch_result>
  5c4:	0ff57513          	andi	a0,a0,255
@@ -438,24 +438,21 @@ Disassembly of section .text:
  5e0:	f59ff06f          	jal	zero,538 <main+0xc4>
  5e4:	e69ff0ef          	jal	ra,44c <QOI_fetch_result>
  5e8:	00050413          	addi	s0,a0,0
- 5ec:	0ff57513          	andi	a0,a0,255
- 5f0:	c51ff0ef          	jal	ra,240 <print_chr>
- 5f4:	00845513          	srli	a0,s0,0x8
- 5f8:	fcdff06f          	jal	zero,5c4 <main+0x150>
- 5fc:	e51ff0ef          	jal	ra,44c <QOI_fetch_result>
- 600:	00050413          	addi	s0,a0,0
- 604:	0ff57513          	andi	a0,a0,255
- 608:	c39ff0ef          	jal	ra,240 <print_chr>
- 60c:	00845513          	srli	a0,s0,0x8
- 610:	0ff57513          	andi	a0,a0,255
- 614:	c2dff0ef          	jal	ra,240 <print_chr>
- 618:	01045513          	srli	a0,s0,0x10
- 61c:	0ff57513          	andi	a0,a0,255
- 620:	c21ff0ef          	jal	ra,240 <print_chr>
- 624:	01845513          	srli	a0,s0,0x18
- 628:	fa1ff06f          	jal	zero,5c8 <main+0x154>
- 62c:	00000913          	addi	s2,zero,0
- 630:	fa5ff06f          	jal	zero,5d4 <main+0x160>
+ 5ec:	00845513          	srli	a0,s0,0x8
+ 5f0:	0ff57513          	andi	a0,a0,255
+ 5f4:	c4dff0ef          	jal	ra,240 <print_chr>
+ 5f8:	0ff47513          	andi	a0,s0,255
+ 5fc:	fcdff06f          	jal	zero,5c8 <main+0x154>
+ 600:	e4dff0ef          	jal	ra,44c <QOI_fetch_result>
+ 604:	00050413          	addi	s0,a0,0
+ 608:	01855513          	srli	a0,a0,0x18
+ 60c:	c35ff0ef          	jal	ra,240 <print_chr>
+ 610:	01045513          	srli	a0,s0,0x10
+ 614:	0ff57513          	andi	a0,a0,255
+ 618:	c29ff0ef          	jal	ra,240 <print_chr>
+ 61c:	fd1ff06f          	jal	zero,5ec <main+0x178>
+ 620:	00000913          	addi	s2,zero,0
+ 624:	fb1ff06f          	jal	zero,5d4 <main+0x160>
 
 Disassembly of section .data:
 
