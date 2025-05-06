@@ -13,7 +13,7 @@ extern void load_test();
 
 inline void print_chr(char ch)
 {
-	*((volatile unsigned int*)OUTPORT) = ch;
+	//*((volatile unsigned int*)OUTPORT) = ch;
 }
 
 inline unsigned int QOI_fetch_result(void){
@@ -96,10 +96,14 @@ int main(void) {
             value = SENSOR_PIXELDATA;
             ra_index = result_info >> 11; //should be max 63 so no need to check 
 
+            print_str("RA index: "); print_dec(ra_index); print_str(" | Value: "); print_hex(value,8);
+
             if (running_array[ra_index] == value){
+                print_str(" | Value was present\n");
                 print_chr(ra_index);
             }else{
-                    running_array[ra_index] = value;
+                print_str(" | Storing and moving on\n");
+                running_array[ra_index] = value;
                 chunk_len = result_info & QOI_LEN_MASK;
                 switch (chunk_len)
                 {
