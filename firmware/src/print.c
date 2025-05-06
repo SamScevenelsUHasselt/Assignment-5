@@ -7,7 +7,7 @@
 
 #include "print.h"
 
-void print_chr(char ch)
+inline void print_chr(char ch)
 {
 	*((volatile unsigned int*)OUTPORT) = ch;
 }
