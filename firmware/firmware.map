@@ -29,7 +29,7 @@ RAM              0x00002000         0x00002000         xrw
 Linker script and memory map
 
 
-.text           0x00000000      0x654
+.text           0x00000000      0x6b8
                 0x00000000                        . = 0x0
  *(.init)
  .init          0x00000000      0x240 build/start.o
@@ -37,34 +37,33 @@ Linker script and memory map
                 0x000001d8                sw_mult
                 0x00000228                load_test
  *(.text*)
- .text          0x00000240      0x108 build/print.o
-                0x00000240                print_chr
-                0x0000024c                print_word
-                0x00000258                print_str
-                0x00000274                print_hex
-                0x000002b0                getDigit
-                0x000002d0                print_dec
- .text          0x00000348       0xcc build/tcnt.o
-                0x00000348                TCNT_start
-                0x0000035c                TCNT_stop
-                0x00000370                TCNT_start_div8
-                0x00000398                TCNT_start_div16
-                0x000003c0                TCNT_set_mode
-                0x00000400                TCNT_clear_ir
- .text          0x00000414       0x38 build/sensor.o
-                0x00000414                SENSOR_fetch
-                0x0000043c                SENSOR_advance
- .text          0x0000044c       0x4c build/qoi.o
-                0x0000044c                QOI_put_pixel
-                0x0000045c                QOI_fetch_result
-                0x00000468                QOI_flush
-                0x00000480                QOI_start
-                0x0000048c                QOI_fetch_info
- .text          0x00000498        0x4 build/firmware.o
-                0x00000498                irq_handler
- .text.startup  0x0000049c      0x1b8 build/firmware.o
-                0x0000049c                main
- .text          0x00000654        0x0 build/start.o
+ .text          0x00000240       0xfc build/print.o
+                0x00000240                print_word
+                0x0000024c                print_str
+                0x00000268                print_hex
+                0x000002a4                getDigit
+                0x000002c4                print_dec
+ .text          0x0000033c       0xcc build/tcnt.o
+                0x0000033c                TCNT_start
+                0x00000350                TCNT_stop
+                0x00000364                TCNT_start_div8
+                0x0000038c                TCNT_start_div16
+                0x000003b4                TCNT_set_mode
+                0x000003f4                TCNT_clear_ir
+ .text          0x00000408       0x38 build/sensor.o
+                0x00000408                SENSOR_fetch
+                0x00000430                SENSOR_advance
+ .text          0x00000440       0x4c build/qoi.o
+                0x00000440                QOI_put_pixel
+                0x00000450                QOI_fetch_result
+                0x0000045c                QOI_flush
+                0x00000474                QOI_start
+                0x00000480                QOI_fetch_info
+ .text          0x0000048c        0x4 build/firmware.o
+                0x0000048c                irq_handler
+ .text.startup  0x00000490      0x228 build/firmware.o
+                0x00000490                main
+ .text          0x000006b8        0x0 build/start.o
 
 .data           0x00002000       0x2c
                 0x00000000                        . = 0x0
