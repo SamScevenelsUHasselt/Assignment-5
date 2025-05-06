@@ -312,7 +312,10 @@ package PKG_hwswcd is
         iface_di : in STD_LOGIC_VECTOR(C_WIDTH-1 downto 0);
         iface_a : in STD_LOGIC_VECTOR(C_WIDTH-1 downto 0);
         iface_we : in STD_LOGIC;
-        iface_do : out STD_LOGIC_VECTOR(C_WIDTH-1 downto 0)
+        iface_do : out STD_LOGIC_VECTOR(C_WIDTH-1 downto 0);
+        
+        sensor_pixeldata : out STD_LOGIC_VECTOR(C_WIDTH-1 downto 0);
+        qoi_flag : out STD_LOGIC
     );
     end component wrapped_sensor;
 
@@ -370,7 +373,10 @@ package PKG_hwswcd is
         iface_di : in STD_LOGIC_VECTOR(C_WIDTH-1 downto 0);
         iface_a : in STD_LOGIC_VECTOR(C_WIDTH-1 downto 0);
         iface_we : in STD_LOGIC;
-        iface_do : out STD_LOGIC_VECTOR(C_WIDTH-1 downto 0)
+        iface_do : out STD_LOGIC_VECTOR(C_WIDTH-1 downto 0);
+        
+        pixel_in : in STD_LOGIC_VECTOR(C_WIDTH-1 downto 0);
+        flag_in : in STD_LOGIC
     );
     end component QOI_Wrapper;
     

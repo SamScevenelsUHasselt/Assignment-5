@@ -18,5 +18,6 @@
 #define SENSOR_get_height()             (unsigned char)((SENSOR_SR>>8) & 0xff)
 
 unsigned int SENSOR_fetch(void);
+void         SENSOR_advance(void);
 
 #endif

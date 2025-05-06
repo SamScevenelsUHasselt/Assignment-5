@@ -66,6 +66,10 @@ int main(void) {
     /* Loop over pixels */
     for(unsigned char h=0;h<height;h++) {
         for(unsigned char w=0;w<width;w++) {
+
+            SENSOR_advance();
+
+            /*
             value = SENSOR_fetch();
             
             result_info = QOI_put_pixel(value);
@@ -81,19 +85,20 @@ int main(void) {
                 break;
             case 0x200: //2 Byte chunk
                 result = QOI_fetch_result();
-                print_chr(result);
                 print_chr(result>>8);
+                print_chr(result);
                 break;
             case 0x300: //4 Byte chunk
                 result = QOI_fetch_result();
-                print_chr(result);
-                print_chr(result>>8);
-                print_chr(result>>16);
                 print_chr(result>>24);
+                print_chr(result>>16);
+                print_chr(result>>8);   
+                print_chr(result);
                 break;
             default: //no chunk
                 break;
             }
+            */
         }
     }
 

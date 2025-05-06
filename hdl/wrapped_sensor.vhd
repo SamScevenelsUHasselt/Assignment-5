@@ -26,7 +26,10 @@ entity wrapped_sensor is
         iface_di : in STD_LOGIC_VECTOR(C_WIDTH-1 downto 0);
         iface_a : in STD_LOGIC_VECTOR(C_WIDTH-1 downto 0);
         iface_we : in STD_LOGIC;
-        iface_do : out STD_LOGIC_VECTOR(C_WIDTH-1 downto 0)
+        iface_do : out STD_LOGIC_VECTOR(C_WIDTH-1 downto 0);
+        
+        sensor_pixeldata : out STD_LOGIC_VECTOR(C_WIDTH-1 downto 0);
+        qoi_flag : out STD_LOGIC
     );
 end entity wrapped_sensor;
 
@@ -40,6 +43,7 @@ architecture Behavioural of wrapped_sensor is
     signal iface_a_i : STD_LOGIC_VECTOR(C_WIDTH-1 downto 0);
     signal iface_we_i : STD_LOGIC;
     signal iface_do_o : STD_LOGIC_VECTOR(C_WIDTH-1 downto 0);
+    signal qoi_flag_o : STD_LOGIC;
 
     signal reg0, reg1, reg2: STD_LOGIC_VECTOR(C_WIDTH-1 downto 0);
 
@@ -48,7 +52,8 @@ architecture Behavioural of wrapped_sensor is
 
 
     signal sensor_re : STD_LOGIC;
-    signal sensor_pixeldata : STD_LOGIC_VECTOR(C_WIDTH-1 downto 0);
+    signal sensor_re_prev : STD_LOGIC;
+    signal sensor_pixeldata_o : STD_LOGIC_VECTOR(C_WIDTH-1 downto 0);
     signal sensor_first : STD_LOGIC;
 
 begin
@@ -62,7 +67,9 @@ begin
     iface_a_i <= iface_a;
     iface_we_i <= iface_we;
     iface_do <= iface_do_o;
-    
+    sensor_pixeldata <= sensor_pixeldata_o;
+    --qoi_flag <= qoi_flag_o;
+    qoi_flag <= reg0(0);
 
     -------------------------------------------------------------------------------
     -- PARSING
@@ -71,7 +78,7 @@ begin
     targeted_register <= iface_a_i(19 downto 2);
 
     sensor_re <= reg0(0);
-    reg1 <= sensor_pixeldata;
+    reg1 <= sensor_pixeldata_o;
     -- reg2 <= (0 => sensor_first, others => '0');
     -- reg2 <= x"00" & x"08" & x"08" & "0000000" & sensor_first; --for sensor data v1
     reg2 <= x"00" & x"4B" & x"32" & "0000000" & sensor_first; --for sensor data v2
@@ -85,7 +92,15 @@ begin
         if rising_edge(clock_i) then
             if reset_i = '1' then 
                 reg0 <= (others => '0');
+                qoi_flag_o <= '0';
             else
+                sensor_re_prev <= reg0(0);
+                reg0(0) <= '0';
+                if sensor_re_prev = '1' then
+                    qoi_flag_o <= '1';
+                else
+                    qoi_flag_o <= '0';
+                end if;
                 if address_within_range = '1' then 
                     if iface_we_i = '1' then 
                         if targeted_register = "000000000000000000" then 
@@ -122,7 +137,7 @@ begin
         clock => clock_i,
         reset => reset_i,
         pixel_data_out_re => sensor_re,
-        pixel_data_out => sensor_pixeldata,
+        pixel_data_out => sensor_pixeldata_o,
         first => sensor_first
     );
 
