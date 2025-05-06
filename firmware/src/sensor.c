@@ -7,3 +7,7 @@ unsigned int SENSOR_fetch(void) {
     SENSOR_CR &= ~SENSOR_CR_RE; 
     return pixeldata;
 }
+
+void SENSOR_advance(void) {
+    SENSOR_CR = SENSOR_CR_RE; 
+}

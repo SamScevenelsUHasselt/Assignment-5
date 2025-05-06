@@ -42,7 +42,10 @@ entity QOI_Wrapper is
         iface_di : in STD_LOGIC_VECTOR(C_WIDTH-1 downto 0);
         iface_a : in STD_LOGIC_VECTOR(C_WIDTH-1 downto 0);
         iface_we : in STD_LOGIC;
-        iface_do : out STD_LOGIC_VECTOR(C_WIDTH-1 downto 0)
+        iface_do : out STD_LOGIC_VECTOR(C_WIDTH-1 downto 0);
+        
+        pixel_in : in STD_LOGIC_VECTOR(C_WIDTH-1 downto 0);
+        flag_in : in STD_LOGIC
     );
 end QOI_Wrapper;
 
@@ -54,6 +57,7 @@ architecture Behavioral of QOI_Wrapper is
     signal iface_a_i : STD_LOGIC_VECTOR(C_WIDTH-1 downto 0);
     signal iface_we_i : STD_LOGIC;
     signal iface_do_o : STD_LOGIC_VECTOR(C_WIDTH-1 downto 0);
+    signal flag_in_i : STD_LOGIC;
     
     signal pixelreg : STD_LOGIC_VECTOR(C_WIDTH-1 downto 0);
     signal controlreg : STD_LOGIC_VECTOR(C_WIDTH-1 downto 0);
@@ -85,6 +89,8 @@ begin
     iface_a_i <= iface_a;
     iface_we_i <= iface_we;
     iface_do <= iface_do_o;
+    pixelreg <= pixel_in;
+    flag_in_i <= flag_in;
 
     address_within_range <= '1' when iface_a_i(C_WIDTH-1 downto C_PERIPHERAL_MASK_LOWINDEX) = C_QOI_BASE_ADDRESS_MASK else '0';
     targeted_register <= iface_a_i(19 downto 2);    
@@ -97,19 +103,15 @@ begin
     begin
         if rising_edge(clock_i) then
             if reset_i = '1' then 
-                pixelreg <= (others => '0');
                 inforeg(C_WIDTH-1 downto 11) <= (others => '0');
                 controlreg <= (others => '0');
                 new_pixel_flag <= '0';
             else
-                new_pixel_flag <= '0';
+                new_pixel_flag <= flag_in_i;
                 controlreg <= (others => '0');
                 if address_within_range = '1' then 
                     if iface_we_i = '1' then 
-                        if targeted_register = "000000000000000000" then 
-                            pixelreg <= iface_di_i;
-                            new_pixel_flag <= '1';
-                        elsif targeted_register = "000000000000000001" then
+                        if targeted_register = "000000000000000001" then
                             controlreg <= iface_di_i;
                             new_pixel_flag <= '1';
                         end if;

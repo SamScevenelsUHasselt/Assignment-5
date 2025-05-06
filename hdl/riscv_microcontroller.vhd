@@ -73,7 +73,11 @@ architecture Behavioural of riscv_microcontroller is
     signal external_irq_dd : STD_LOGIC;
     signal debouncer : integer range 0 to 800000-1;
     signal external_irq_sync_dbnc, external_irq_set, external_irq_reset : STD_LOGIC;
-
+    
+    --SENSOR <--> QOI
+    signal pixel : STD_LOGIC_VECTOR(31 downto 0);
+    signal flag : STD_LOGIC;
+    
 begin
 
     -------------------------------------------------------------------------------
@@ -182,7 +186,9 @@ begin
         iface_di => dmem_di,
         iface_a => dmem_a,
         iface_we => sensor_we,
-        iface_do => dmem_do_sensor
+        iface_do => dmem_do_sensor,
+        sensor_pixeldata => pixel,
+        qoi_flag => flag
     );
     
     sensor_we <= dmem_we when  dmem_a(C_WIDTH-1 downto C_PERIPHERAL_MASK_LOWINDEX) = C_SENSOR_BASE_ADDRESS_MASK else '0';
@@ -193,7 +199,9 @@ begin
         iface_di => dmem_di,
         iface_a => dmem_a,
         iface_we => qoi_we,
-        iface_do => dmem_do_qoi
+        iface_do => dmem_do_qoi,
+        pixel_in => pixel,
+        flag_in => flag
     );
     
     qoi_we <= dmem_we when  dmem_a(C_WIDTH-1 downto C_PERIPHERAL_MASK_LOWINDEX) = C_QOI_BASE_ADDRESS_MASK else '0';
