@@ -94,10 +94,11 @@ int main(void) {
                 print_chr(result_info);
             }
 
-            print_str("info: "); print_hex(result_info,8); print_str("\n");
+            print_str("info: "); print_hex(result_info,8); print_str(" | Sanity bit: ")print_hex(result_info & QOI_RLE_HAPPENED_MASK,1); print_str("\n");
 
 
             if (result_info & QOI_RLE_HAPPENED_MASK == 0){
+                print_str("Yahoo-----------------------------------------------------------------------------------------------\n");
                 value = SENSOR_PIXELDATA;
                 ra_index = result_info >> 12; //should be max 63 so no need to check 
                 if (running_array[ra_index] == value){
