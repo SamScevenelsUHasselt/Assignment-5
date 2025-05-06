@@ -40,6 +40,8 @@ void irq_handler(unsigned int cause) {
 
 int main(void) {
 
+    unsigned int running_array[64] = {0};
+
     unsigned int width = SENSOR_get_width();
     unsigned int height = SENSOR_get_height();
 
@@ -74,7 +76,8 @@ int main(void) {
     unsigned int result_info;
     unsigned int result;
     unsigned int chunk_len;
-    
+    unsigned int ra_index;
+
     QOI_start();
 
     /* Loop over pixels */
@@ -85,27 +88,36 @@ int main(void) {
             if ((result_info & QOI_RLE_MASK) == QOI_RLE_MASK){ //RLE has ended, store the chunk
                 print_chr(QOI_RLE_DATA_MASK);
             }
-            chunk_len = result_info & QOI_LEN_MASK;
-            switch (chunk_len)
-            {
-            case 0x100: //1 Byte chunk
-                result = QOI_fetch_result();
-                print_chr(result);
-                break;
-            case 0x200: //2 Byte chunk
-                result = QOI_fetch_result();
-                print_chr(result>>8);
-                print_chr(result);
-                break;
-            case 0x300: //4 Byte chunk
-                result = QOI_fetch_result();
-                print_chr(result>>24);
-                print_chr(result>>16);
-                print_chr(result>>8);   
-                print_chr(result);
-                break;
-            default: //no chunk
-                break;
+
+            value = SENSOR_PIXELDATA;
+            ra_index = result_info >> 11; //should be max 63 so no need to check 
+
+            if (running_array[ra_index] == value){//
+                print_chr(ra_index);
+            }else{
+                    running_array[ra_index] = value;
+                chunk_len = result_info & QOI_LEN_MASK;
+                switch (chunk_len)
+                {
+                case 0x100: //1 Byte chunk
+                    result = QOI_fetch_result();
+                    print_chr(result);
+                    break;
+                case 0x200: //2 Byte chunk
+                    result = QOI_fetch_result();
+                    print_chr(result>>8);
+                    print_chr(result);
+                    break;
+                case 0x300: //4 Byte chunk
+                    result = QOI_fetch_result();
+                    print_chr(result>>24);
+                    print_chr(result>>16);
+                    print_chr(result>>8);   
+                    print_chr(result);
+                    break;
+                default: //no chunk
+                    break;
+                }
             }
             SENSOR_advance();
         }

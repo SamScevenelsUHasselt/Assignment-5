@@ -43,10 +43,11 @@ entity QOI is
         new_pixel : in STD_LOGIC;
         flush_rle : in STD_LOGIC;
         result : out STD_LOGIC_VECTOR(C_WIDTH-1 downto 0);
-        result_info: out STD_LOGIC_VECTOR(10 downto 0)
+        result_info: out STD_LOGIC_VECTOR(16 downto 0)
     );
 end QOI;
 
+--result_info-- bit 16 downto 11 --> index
 --result_info-- bit 10
 -- 0 -> Nothing in result_re
 -- 1 -> Somethin in result_re (due to rle being reset)
@@ -65,7 +66,7 @@ architecture Behavioral of QOI is
     signal new_pixel_i : STD_LOGIC;
     signal flush_rle_i : STD_LOGIC;
     signal result_o : STD_LOGIC_VECTOR(C_WIDTH-1 downto 0);
-    signal result_info_o : STD_LOGIC_VECTOR(10 downto 0);
+    signal result_info_o : STD_LOGIC_VECTOR(16 downto 0);
     signal new_pixel_i_prev : STD_LOGIC;
     
     alias r : STD_LOGIC_VECTOR(7 downto 0) is pixel_i(31 downto 24);
@@ -77,9 +78,9 @@ architecture Behavioral of QOI is
     
     signal index : natural range 0 to 63;
     
-    type T_running_array is array (0 to 63) of STD_LOGIC_VECTOR(C_WIDTH-1 downto 0);
-    signal ra : T_running_array;
-    signal ra_value : STD_LOGIC_VECTOR(C_WIDTH-1 downto 0);
+--    type T_running_array is array (0 to 63) of STD_LOGIC_VECTOR(C_WIDTH-1 downto 0);
+--    signal ra : T_running_array;
+--    signal ra_value : STD_LOGIC_VECTOR(C_WIDTH-1 downto 0);
     
 begin
 
@@ -125,12 +126,12 @@ begin
         if reset_i = '1' then 
             rle <= -1;
             
-            for i in ra'range loop
-                ra(i) <= (others => '0');
-            end loop;
+--            for i in ra'range loop
+--                ra(i) <= (others => '0');
+--            end loop;
             
             index <= 0;
-            ra_value <= (others => '0');
+--            ra_value <= (others => '0');
             result_o <= (others => '0');
             result_info_o <= (others => '0');
         else
@@ -141,13 +142,13 @@ begin
             result := (base_sum + 53) mod 64;
             
             index <= result;
-            
-            ra_value <= ra(index);
+            result_info_o(16 downto 11) <= STD_LOGIC_VECTOR(TO_UNSIGNED(index,6));
+--            ra_value <= ra(index);
             if new_pixel_i = '1' then
-                result_info_o <= "00000000000";
+                result_info_o(10 downto 0) <= "00000000000";
                 if flush_rle_i = '1' then
                     if rle = -1 then
-                        result_info_o <= "00000000000";
+                        result_info_o(10 downto 0) <= "00000000000";
                     else
                         rle_v := std_logic_vector(TO_UNSIGNED(rle,6));
                         result_info_o(7 downto 0) <= "11" & rle_v;
@@ -172,12 +173,12 @@ begin
                             rle <= -1;
                         end if;
                         --STEP 2 ------ check if in the running array --------------------------------------------------------------------------------------------------------------------
-                        if ra_value = pixel_i then --The pixel_i is in the running array
-                            index_v := std_logic_vector(TO_UNSIGNED(index,6));
-                            result_o <= X"000000" & "00" & index_v;
-                            result_info_o(9 downto 8) <= "01";
-                        else --if not store it anyway and continue
-                            ra(index) <= pixel_i;
+--                        if ra_value = pixel_i then --The pixel_i is in the running array
+--                            index_v := std_logic_vector(TO_UNSIGNED(index,6));
+--                            result_o <= X"000000" & "00" & index_v;
+--                            result_info_o(9 downto 8) <= "01";
+--                        else --if not store it anyway and continue
+--                            ra(index) <= pixel_i;
                            --STEP 3 ------ check difference with previous pixel_is --------------------------------------------------------------------------------------------------------
                             r_diff_9 := signed('0' & r) - signed('0' & r_prev);
                             r_diff := r_diff_9(7 downto 0);
@@ -208,7 +209,7 @@ begin
                                 result_o <= "11111110" & r & g & b;
                                 result_info_o(9 downto 8) <= "11";
                             end if;
-                        end if;
+--                        end if;
                     end if;
                 end if;
             end if;

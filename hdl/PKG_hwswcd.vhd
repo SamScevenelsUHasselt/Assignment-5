@@ -362,7 +362,7 @@ package PKG_hwswcd is
         new_pixel : in STD_LOGIC;
         flush_rle : in STD_LOGIC;
         result : out STD_LOGIC_VECTOR(C_WIDTH-1 downto 0);
-        result_info: out STD_LOGIC_VECTOR(10 downto 0)
+        result_info: out STD_LOGIC_VECTOR(16 downto 0)
     );
     end component QOI;
     
