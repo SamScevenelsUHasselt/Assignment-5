@@ -43,11 +43,14 @@ entity QOI is
         new_pixel : in STD_LOGIC;
         flush_rle : in STD_LOGIC;
         result : out STD_LOGIC_VECTOR(C_WIDTH-1 downto 0);
-        result_info: out STD_LOGIC_VECTOR(16 downto 0)
+        result_info: out STD_LOGIC_VECTOR(17 downto 0)
     );
 end QOI;
 
---result_info-- bit 16 downto 11 --> index
+
+--result_info-- bit 17 downto 12 --> index
+--result_info-- bit 11 --> RLE happened
+
 --result_info-- bit 10
 -- 0 -> Nothing in result_re
 -- 1 -> Somethin in result_re (due to rle being reset)
@@ -66,7 +69,7 @@ architecture Behavioral of QOI is
     signal new_pixel_i : STD_LOGIC;
     signal flush_rle_i : STD_LOGIC;
     signal result_o : STD_LOGIC_VECTOR(C_WIDTH-1 downto 0);
-    signal result_info_o : STD_LOGIC_VECTOR(16 downto 0);
+    signal result_info_o : STD_LOGIC_VECTOR(17 downto 0);
     signal new_pixel_i_prev : STD_LOGIC;
     
     alias r : STD_LOGIC_VECTOR(7 downto 0) is pixel_i(31 downto 24);
@@ -142,7 +145,7 @@ begin
             result := (base_sum + 53) mod 64;
             
             index <= result;
-            result_info_o(16 downto 11) <= STD_LOGIC_VECTOR(TO_UNSIGNED(index,6));
+            result_info_o(17 downto 12) <= STD_LOGIC_VECTOR(TO_UNSIGNED(index,6));
 --            ra_value <= ra(index);
             if new_pixel_i = '1' then
                 result_info_o(10 downto 0) <= "00000000000";
@@ -159,11 +162,15 @@ begin
                     --STEP 1 ------ check if equal to previous pixel_i ---------------------------------------------------------------------------------------------------------------------
                     if r = r_prev and g = g_prev and b = b_prev then 
                         rle <= rle + 1;
+                        result_info_o(11) <= '1';
                         if rle > 61 then --Ensure that rle does not exceed 62 as this is illegal and store the current QOI_OP_RUN chunk
                             rle_v := std_logic_vector(TO_UNSIGNED(rle,6));
                             result_o <= X"000000" & "11" & rle_v;
                             result_info_o(9 downto 8) <= "01";
                             rle <= -1;
+                        else
+                            result_info_o(17 downto 12) <= "000000";
+                            result_info_o(10 downto 0) <= (others => '0');
                         end if;
                     else
                         if rle > -1 then --if rle != -1 then store QOI_OP_RUN chunk

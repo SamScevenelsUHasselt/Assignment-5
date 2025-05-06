@@ -77,7 +77,7 @@ begin
         new_pixel => new_pixel_flag,
         flush_rle => controlreg(0),
         result => outreg,
-        result_info => inforeg(16 downto 0)
+        result_info => inforeg(17 downto 0)
     );
     
     -------------------------------------------------------------------------------
@@ -103,7 +103,7 @@ begin
     begin
         if rising_edge(clock_i) then
             if reset_i = '1' then 
-                inforeg(C_WIDTH-1 downto 17) <= (others => '0');
+                inforeg(C_WIDTH-1 downto 18) <= (others => '0');
                 controlreg <= (others => '0');
                 new_pixel_flag <= '0';
             else

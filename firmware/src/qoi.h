@@ -15,10 +15,11 @@
 
 #define QOI_CR_FL                    0x1
 
-#define QOI_RLE_MASK                 0x400
-#define QOI_LEN_MASK                 0x300
-#define QOI_RLE_DATA_MASK            0x0FF
-#define QOI_RUNNING_ARRAY_INDEX_MASK 0x1F800
+#define QOI_RLE_MASK                 0x00400
+#define QOI_LEN_MASK                 0x00300
+#define QOI_RLE_DATA_MASK            0x000FF
+#define QOI_RUNNING_ARRAY_INDEX_MASK 0x3F000
+#define QOI_RLE_HAPPENED_MASK        0x00800
 
 unsigned int QOI_put_pixel(unsigned int pixel);
 unsigned int QOI_flush(void);

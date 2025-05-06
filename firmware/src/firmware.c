@@ -93,38 +93,41 @@ int main(void) {
                 print_chr(QOI_RLE_DATA_MASK);
             }
 
-            value = SENSOR_PIXELDATA;
-            ra_index = result_info >> 11; //should be max 63 so no need to check 
 
-            print_str("RA index: "); print_dec(ra_index); print_str(" | Value: "); print_hex(value,8);
 
-            if (running_array[ra_index] == value){
-                print_str(" | Value was present\n");
-                print_chr(ra_index);
-            }else{
-                print_str(" | Storing and moving on\n");
-                running_array[ra_index] = value;
-                chunk_len = result_info & QOI_LEN_MASK;
-                switch (chunk_len)
-                {
-                case 0x100: //1 Byte chunk
-                    result = QOI_fetch_result();
-                    print_chr(result);
-                    break;
-                case 0x200: //2 Byte chunk
-                    result = QOI_fetch_result();
-                    print_chr(result>>8);
-                    print_chr(result);
-                    break;
-                case 0x300: //4 Byte chunk
-                    result = QOI_fetch_result();
-                    print_chr(result>>24);
-                    print_chr(result>>16);
-                    print_chr(result>>8);   
-                    print_chr(result);
-                    break;
-                default: //no chunk
-                    break;
+            
+
+            //print_str("RA index: "); print_dec(ra_index); print_str(" | Value: "); print_hex(value,8);
+            if (result_info & QOI_RLE_HAPPENED_MASK == 0){
+                value = SENSOR_PIXELDATA;
+                ra_index = result_info >> 12; //should be max 63 so no need to check 
+                if (running_array[ra_index] == value){
+                    //print_str(" | Value was present\n");
+                    print_chr(ra_index);
+                }else{
+                    //print_str(" | Storing and moving on\n");
+                    running_array[ra_index] = value;
+                    chunk_len = result_info & QOI_LEN_MASK;
+                    switch (chunk_len)
+                    {
+                    case 0x100: //1 Byte chunk
+                        result = QOI_fetch_result();
+                        print_chr(result);
+                        break;
+                    case 0x200: //2 Byte chunk
+                        result = QOI_fetch_result();
+                        print_chr(result>>8);
+                        print_chr(result);
+                        break;
+                    case 0x300: //4 Byte chunk
+                        result = QOI_fetch_result();
+                        print_chr(result>>24);
+                        print_chr(result>>16);
+                        print_chr(result>>8);   
+                        print_chr(result);
+                        break;
+                    default: //no chunk
+                        break;
                 }
             }
             SENSOR_advance();
