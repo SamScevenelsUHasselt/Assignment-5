@@ -356,38 +356,48 @@ Disassembly of section .text:
  498:	0084d493          	srli	s1,s1,0x8
  49c:	85000a37          	lui	s4,0x85000
  4a0:	02812423          	sw	s0,40(sp)
- 4a4:	01512a23          	sw	s5,20(sp)
- 4a8:	01612823          	sw	s6,16(sp)
- 4ac:	02112623          	sw	ra,44(sp)
- 4b0:	01312e23          	sw	s3,28(sp)
- 4b4:	01712623          	sw	s7,12(sp)
- 4b8:	0ff97913          	andi	s2,s2,255
- 4bc:	0ff4f493          	andi	s1,s1,255
- 4c0:	fa9ff0ef          	jal	ra,468 <QOI_start>
- 4c4:	00000413          	addi	s0,zero,0
- 4c8:	00ca0a13          	addi	s4,s4,12 # 8500000c <running_array+0x84ffdfe0>
- 4cc:	00003ab7          	lui	s5,0x3
- 4d0:	00003b37          	lui	s6,0x3
- 4d4:	04946463          	bltu	s0,s1,51c <main+0xa4>
- 4d8:	f79ff0ef          	jal	ra,450 <QOI_flush>
- 4dc:	0000006f          	jal	zero,4dc <main+0x64>
- 4e0:	000a2b83          	lw	s7,0(s4)
- 4e4:	14ca8513          	addi	a0,s5,332 # 314c <running_array+0x1120>
- 4e8:	d65ff0ef          	jal	ra,24c <print_str>
- 4ec:	00800593          	addi	a1,zero,8
- 4f0:	000b8513          	addi	a0,s7,0
- 4f4:	d75ff0ef          	jal	ra,268 <print_hex>
- 4f8:	154b0513          	addi	a0,s6,340 # 3154 <running_array+0x1128>
- 4fc:	00198993          	addi	s3,s3,1
- 500:	d4dff0ef          	jal	ra,24c <print_str>
- 504:	0ff9f993          	andi	s3,s3,255
- 508:	f29ff0ef          	jal	ra,430 <SENSOR_advance>
- 50c:	fd29eae3          	bltu	s3,s2,4e0 <main+0x68>
- 510:	00140413          	addi	s0,s0,1
- 514:	0ff47413          	andi	s0,s0,255
- 518:	fbdff06f          	jal	zero,4d4 <main+0x5c>
- 51c:	00000993          	addi	s3,zero,0
- 520:	fedff06f          	jal	zero,50c <main+0x94>
+ 4a4:	01712623          	sw	s7,12(sp)
+ 4a8:	01812423          	sw	s8,8(sp)
+ 4ac:	01912223          	sw	s9,4(sp)
+ 4b0:	02112623          	sw	ra,44(sp)
+ 4b4:	01312e23          	sw	s3,28(sp)
+ 4b8:	01512a23          	sw	s5,20(sp)
+ 4bc:	01612823          	sw	s6,16(sp)
+ 4c0:	0ff97913          	andi	s2,s2,255
+ 4c4:	0ff4f493          	andi	s1,s1,255
+ 4c8:	fa1ff0ef          	jal	ra,468 <QOI_start>
+ 4cc:	00000413          	addi	s0,zero,0
+ 4d0:	00ca0a13          	addi	s4,s4,12 # 8500000c <running_array+0x84ffdfe0>
+ 4d4:	00003bb7          	lui	s7,0x3
+ 4d8:	00003c37          	lui	s8,0x3
+ 4dc:	00003cb7          	lui	s9,0x3
+ 4e0:	04946e63          	bltu	s0,s1,53c <main+0xc4>
+ 4e4:	f6dff0ef          	jal	ra,450 <QOI_flush>
+ 4e8:	0000006f          	jal	zero,4e8 <main+0x70>
+ 4ec:	000a2b03          	lw	s6,0(s4)
+ 4f0:	14cb8513          	addi	a0,s7,332 # 314c <running_array+0x1120>
+ 4f4:	d59ff0ef          	jal	ra,24c <print_str>
+ 4f8:	00800593          	addi	a1,zero,8
+ 4fc:	000b0513          	addi	a0,s6,0
+ 500:	d69ff0ef          	jal	ra,268 <print_hex>
+ 504:	154c0513          	addi	a0,s8,340 # 3154 <running_array+0x1128>
+ 508:	d45ff0ef          	jal	ra,24c <print_str>
+ 50c:	00100593          	addi	a1,zero,1
+ 510:	015b7533          	and	a0,s6,s5
+ 514:	d55ff0ef          	jal	ra,268 <print_hex>
+ 518:	164c8513          	addi	a0,s9,356 # 3164 <running_array+0x1138>
+ 51c:	00198993          	addi	s3,s3,1
+ 520:	d2dff0ef          	jal	ra,24c <print_str>
+ 524:	0ff9f993          	andi	s3,s3,255
+ 528:	f09ff0ef          	jal	ra,430 <SENSOR_advance>
+ 52c:	fd29e0e3          	bltu	s3,s2,4ec <main+0x74>
+ 530:	00140413          	addi	s0,s0,1
+ 534:	0ff47413          	andi	s0,s0,255
+ 538:	fa9ff06f          	jal	zero,4e0 <main+0x68>
+ 53c:	00001ab7          	lui	s5,0x1
+ 540:	00000993          	addi	s3,zero,0
+ 544:	800a8a93          	addi	s5,s5,-2048 # 800 <main+0x388>
+ 548:	fe5ff06f          	jal	zero,52c <main+0xb4>
 
 Disassembly of section .data:
 
@@ -436,4 +446,12 @@ Disassembly of section .rodata.str1.4:
     314e:	6f66                	.insn	2, 0x6f66
     3150:	203a                	.insn	2, 0x203a
     3152:	0000                	.insn	2, 0x
-    3154:	000a                	.insn	2, 0x000a
+    3154:	7c20                	.insn	2, 0x7c20
+    3156:	5320                	.insn	2, 0x5320
+    3158:	6e61                	.insn	2, 0x6e61
+    315a:	7469                	.insn	2, 0x7469
+    315c:	2079                	.insn	2, 0x2079
+    315e:	6962                	.insn	2, 0x6962
+    3160:	3a74                	.insn	2, 0x3a74
+    3162:	0020                	.insn	2, 0x0020
+    3164:	000a                	.insn	2, 0x000a
