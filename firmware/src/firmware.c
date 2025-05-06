@@ -63,11 +63,11 @@ int main(void) {
     unsigned int result;
     unsigned int chunk_len;
     
+    QOI_start();
+
     /* Loop over pixels */
     for(unsigned char h=0;h<height;h++) {
         for(unsigned char w=0;w<width;w++) {
-            
-            QOI_start();
             
             result_info = QOI_fetch_info();
             if ((result_info & QOI_RLE_MASK) == QOI_RLE_MASK){ //RLE has ended, store the chunk
