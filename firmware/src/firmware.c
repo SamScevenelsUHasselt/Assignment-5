@@ -13,7 +13,7 @@ extern void load_test();
 
 inline void print_chr(char ch)
 {
-	*((volatile unsigned int*)OUTPORT) = ch;
+	//*((volatile unsigned int*)OUTPORT) = ch;
 }
 
 inline unsigned int QOI_fetch_result(void){
@@ -91,11 +91,12 @@ int main(void) {
             
             result_info = QOI_fetch_info();
             if ((result_info & QOI_RLE_MASK) == QOI_RLE_MASK){ //RLE has ended, store the chunk
-                
                 print_chr(result_info);
             }
 
-            //print_str("RA index: "); print_dec(ra_index); print_str(" | Value: "); print_hex(value,8);
+            print_str("info: "); print_hex(result_info,8); print_str("\n");
+
+
             if (result_info & QOI_RLE_HAPPENED_MASK == 0){
                 value = SENSOR_PIXELDATA;
                 ra_index = result_info >> 12; //should be max 63 so no need to check 
