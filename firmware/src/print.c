@@ -7,6 +7,11 @@
 
 #include "print.h"
 
+void print_chr(char ch)
+{
+	*((volatile unsigned int*)OUTPORT) = ch;
+}
+
 void print_word(int word){
 	*((volatile unsigned int*)OUTPORT) = word;
 }
