@@ -68,7 +68,8 @@ begin
     iface_we_i <= iface_we;
     iface_do <= iface_do_o;
     sensor_pixeldata <= sensor_pixeldata_o;
-    qoi_flag <= qoi_flag_o;
+    --qoi_flag <= qoi_flag_o;
+    qoi_flag <= reg0(0);
 
     -------------------------------------------------------------------------------
     -- PARSING
