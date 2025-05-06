@@ -437,12 +437,12 @@ Disassembly of section .text:
  5c4:	40057793          	andi	a5,a0,1024
  5c8:	00050413          	addi	s0,a0,0
  5cc:	00078663          	beq	a5,zero,5d8 <main+0x13c>
- 5d0:	0ff57513          	andi	a0,a0,255
+ 5d0:	0ff00513          	addi	a0,zero,255
  5d4:	c6dff0ef          	jal	ra,240 <print_chr>
- 5d8:	30047413          	andi	s0,s0,768
- 5dc:	03540a63          	beq	s0,s5,610 <main+0x174>
- 5e0:	05640663          	beq	s0,s6,62c <main+0x190>
- 5e4:	01741863          	bne	s0,s7,5f4 <main+0x158>
+ 5d8:	30047513          	andi	a0,s0,768
+ 5dc:	03550a63          	beq	a0,s5,610 <main+0x174>
+ 5e0:	05650663          	beq	a0,s6,62c <main+0x190>
+ 5e4:	01751863          	bne	a0,s7,5f4 <main+0x158>
  5e8:	e75ff0ef          	jal	ra,45c <QOI_fetch_result>
  5ec:	0ff57513          	andi	a0,a0,255
  5f0:	c51ff0ef          	jal	ra,240 <print_chr>
