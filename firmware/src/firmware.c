@@ -37,10 +37,9 @@ void irq_handler(unsigned int cause) {
 
 }
 
+unsigned int running_array[64] = {0};
 
 int main(void) {
-
-    unsigned int running_array[64] = {0};
 
     unsigned int width = SENSOR_get_width();
     unsigned int height = SENSOR_get_height();
@@ -92,7 +91,7 @@ int main(void) {
             value = SENSOR_PIXELDATA;
             ra_index = result_info >> 11; //should be max 63 so no need to check 
 
-            if (running_array[ra_index] == value){//
+            if (running_array[ra_index] == value){
                 print_chr(ra_index);
             }else{
                     running_array[ra_index] = value;
