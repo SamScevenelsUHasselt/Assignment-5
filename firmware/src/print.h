@@ -12,10 +12,7 @@
 
 
 // print.c
-static inline void print_chr(char ch)
-{
-	*((volatile unsigned int*)OUTPORT) = ch;
-}
+extern inline void print_chr(char ch);
 void print_word(int word);
 void print_str(const char *p);
 void print_hex(unsigned int val, int digits);
