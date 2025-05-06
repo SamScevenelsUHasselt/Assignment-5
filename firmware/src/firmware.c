@@ -93,10 +93,6 @@ int main(void) {
                 print_chr(QOI_RLE_DATA_MASK);
             }
 
-
-
-            
-
             //print_str("RA index: "); print_dec(ra_index); print_str(" | Value: "); print_hex(value,8);
             if (result_info & QOI_RLE_HAPPENED_MASK == 0){
                 value = SENSOR_PIXELDATA;
@@ -128,6 +124,7 @@ int main(void) {
                         break;
                     default: //no chunk
                         break;
+                    }
                 }
             }
             SENSOR_advance();
