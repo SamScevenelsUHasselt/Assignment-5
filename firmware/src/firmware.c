@@ -68,12 +68,8 @@ int main(void) {
         for(unsigned char w=0;w<width;w++) {
             
             QOI_start();
-            SENSOR_advance();
             
-            /*
-            value = SENSOR_fetch();
-            
-            result_info = QOI_put_pixel(value);
+            result_info = QOI_fetch_info();
             if ((result_info & QOI_RLE_MASK) == QOI_RLE_MASK){ //RLE has ended, store the chunk
                 print_chr(result_info & QOI_RLE_DATA_MASK);
             }
@@ -99,7 +95,7 @@ int main(void) {
             default: //no chunk
                 break;
             }
-            */
+            SENSOR_advance();
         }
     }
 

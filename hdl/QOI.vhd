@@ -66,6 +66,7 @@ architecture Behavioral of QOI is
     signal flush_rle_i : STD_LOGIC;
     signal result_o : STD_LOGIC_VECTOR(C_WIDTH-1 downto 0);
     signal result_info_o : STD_LOGIC_VECTOR(10 downto 0);
+    signal new_pixel_i_prev : STD_LOGIC;
     
     alias r : STD_LOGIC_VECTOR(7 downto 0) is pixel_i(31 downto 24);
     alias g : STD_LOGIC_VECTOR(7 downto 0) is pixel_i(23 downto 16);
@@ -220,11 +221,15 @@ begin
             r_prev <= (others => '0');
             g_prev <= (others => '0');
             b_prev <= (others => '0');
+            new_pixel_i_prev <= '0';
         else
             if falling_edge(clock_i) then
-                r_prev <= r;
-                g_prev <= g;
-                b_prev <= b;
+                if new_pixel_i = '0' and new_pixel_i_prev = '1' then
+                    r_prev <= r;
+                    g_prev <= g;
+                    b_prev <= b;
+                end if;
+                new_pixel_i_prev <= new_pixel_i;
             end if;
         end if;
     end process;
