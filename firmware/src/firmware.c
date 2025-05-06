@@ -94,7 +94,7 @@ int main(void) {
                 print_chr(result_info);
             }
 
-            print_str("info: "); print_hex(result_info,8); print_str(" | Sanity bit: ")print_hex(result_info & QOI_RLE_HAPPENED_MASK,1); print_str("\n");
+            print_str("info: "); print_hex(result_info,8); print_str(" | Sanity bit: "); print_hex(result_info & QOI_RLE_HAPPENED_MASK,1); print_str("\n");
 
 
             if (result_info & QOI_RLE_HAPPENED_MASK == 0){
