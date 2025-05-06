@@ -71,7 +71,7 @@ int main(void) {
             
             result_info = QOI_fetch_info();
             if ((result_info & QOI_RLE_MASK) == QOI_RLE_MASK){ //RLE has ended, store the chunk
-                print_chr(result_info & QOI_RLE_DATA_MASK);
+                print_chr(QOI_RLE_DATA_MASK);
             }
             chunk_len = result_info & QOI_LEN_MASK;
             switch (chunk_len)
