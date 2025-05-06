@@ -81,15 +81,15 @@ int main(void) {
                 break;
             case 0x200: //2 Byte chunk
                 result = QOI_fetch_result();
-                print_chr(result);
                 print_chr(result>>8);
+                print_chr(result);
                 break;
             case 0x300: //4 Byte chunk
                 result = QOI_fetch_result();
-                print_chr(result);
-                print_chr(result>>8);
-                print_chr(result>>16);
                 print_chr(result>>24);
+                print_chr(result>>16);
+                print_chr(result>>8);
+                print_chr(result);
                 break;
             default: //no chunk
                 break;
