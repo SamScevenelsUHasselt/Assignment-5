@@ -29,7 +29,7 @@ RAM              0x00002000         0x00002000         xrw
 Linker script and memory map
 
 
-.text           0x00000000      0x628
+.text           0x00000000      0x5ac
                 0x00000000                        . = 0x0
  *(.init)
  .init          0x00000000      0x240 build/start.o
@@ -51,17 +51,18 @@ Linker script and memory map
                 0x00000398                TCNT_start_div16
                 0x000003c0                TCNT_set_mode
                 0x00000400                TCNT_clear_ir
- .text          0x00000414       0x28 build/sensor.o
+ .text          0x00000414       0x38 build/sensor.o
                 0x00000414                SENSOR_fetch
- .text          0x0000043c       0x34 build/qoi.o
-                0x0000043c                QOI_put_pixel
-                0x0000044c                QOI_fetch_result
-                0x00000458                QOI_flush
- .text          0x00000470        0x4 build/firmware.o
-                0x00000470                irq_handler
- .text.startup  0x00000474      0x1b4 build/firmware.o
-                0x00000474                main
- .text          0x00000628        0x0 build/start.o
+                0x0000043c                SENSOR_advance
+ .text          0x0000044c       0x34 build/qoi.o
+                0x0000044c                QOI_put_pixel
+                0x0000045c                QOI_fetch_result
+                0x00000468                QOI_flush
+ .text          0x00000480        0x4 build/firmware.o
+                0x00000480                irq_handler
+ .text.startup  0x00000484      0x128 build/firmware.o
+                0x00000484                main
+ .text          0x000005ac        0x0 build/start.o
 
 .data           0x00002000       0x2c
                 0x00000000                        . = 0x0
