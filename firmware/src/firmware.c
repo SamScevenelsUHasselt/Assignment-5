@@ -13,7 +13,7 @@ extern void load_test();
 
 inline void print_chr(char ch)
 {
-	//*((volatile unsigned int*)OUTPORT) = ch;
+	*((volatile unsigned int*)OUTPORT) = ch;
 }
 
 inline unsigned int QOI_fetch_result(void){
